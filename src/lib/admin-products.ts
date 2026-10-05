@@ -1,0 +1,361 @@
+import { asc, desc, eq, max, sql } from "drizzle-orm";
+
+import { db } from "@/db";
+import { categories, orderItems, productImages, products } from "@/db/schema";
+import { slugify, type ProductFormValues } from "@/lib/product-form";
+
+/**
+ * Product queries and writes for the admin.
+ *
+ * Separate from `src/lib/products.ts`, which serves the shop and only ever
+ * shows active pieces. Here we need everything, including deactivated ones.
+ *
+ * The writes live here rather than in the server actions so they can be called
+ * without a request: `revalidatePath` and the session check stay in the action,
+ * the SQL does not depend on either.
+ */
+
+export type AdminProductRow = {
+  id: number;
+  slug: string;
+  nameFr: string;
+  price: number;
+  isActive: boolean;
+  categoryNameFr: string;
+  imageUrl: string | null;
+  imageCount: number;
+  orderCount: number;
+};
+
+export async function getAdminProducts(): Promise<AdminProductRow[]> {
+  const rows = await db
+    .select({
+      id: products.id,
+      slug: products.slug,
+      nameFr: products.nameFr,
+      price: products.price,
+      isActive: products.isActive,
+      categoryNameFr: categories.nameFr,
+    })
+    .from(products)
+    .innerJoin(categories, eq(products.categoryId, categories.id))
+    .orderBy(desc(products.isActive), asc(products.nameFr));
+
+  // Three small queries instead of one full of correlated subqueries. Drizzle
+  // emits a `sql` template's outer column unqualified, and inside the subquery
+  // Postgres binds a bare `"id"` to the inner table, so the counts come back 0.
+  const [images, imageTotals, orderTotals] = await Promise.all([
+    db
+      .select({
+        productId: productImages.productId,
+        url: productImages.url,
+      })
+      .from(productImages)
+      .orderBy(asc(productImages.position), asc(productImages.id)),
+    db
+      .select({
+        productId: productImages.productId,
+        total: sql<number>`count(*)::int`,
+      })
+      .from(productImages)
+      .groupBy(productImages.productId),
+    db
+      .select({
+        productId: orderItems.productId,
+        total: sql<number>`count(*)::int`,
+      })
+      .from(orderItems)
+      .groupBy(orderItems.productId),
+  ]);
+
+  // The first photo in gallery order is the cover.
+  const coverByProduct = new Map<number, string>();
+  for (const image of images) {
+    if (!coverByProduct.has(image.productId)) {
+      coverByProduct.set(image.productId, image.url);
+    }
+  }
+
+  const imageCountByProduct = new Map<number, number>(
+    imageTotals.map((row) => [row.productId, row.total]),
+  );
+  const orderCountByProduct = new Map<number, number>(
+    orderTotals.map((row) => [row.productId, row.total]),
+  );
+
+  return rows.map((row) => ({
+    ...row,
+    imageUrl: coverByProduct.get(row.id) ?? null,
+    imageCount: imageCountByProduct.get(row.id) ?? 0,
+    // How many times this piece appears in past orders: a hint that it should
+    // be deactivated rather than deleted.
+    orderCount: orderCountByProduct.get(row.id) ?? 0,
+  }));
+}
+
+export type AdminProductDetail = {
+  id: number;
+  slug: string;
+  nameFr: string;
+  nameEn: string;
+  descriptionFr: string;
+  descriptionEn: string;
+  categoryId: number;
+  price: number;
+  isActive: boolean;
+  images: { id: number; url: string; position: number }[];
+};
+
+/** `null` when the id does not exist. */
+export async function getAdminProduct(
+  id: number,
+): Promise<AdminProductDetail | null> {
+  const row = await db.query.products.findFirst({
+    where: eq(products.id, id),
+    columns: {
+      id: true,
+      slug: true,
+      nameFr: true,
+      nameEn: true,
+      descriptionFr: true,
+      descriptionEn: true,
+      categoryId: true,
+      price: true,
+      isActive: true,
+    },
+    with: {
+      images: {
+        columns: { id: true, url: true, position: true },
+        orderBy: (images, { asc: byAsc }) => [
+          byAsc(images.position),
+          byAsc(images.id),
+        ],
+      },
+    },
+  });
+
+  if (!row) return null;
+
+  return {
+    id: row.id,
+    slug: row.slug,
+    nameFr: row.nameFr,
+    nameEn: row.nameEn,
+    descriptionFr: row.descriptionFr,
+    descriptionEn: row.descriptionEn,
+    categoryId: row.categoryId,
+    price: row.price,
+    isActive: row.isActive,
+    images: row.images,
+  };
+}
+
+/** Categories for the form dropdown. */
+export async function getAdminCategories() {
+  return db
+    .select({ id: categories.id, nameFr: categories.nameFr })
+    .from(categories)
+    .orderBy(asc(categories.nameFr));
+}
+
+/** Used to make sure a slug is free, and to find the next free one. */
+export async function slugExists(slug: string, exceptId?: number): Promise<boolean> {
+  const row = await db
+    .select({ id: products.id })
+    .from(products)
+    .where(eq(products.slug, slug))
+    .limit(1);
+
+  if (row.length === 0) return false;
+  return exceptId === undefined ? true : row[0].id !== exceptId;
+}
+
+/**
+ * `base` if free, otherwise `base-2`, `base-3`…
+ * Keeps admin life simple: the slug is generated, only rarely typed by hand.
+ */
+export async function findFreeSlug(base: string): Promise<string> {
+  const root = base || "piece";
+  if (!(await slugExists(root))) return root;
+
+  for (let suffix = 2; suffix < 200; suffix += 1) {
+    const candidate = `${root}-${suffix}`;
+    if (!(await slugExists(candidate))) return candidate;
+  }
+  // Practically unreachable.
+  return `${root}-${Date.now()}`;
+}
+
+/** Exactly what a `products` row needs, with prices already in centimes. */
+export type ProductInput = {
+  slug: string;
+  nameFr: string;
+  nameEn: string;
+  descriptionFr: string;
+  descriptionEn: string;
+  categoryId: number;
+  price: number;
+  isActive: boolean;
+};
+
+/**
+ * Pure: no DB, no Next. Turns validated form values into row values.
+ *
+ * The English columns are NOT NULL and the site is French-only, so an empty
+ * English field copies the French instead of storing an empty string.
+ */
+export function toProductInput(
+  data: ProductFormValues,
+  price: number,
+  slug: string,
+): ProductInput {
+  return {
+    slug,
+    nameFr: data.nameFr,
+    nameEn: data.nameEn || data.nameFr,
+    descriptionFr: data.descriptionFr,
+    descriptionEn: data.descriptionEn || data.descriptionFr,
+    categoryId: data.categoryId,
+    price,
+    isActive: data.isActive,
+  };
+}
+
+/**
+ * Picks the slug to store.
+ *
+ * A slug typed by hand must be free, otherwise the admin is told and can fix it.
+ * A slug left empty is only a suggestion, so the next free one is taken quietly.
+ */
+export async function resolveProductSlug({
+  slug,
+  nameFr,
+  productId,
+}: {
+  slug: string;
+  nameFr: string;
+  productId?: number;
+}): Promise<{ ok: true; slug: string } | { ok: false; reason: "taken" }> {
+  const wanted = slug ? slugify(slug) : slugify(nameFr);
+
+  if (slug) {
+    return (await slugExists(wanted, productId))
+      ? { ok: false, reason: "taken" }
+      : { ok: true, slug: wanted };
+  }
+
+  return { ok: true, slug: await findFreeSlug(wanted) };
+}
+
+export async function createProduct(input: ProductInput): Promise<number> {
+  const created = await db
+    .insert(products)
+    .values(input)
+    .returning({ id: products.id });
+  return created[0].id;
+}
+
+/** Returns the slug the product had before, so its old page can be revalidated. */
+export async function updateProduct(
+  id: number,
+  input: ProductInput,
+): Promise<string | null> {
+  const before = await db.query.products.findFirst({
+    where: eq(products.id, id),
+    columns: { slug: true },
+  });
+
+  await db.update(products).set(input).where(eq(products.id, id));
+
+  return before?.slug ?? null;
+}
+
+/** Flips the visible flag and reports what it became. */
+export async function setProductActive(
+  id: number,
+  isActive: boolean,
+): Promise<{ slug: string; isActive: boolean } | null> {
+  const before = await db.query.products.findFirst({
+    where: eq(products.id, id),
+    columns: { slug: true, isActive: true },
+  });
+  if (!before) return null;
+
+  await db.update(products).set({ isActive }).where(eq(products.id, id));
+
+  return { slug: before.slug, isActive };
+}
+
+/**
+ * Only http(s) links, so a `javascript:` URL can never end up in an `src`.
+ */
+export function isAllowedImageUrl(url: string): boolean {
+  if (url.length > 2000) return false;
+  try {
+    const { protocol } = new URL(url);
+    return protocol === "https:" || protocol === "http:";
+  } catch {
+    return false;
+  }
+}
+
+/** Appends a photo to the gallery. New photos go to the end. */
+export async function addProductImage(
+  productId: number,
+  url: string,
+): Promise<void> {
+  const last = await db
+    .select({ top: max(productImages.position) })
+    .from(productImages)
+    .where(eq(productImages.productId, productId));
+
+  await db.insert(productImages).values({
+    productId,
+    url,
+    position: (last[0]?.top ?? -1) + 1,
+  });
+}
+
+export async function removeProductImage(imageId: number): Promise<void> {
+  await db.delete(productImages).where(eq(productImages.id, imageId));
+}
+
+/**
+ * Moves a photo one place earlier or later in the gallery.
+ *
+ * Swapping in two statements leaves the two rows sharing a position for a
+ * moment; there is no unique constraint on it, so that is harmless.
+ */
+export async function moveProductImage(
+  imageId: number,
+  direction: "up" | "down",
+): Promise<boolean> {
+  const image = await db.query.productImages.findFirst({
+    where: eq(productImages.id, imageId),
+  });
+  if (!image) return false;
+
+  const siblings = await db
+    .select({ id: productImages.id, position: productImages.position })
+    .from(productImages)
+    .where(eq(productImages.productId, image.productId))
+    .orderBy(productImages.position, productImages.id);
+
+  const index = siblings.findIndex((row) => row.id === imageId);
+  const target = direction === "up" ? index - 1 : index + 1;
+  if (index < 0 || target < 0 || target >= siblings.length) return false;
+
+  const other = siblings[target];
+  // Each row takes the *other's* position. The two rows share a position in
+  // between, which is fine: nothing is unique on it.
+  await db
+    .update(productImages)
+    .set({ position: image.position })
+    .where(eq(productImages.id, other.id));
+  await db
+    .update(productImages)
+    .set({ position: other.position })
+    .where(eq(productImages.id, imageId));
+
+  return true;
+}
