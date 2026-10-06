@@ -29,12 +29,21 @@ export async function generateMetadata({
   const product = await getProductBySlug(slug);
 
   // A missing product still needs a title for the 404 page.
-  if (!product) return { title: "Page introuvable" };
+  if (!product) return { title: "Page introuvable", robots: { index: false } };
 
   return {
     title: product.nameFr,
     description: product.descriptionFr,
+    // Relative, so it resolves against `metadataBase` in the root layout.
+    alternates: { canonical: `/products/${slug}` },
     openGraph: {
+      // Repeated on purpose: defining `openGraph` here replaces the root one
+      // rather than merging with it, so locale and siteName have to be carried
+      // across or WhatsApp drops the link preview.
+      type: "article",
+      locale: "fr_MA",
+      siteName: strings.siteName,
+      url: `/products/${slug}`,
       title: `${product.nameFr} — ${formatPrice(product.price)}`,
       description: product.descriptionFr,
       images: product.images[0]

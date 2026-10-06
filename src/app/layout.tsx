@@ -34,10 +34,12 @@ export const metadata: Metadata = {
     template: `%s | ${strings.siteName}`,
   },
   description: strings.hero.body,
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "fr_MA",
     siteName: strings.siteName,
+    url: "/",
     title: `${strings.siteName} — ${strings.tagline}`,
     description: strings.hero.body,
   },

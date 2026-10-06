@@ -197,6 +197,40 @@ export const strings = {
 /** Instagram handle placeholder — replace with the real account when known. */
 export const INSTAGRAM_URL = "https://instagram.com/crochetbynouhad";
 
-/** Canonical site origin, used for metadata/OG URLs. */
-export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
+/**
+ * Canonical site origin, used for metadata/OG URLs, the sitemap and robots.txt.
+ *
+ * Resolution order:
+ *   1. `NEXT_PUBLIC_SITE_URL`, if set — wins over everything.
+ *   2. Vercel's own project domain, so a deploy needs no configuration.
+ *   3. `localhost`, which is correct under `next dev` and nowhere else.
+ *
+ * Publishing `localhost:3000` as the canonical address would poison search
+ * results and link previews while looking completely normal, so a production
+ * build with neither of the first two refuses to run.
+ *
+ * The guard is server-only: `VERCEL_*` is stripped from the browser bundle by
+ * design, and `strings.ts` is imported by client components, so evaluating
+ * there would throw on every page.
+ */
+const IS_SERVER = typeof window === "undefined";
+
+const EXPLICIT_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
+
+const VERCEL_HOST =
+  process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL;
+
+const VERCEL_SITE_URL = VERCEL_HOST
+  ? `https://${VERCEL_HOST.replace(/^https?:\/\//, "")}`
+  : undefined;
+
+const RESOLVED_SITE_URL = EXPLICIT_SITE_URL ?? VERCEL_SITE_URL;
+
+if (IS_SERVER && process.env.NODE_ENV === "production" && !RESOLVED_SITE_URL) {
+  throw new Error(
+    "No public origin for the site. Set NEXT_PUBLIC_SITE_URL to the deployed " +
+      "origin with no trailing slash, e.g. https://example.com",
+  );
+}
+
+export const SITE_URL = RESOLVED_SITE_URL ?? "http://localhost:3000";
