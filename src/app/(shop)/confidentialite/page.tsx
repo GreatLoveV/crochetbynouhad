@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Separator } from "@/components/ui/separator";
-import { strings } from "@/lib/strings";
+import { strings } from "@/lib/constants/strings";
 
 export const metadata: Metadata = {
   title: strings.legal.privacyTitle,

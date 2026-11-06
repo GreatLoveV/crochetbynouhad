@@ -5,9 +5,13 @@ import { ArrowLeftIcon } from "lucide-react";
 import { OrderStatusBadge } from "@/components/admin/order-status-badge";
 import { OrderStatusControl } from "@/components/admin/order-status-control";
 import { Button } from "@/components/ui/button";
-import { getAdminOrder } from "@/lib/admin-orders";
-import { formatPrice } from "@/lib/money";
-import { strings } from "@/lib/strings";
+import {
+  buildAdminOrderWhatsappMessage,
+  getAdminOrder,
+} from "@/lib/data/admin-orders";
+import { formatPrice } from "@/lib/format/money";
+import { strings } from "@/lib/constants/strings";
+import { normalizeMoroccanPhone, whatsappUrlTo } from "@/lib/integrations/whatsapp";
 
 export const metadata = { title: "Commande — Administration" };
 
@@ -21,7 +25,10 @@ export default async function AdminOrderPage({
   const order = await getAdminOrder(orderId);
   if (!order) notFound();
 
-  const whatsappHref = `https://wa.me/${order.phone.replace(/[^0-9]/g, "")}`;
+  const whatsappHref = whatsappUrlTo(
+    normalizeMoroccanPhone(order.phone),
+    buildAdminOrderWhatsappMessage(order),
+  );
 
   return (
     <div className="flex flex-col gap-6">
@@ -74,6 +81,11 @@ export default async function AdminOrderPage({
                           {item.nameFr}
                         </span>
                       )}
+                      {item.reference ? (
+                        <span className="block text-xs tracking-[0.14em] text-muted-foreground uppercase">
+                          {item.reference}
+                        </span>
+                      ) : null}
                     </td>
                     <td className="w-16 py-2 pr-3 text-right tabular-nums text-muted-foreground">
                       ×{item.quantity}

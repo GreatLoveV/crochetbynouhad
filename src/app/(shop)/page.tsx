@@ -1,9 +1,14 @@
 import Link from "next/link";
+import { MessageCircleIcon } from "lucide-react";
 
 import { Hero } from "@/components/home/hero";
 import { ProductCard } from "@/components/home/product-card";
-import { getActiveProducts, getCategories } from "@/lib/products";
-import { strings } from "@/lib/strings";
+import { InstagramIcon } from "@/components/icons";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { getActiveProducts, getCategories } from "@/lib/data/products";
+import { INSTAGRAM_URL, strings } from "@/lib/constants/strings";
+import { whatsappUrl } from "@/lib/integrations/whatsapp";
 
 /**
  * Home = hero + catalog, filtered by ?category=<slug>.
@@ -49,7 +54,9 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
           activeSlug={activeCategory?.slug}
         />
 
-        {products.length === 0 ? (
+        {activeCategory?.isComingSoon ? (
+          <ComingSoon categoryName={activeCategory.nameFr} />
+        ) : products.length === 0 ? (
           <p className="mt-8 rounded-3xl border border-dashed border-border px-6 py-16 text-center text-muted-foreground">
             {strings.shop.empty}
           </p>
@@ -65,6 +72,63 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
   );
 }
 
+/** Friendly placeholder for a category that has no pieces yet. */
+function ComingSoon({ categoryName }: { categoryName: string }) {
+  const message = `Bonjour ${strings.siteName}, je souhaite être prévenu quand « ${categoryName} » sera disponible.`;
+
+  return (
+    <div className="mt-8 flex flex-col items-center gap-5 rounded-3xl border border-dashed border-border px-6 py-16 text-center">
+      <div className="flex flex-col gap-2">
+        <h3 className="font-heading text-2xl">
+          {strings.shop.comingSoonTitle}
+        </h3>
+        <p className="max-w-md text-muted-foreground">
+          {strings.shop.comingSoonBody}
+        </p>
+      </div>
+
+      <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+        <Button
+          size="lg"
+          className="w-full sm:w-auto"
+          render={
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            />
+          }
+        >
+          <InstagramIcon />
+          {strings.shop.comingSoonInstagram}
+        </Button>
+        <Button
+          variant="outline"
+          size="lg"
+          className="w-full sm:w-auto"
+          render={
+            <a
+              href={whatsappUrl(message)}
+              target="_blank"
+              rel="noopener noreferrer"
+            />
+          }
+        >
+          <MessageCircleIcon />
+          {strings.shop.comingSoonWhatsapp}
+        </Button>
+      </div>
+
+      <Link
+        href="/#boutique"
+        className="text-sm text-muted-foreground underline underline-offset-4 transition-colors duration-300 ease-soft hover:text-primary"
+      >
+        {strings.shop.comingSoonBack}
+      </Link>
+    </div>
+  );
+}
+
 /**
  * Horizontal row of filter pills. Scrolls sideways on a 390px phone instead of
  * wrapping, so the product grid always starts at the same height.
@@ -73,7 +137,7 @@ function CategoryFilter({
   categories,
   activeSlug,
 }: {
-  categories: { slug: string; nameFr: string }[];
+  categories: { slug: string; nameFr: string; isComingSoon: boolean }[];
   activeSlug: string | undefined;
 }) {
   return (
@@ -94,6 +158,11 @@ function CategoryFilter({
               active={activeSlug === category.slug}
             >
               {category.nameFr}
+              {category.isComingSoon ? (
+                <Badge variant="secondary" className="ml-1.5 px-1.5 py-0 text-[0.65rem]">
+                  {strings.shop.comingSoonBadge}
+                </Badge>
+              ) : null}
             </FilterPill>
           </li>
         ))}

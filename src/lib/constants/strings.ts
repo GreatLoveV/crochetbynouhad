@@ -29,6 +29,13 @@ export const strings = {
     title: "La collection",
     all: "Tout",
     empty: "Aucune pièce pour le moment. Revenez bientôt !",
+    comingSoonBadge: "Bientôt",
+    comingSoonTitle: "Bientôt disponible.",
+    comingSoonBody:
+      "Suivez-nous sur Instagram pour être prévenu.",
+    comingSoonInstagram: "Suivre sur Instagram",
+    comingSoonWhatsapp: "Être prévenu sur WhatsApp",
+    comingSoonBack: "Voir les pièces disponibles",
   },
 
   notFound: {
@@ -45,14 +52,18 @@ export const strings = {
     viewPage: "Voir le panier",
     total: "Total",
     checkoutHint: "Le paiement se fait à la livraison.",
-    whatsapp: "Commander via WhatsApp",
   },
 
   product: {
     quantity: "Quantité",
     addToCart: "Ajouter au panier",
-    orderWhatsapp: "Commander / poser une question",
+    askWhatsapp: "Une question ? WhatsApp",
     backToShop: "Retour à la boutique",
+    reference: "Référence",
+    unique: "Pièce unique",
+    soldOut: "Vendu",
+    soldOutHint: "Cette pièce a déjà trouvé sa propriétaire.",
+    alreadyInCart: "Déjà dans votre panier",
   },
 
   checkout: {
@@ -61,8 +72,7 @@ export const strings = {
     summaryTitle: "Votre commande",
     itemsTitle: "Récapitulatif",
     totalLabel: "Total à payer à la livraison",
-    paymentNote:
-      "Vous ne payez rien maintenant. Nous nous arrangeons à la livraison.",
+    paymentNote: "Frais de livraison confirmés par WhatsApp.",
     name: "Nom complet",
     namePlaceholder: "Salma El Amrani",
     phone: "Téléphone",
@@ -81,17 +91,22 @@ export const strings = {
     fixErrors: "Vérifiez les informations saisies.",
     unavailable:
       "Une pièce de votre panier n'est plus disponible. Merci de revoir votre panier.",
+    reserved: "Cette pièce vient d'être réservée.",
     submitError:
       "La commande n'a pas pu être enregistrée. Réessayez, ou commandez via WhatsApp.",
   },
 
   order: {
     confirmationPath: "/order/confirmation",
-    title: "Merci pour votre commande !",
-    body: "Nouhad va vous contacter pour confirmer les détails et le prix de la livraison.",
+    title: "Commande reçue",
+    body: "Nouhad vous contactera sur WhatsApp pour confirmer votre commande.",
     reference: "Numéro de commande",
+    itemFallback: "Pièce",
     keepShopping: "Retourner à la boutique",
-    whatsapp: "Envoyer le récapitulatif sur WhatsApp",
+    whatsapp: "Accélérer : envoyer ma commande sur WhatsApp",
+    whatsappOptional:
+      "Facultatif — Nouhad vous contactera de toute façon.",
+    notFound: "Cette commande est introuvable.",
   },
 
   footer: {
@@ -143,9 +158,18 @@ export const strings = {
     productPrice: "Prix (MAD)",
     productPriceHint: "En dirhams, sans décimales : 250 pour 250,00 MAD.",
     productSlug: "Adresse web",
+    productReference: "Référence",
+    productReferenceHint:
+      "Identifiant stable de la pièce, affiché à la boutique et sur chaque commande. Laisser vide pour le générer à l’enregistrement.",
     productActive: "Visible dans la boutique",
     productActiveHint:
       "Décochez pour retirer la pièce de la boutique sans la supprimer.",
+    productUnique: "Pièce unique",
+    productUniqueHint:
+      "Une seule pièce disponible : pas de choix de quantité, elle est réservée dès la commande.",
+    productSoldOut: "Pièce vendue",
+    productSoldOutHint:
+      "Cochez si la pièce n'est plus disponible. Décochez pour la remettre en vente.",
     save: "Enregistrer",
     saving: "Enregistrement…",
     cancel: "Annuler",
@@ -181,8 +205,17 @@ export const strings = {
     orderItems: "Articles",
     noOrders: "Aucune commande pour le moment.",
     statusUpdated: "Statut mis à jour.",
-    whatsappCustomer: "Écrire sur WhatsApp",
+    whatsappCustomer: "Contacter le client sur WhatsApp",
     orderTotal: "Total",
+
+    categories: "Catégories",
+    categoriesSubtitle:
+      "Marquez une catégorie « À venir » tant qu’aucune pièce n’y est disponible.",
+    categoryComingSoon: "À venir",
+    categoryComingSoonHint:
+      "La catégorie reste visible avec un badge « Bientôt ».",
+    categoryLive: "En ligne",
+    categoryUpdated: "Catégorie mise à jour.",
   },
 
   orderStatus: {

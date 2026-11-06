@@ -1,3 +1,5 @@
+import "server-only";
+
 import { db } from "@/db";
 import { products } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
@@ -10,6 +12,9 @@ export type ProductSummary = {
   price: number;
   imageUrl: string | null;
   categoryNameFr: string;
+  reference: string | null;
+  isUnique: boolean;
+  isSoldOut: boolean;
 };
 
 /** Everything the product page needs. */
@@ -23,17 +28,22 @@ export type ProductDetail = {
   categorySlug: string;
   /** Already ordered by `position`, so [0] is the main photo. */
   images: { url: string; position: number }[];
+  reference: string | null;
+  isUnique: boolean;
+  isSoldOut: boolean;
 };
 
 export type CategorySummary = {
   id: number;
   slug: string;
   nameFr: string;
+  isComingSoon: boolean;
 };
 
 /** Used by the category filter bar. */
 export async function getCategories(): Promise<CategorySummary[]> {
   return db.query.categories.findMany({
+    columns: { id: true, slug: true, nameFr: true, isComingSoon: true },
     orderBy: (category, { asc }) => [asc(category.nameFr)],
   });
 }
@@ -66,6 +76,9 @@ export async function getActiveProducts(
     price: row.price,
     imageUrl: row.images[0]?.url ?? null,
     categoryNameFr: row.category.nameFr,
+    reference: row.reference,
+    isUnique: row.isUnique,
+    isSoldOut: row.isSoldOut,
   }));
 }
 
@@ -93,6 +106,9 @@ export async function getProductsByIds(
     price: row.price,
     imageUrl: row.images[0]?.url ?? null,
     categoryNameFr: row.category.nameFr,
+    reference: row.reference,
+    isUnique: row.isUnique,
+    isSoldOut: row.isSoldOut,
   }));
 }
 
@@ -128,6 +144,9 @@ export async function getProductBySlug(
       url: image.url,
       position: image.position,
     })),
+    reference: row.reference,
+    isUnique: row.isUnique,
+    isSoldOut: row.isSoldOut,
   };
 }
 

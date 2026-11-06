@@ -5,9 +5,10 @@ import { ChevronRightIcon } from "lucide-react";
 
 import { ImageGallery } from "@/components/product/image-gallery";
 import { ProductBuyBox } from "@/components/product/buy-box";
-import { formatPrice } from "@/lib/money";
-import { getActiveProductSlugs, getProductBySlug } from "@/lib/products";
-import { SITE_URL, strings } from "@/lib/strings";
+import { Badge } from "@/components/ui/badge";
+import { formatPrice } from "@/lib/format/money";
+import { getActiveProductSlugs, getProductBySlug } from "@/lib/data/products";
+import { SITE_URL, strings } from "@/lib/constants/strings";
 
 /**
  * Product pages are the links shared on WhatsApp and Instagram, so they are
@@ -94,12 +95,24 @@ export default async function ProductPage({
 
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
-            <p className="text-xs tracking-[0.18em] text-muted-foreground uppercase">
-              {product.categoryNameFr}
-            </p>
+            <div className="flex items-center gap-3">
+              <p className="text-xs tracking-[0.18em] text-muted-foreground uppercase">
+                {product.categoryNameFr}
+              </p>
+              {product.isUnique && product.isSoldOut ? (
+                <Badge variant="secondary">{strings.product.soldOut}</Badge>
+              ) : null}
+            </div>
             <h1 className="text-3xl leading-tight font-medium sm:text-4xl">
               {product.nameFr}
             </h1>
+            {/* Every piece is one of a kind, so the reference is the name of
+                this exact item in Nouhad's notebook. */}
+            {product.reference ? (
+              <p className="text-xs tracking-[0.16em] text-muted-foreground uppercase">
+                {strings.product.reference} {product.reference}
+              </p>
+            ) : null}
           </div>
 
           {/* whitespace-pre-line keeps the line breaks the admin typed. */}
@@ -112,6 +125,9 @@ export default async function ProductPage({
             name={product.nameFr}
             price={product.price}
             productUrl={productUrl}
+            reference={product.reference}
+            isUnique={product.isUnique}
+            isSoldOut={product.isSoldOut}
           />
         </div>
       </div>

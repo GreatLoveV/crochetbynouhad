@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { CheckoutForm } from "@/components/checkout/checkout-form";
-import { strings } from "@/lib/strings";
+import { strings } from "@/lib/constants/strings";
 
 export const metadata: Metadata = {
   title: `${strings.checkout.title} | ${strings.siteName}`,

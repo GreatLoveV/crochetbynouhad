@@ -4,10 +4,10 @@ import { useTransition } from "react";
 import { Loader2Icon } from "lucide-react";
 
 import { updateOrderStatus } from "@/app/admin/actions/orders";
-import { ORDER_STATUSES, type OrderStatus } from "@/lib/admin-orders";
+import { ORDER_STATUSES, type OrderStatus } from "@/lib/constants/order-statuses";
 import { Button } from "@/components/ui/button";
 import { orderStatusLabel } from "@/components/admin/order-status-badge";
-import { strings } from "@/lib/strings";
+import { strings } from "@/lib/constants/strings";
 
 /**
  * Status dropdown plus a save button: nothing changes until Nouhad confirms, so

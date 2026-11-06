@@ -2,7 +2,7 @@ import type { DefaultSession } from "next-auth";
 
 /**
  * Teaches TypeScript about the extra fields the `jwt` and `session` callbacks
- * in `src/lib/auth.ts` add.
+ * in `src/lib/auth/auth.ts` add.
  */
 declare module "next-auth" {
   interface Session {
@@ -12,7 +12,7 @@ declare module "next-auth" {
     } & DefaultSession["user"];
   }
 
-  /** `role` comes back from the `authorize` callback in `src/lib/auth.ts`. */
+  /** `role` comes back from the `authorize` callback in `src/lib/auth/auth.ts`. */
   interface User {
     role?: string;
   }

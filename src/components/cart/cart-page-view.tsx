@@ -7,12 +7,13 @@ import { useCart } from "@/components/cart/cart-provider";
 import {
   CartLineRows,
   cartTotal,
+  lineQuantity,
 } from "@/components/cart/cart-line-rows";
 import { useCartProducts } from "@/components/cart/use-cart-products";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { formatPrice } from "@/lib/money";
-import { strings } from "@/lib/strings";
+import { formatPrice } from "@/lib/format/money";
+import { strings } from "@/lib/constants/strings";
 
 /**
  * The /cart page body.
@@ -129,8 +130,7 @@ function CartPageLines({
 
           <ul className="flex flex-col gap-2 text-sm">
             {products.map((product) => {
-              const quantity =
-                items.find((item) => item.productId === product.id)?.quantity ?? 0;
+              const quantity = lineQuantity(product, items);
               return (
                 <li key={product.id} className="flex justify-between gap-4">
                   <span className="text-muted-foreground">

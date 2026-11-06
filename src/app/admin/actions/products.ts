@@ -6,7 +6,7 @@ import { z } from "zod";
 
 import { db } from "@/db";
 import { products } from "@/db/schema";
-import { getAdmin } from "@/lib/admin";
+import { getAdmin } from "@/lib/auth/admin";
 import {
   createProduct,
   isAllowedImageUrl,
@@ -17,10 +17,10 @@ import {
   setProductActive,
   toProductInput,
   updateProduct,
-} from "@/lib/admin-products";
-import { madToCentimes } from "@/lib/money";
-import { productFormSchema, type ProductFormState } from "@/lib/product-form";
-import { strings } from "@/lib/strings";
+} from "@/lib/data/admin-products";
+import { madToCentimes } from "@/lib/format/money";
+import { productFormSchema, type ProductFormState } from "@/lib/validation/product-form";
+import { strings } from "@/lib/constants/strings";
 
 /**
  * Everything the admin can change about a product.
@@ -43,7 +43,10 @@ function formValues(formData: FormData) {
     categoryId: String(formData.get("categoryId") ?? ""),
     price: String(formData.get("price") ?? ""),
     slug: String(formData.get("slug") ?? ""),
+    reference: String(formData.get("reference") ?? ""),
     isActive: formData.get("isActive") === "on",
+    isUnique: formData.get("isUnique") === "on",
+    isSoldOut: formData.get("isSoldOut") === "on",
   };
 }
 
@@ -94,7 +97,7 @@ export async function saveProduct(
       return { status: "error", message: strings.admin.errorSlugTaken, values };
     }
 
-    const input = toProductInput(data, price, resolved.slug);
+    const input = toProductInput(data, price, resolved.slug, data.reference ?? "");
 
     if (editing) {
       const previousSlug = await updateProduct(productId, input);

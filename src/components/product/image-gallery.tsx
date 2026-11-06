@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 
-import { isOptimizableImageUrl } from "@/lib/images";
+import { isOptimizableImageUrl } from "@/lib/constants/images";
 
 /**
  * Product photo gallery: one large image plus a thumbnail strip.

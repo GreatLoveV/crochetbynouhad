@@ -13,9 +13,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getAdminProducts } from "@/lib/admin-products";
-import { formatPrice } from "@/lib/money";
-import { strings } from "@/lib/strings";
+import { getAdminProducts } from "@/lib/data/admin-products";
+import { formatPrice } from "@/lib/format/money";
+import { strings } from "@/lib/constants/strings";
 
 export default async function AdminProductsPage() {
   // The protected layout already ran `requireAdmin()`; this page only reads.
@@ -81,6 +81,11 @@ export default async function AdminProductsPage() {
                       <span className="text-xs text-muted-foreground">
                         /{product.slug}
                       </span>
+                      {product.reference ? (
+                        <span className="text-xs tracking-[0.14em] text-muted-foreground uppercase">
+                          {product.reference}
+                        </span>
+                      ) : null}
                     </div>
                   </TableCell>
                   <TableCell className="hidden text-muted-foreground sm:table-cell">
@@ -90,11 +95,16 @@ export default async function AdminProductsPage() {
                     {formatPrice(product.price)}
                   </TableCell>
                   <TableCell className="text-right">
-                    <Badge
-                      variant={product.isActive ? "default" : "secondary"}
-                    >
-                      {product.isActive ? "En ligne" : "Retirée"}
-                    </Badge>
+                    <div className="flex flex-wrap justify-end gap-1">
+                      <Badge
+                        variant={product.isActive ? "default" : "secondary"}
+                      >
+                        {product.isActive ? "En ligne" : "Retirée"}
+                      </Badge>
+                      {product.isUnique && product.isSoldOut ? (
+                        <Badge variant="secondary">{strings.product.soldOut}</Badge>
+                      ) : null}
+                    </div>
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">

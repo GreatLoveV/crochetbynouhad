@@ -1,37 +1,40 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import { createOrder, ProductUnavailableError } from "@/db/place-order";
-import { checkoutSchema } from "@/lib/checkout";
-import { strings } from "@/lib/strings";
-
-export type OrderFormState = {
-  status: "idle" | "invalid" | "error";
-  /** One message per field, keyed by input name, ready to render. */
-  fieldErrors?: Record<string, string>;
-  message?: string;
-};
-
-export const emptyOrderFormState: OrderFormState = { status: "idle" };
+import {
+  createOrder,
+  ProductReservedError,
+  ProductUnavailableError,
+} from "@/lib/data/place-order";
+import { checkoutSchema } from "@/lib/validation/checkout";
+import { notifyNewOrder } from "@/lib/integrations/notify";
+import { type OrderFormState } from "@/lib/validation/order-form";
+import { strings } from "@/lib/constants/strings";
 
 /**
  * Places an order from the checkout form.
  *
  * The browser sends product ids and quantities only: names, prices and the
- * total are all decided by the server (`createOrder`). See `@/db/place-order`.
+ * total are all decided by the server (`createOrder`). See `@/lib/data/place-order`.
  */
 export async function placeOrder(
   _previous: OrderFormState,
   formData: FormData,
 ): Promise<OrderFormState> {
+  // Read once so both the validation and the echoed values use the same data.
+  const values = {
+    name: String(formData.get("name") ?? ""),
+    phone: String(formData.get("phone") ?? ""),
+    city: String(formData.get("city") ?? ""),
+    address: String(formData.get("address") ?? ""),
+    notes: String(formData.get("notes") ?? ""),
+  };
+
   const parsed = checkoutSchema.safeParse({
-    name: formData.get("name"),
-    phone: formData.get("phone"),
-    city: formData.get("city"),
-    address: formData.get("address"),
-    notes: formData.get("notes") ?? "",
+    ...values,
     cart: formData.get("cart"),
   });
 
@@ -40,6 +43,7 @@ export async function placeOrder(
       status: "invalid",
       fieldErrors: toFieldErrors(parsed.error),
       message: strings.checkout.fixErrors,
+      values,
     };
   }
 
@@ -49,12 +53,29 @@ export async function placeOrder(
   try {
     orderId = await createOrder({ name, phone, city, address, notes, cart });
   } catch (error) {
+    if (error instanceof ProductReservedError) {
+      return { status: "error", message: strings.checkout.reserved, values };
+    }
     if (error instanceof ProductUnavailableError) {
-      return { status: "error", message: strings.checkout.unavailable };
+      return { status: "error", message: strings.checkout.unavailable, values };
     }
     console.error("[placeOrder] could not save the order", error);
-    return { status: "error", message: strings.checkout.submitError };
+    return { status: "error", message: strings.checkout.submitError, values };
   }
+
+  // Best-effort: a broken notification must never block a saved order.
+  await notifyNewOrder(orderId);
+
+  // Lets the confirmation page show the customer their own name and city
+  // without exposing them to anyone who guesses an order id.
+  const cookieStore = await cookies();
+  cookieStore.set("cbn-order", String(orderId), {
+    httpOnly: true,
+    sameSite: "lax",
+    path: "/",
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 60 * 60 * 24 * 7,
+  });
 
   // Outside the try/catch on purpose: redirect() works by throwing, and we do
   // not want to catch it and show an error instead of moving on.

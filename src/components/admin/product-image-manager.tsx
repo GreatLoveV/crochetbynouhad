@@ -18,7 +18,7 @@ import {
 } from "@/app/admin/actions/products";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { strings } from "@/lib/strings";
+import { strings } from "@/lib/constants/strings";
 
 type ImageRow = { id: number; url: string; position: number };
 

@@ -1,6 +1,8 @@
+import "server-only";
+
 import { redirect } from "next/navigation";
 
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/auth";
 
 /**
  * The one place that decides whether the current visitor is allowed into the

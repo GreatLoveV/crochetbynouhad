@@ -1,8 +1,11 @@
+import "server-only";
+
 import { asc, desc, eq, max, sql } from "drizzle-orm";
 
 import { db } from "@/db";
 import { categories, orderItems, productImages, products } from "@/db/schema";
-import { slugify, type ProductFormValues } from "@/lib/product-form";
+import { formatProductReference } from "@/lib/format/money";
+import { slugify, type ProductFormValues } from "@/lib/validation/product-form";
 
 /**
  * Product queries and writes for the admin.
@@ -21,6 +24,9 @@ export type AdminProductRow = {
   nameFr: string;
   price: number;
   isActive: boolean;
+  reference: string | null;
+  isUnique: boolean;
+  isSoldOut: boolean;
   categoryNameFr: string;
   imageUrl: string | null;
   imageCount: number;
@@ -35,6 +41,9 @@ export async function getAdminProducts(): Promise<AdminProductRow[]> {
       nameFr: products.nameFr,
       price: products.price,
       isActive: products.isActive,
+      reference: products.reference,
+      isUnique: products.isUnique,
+      isSoldOut: products.isSoldOut,
       categoryNameFr: categories.nameFr,
     })
     .from(products)
@@ -102,7 +111,10 @@ export type AdminProductDetail = {
   descriptionEn: string;
   categoryId: number;
   price: number;
+  reference: string | null;
   isActive: boolean;
+  isUnique: boolean;
+  isSoldOut: boolean;
   images: { id: number; url: string; position: number }[];
 };
 
@@ -121,7 +133,10 @@ export async function getAdminProduct(
       descriptionEn: true,
       categoryId: true,
       price: true,
+      reference: true,
       isActive: true,
+      isUnique: true,
+      isSoldOut: true,
     },
     with: {
       images: {
@@ -145,7 +160,10 @@ export async function getAdminProduct(
     descriptionEn: row.descriptionEn,
     categoryId: row.categoryId,
     price: row.price,
+    reference: row.reference,
     isActive: row.isActive,
+    isUnique: row.isUnique,
+    isSoldOut: row.isSoldOut,
     images: row.images,
   };
 }
@@ -156,6 +174,62 @@ export async function getAdminCategories() {
     .select({ id: categories.id, nameFr: categories.nameFr })
     .from(categories)
     .orderBy(asc(categories.nameFr));
+}
+
+/** Categories with their "coming soon" flag and how many pieces they hold. */
+export type AdminCategoryRow = {
+  id: number;
+  slug: string;
+  nameFr: string;
+  isComingSoon: boolean;
+  productCount: number;
+};
+
+export async function getAdminCategoryList(): Promise<AdminCategoryRow[]> {
+  const [rows, counts] = await Promise.all([
+    db
+      .select({
+        id: categories.id,
+        slug: categories.slug,
+        nameFr: categories.nameFr,
+        isComingSoon: categories.isComingSoon,
+      })
+      .from(categories)
+      .orderBy(asc(categories.nameFr)),
+    db
+      .select({
+        categoryId: products.categoryId,
+        total: sql<number>`count(*)::int`,
+      })
+      .from(products)
+      .groupBy(products.categoryId),
+  ]);
+
+  const countByCategory = new Map(counts.map((row) => [row.categoryId, row.total]));
+
+  return rows.map((row) => ({
+    ...row,
+    productCount: countByCategory.get(row.id) ?? 0,
+  }));
+}
+
+/** Flips a category between live and coming soon. */
+export async function setCategoryComingSoon(
+  id: number,
+  isComingSoon: boolean,
+): Promise<{ slug: string; isComingSoon: boolean } | null> {
+  const before = await db.query.categories.findFirst({
+    where: eq(categories.id, id),
+    columns: { slug: true },
+  });
+  if (!before) return null;
+
+  await db
+    .update(categories)
+    .set({ isComingSoon })
+    .where(eq(categories.id, id));
+
+  return { slug: before.slug, isComingSoon };
 }
 
 /** Used to make sure a slug is free, and to find the next free one. */
@@ -196,6 +270,9 @@ export type ProductInput = {
   categoryId: number;
   price: number;
   isActive: boolean;
+  isUnique: boolean;
+  isSoldOut: boolean;
+  reference: string;
 };
 
 /**
@@ -208,6 +285,7 @@ export function toProductInput(
   data: ProductFormValues,
   price: number,
   slug: string,
+  reference: string,
 ): ProductInput {
   return {
     slug,
@@ -218,6 +296,9 @@ export function toProductInput(
     categoryId: data.categoryId,
     price,
     isActive: data.isActive,
+    isUnique: data.isUnique,
+    isSoldOut: data.isSoldOut,
+    reference,
   };
 }
 
@@ -247,12 +328,28 @@ export async function resolveProductSlug({
   return { ok: true, slug: await findFreeSlug(wanted) };
 }
 
+/**
+ * Inserts a product and returns its id.
+ *
+ * A blank reference is written as null first (Postgres allows many nulls in a
+ * unique column), then backfilled with `CN-` + the id now that it exists, so
+ * two products can never end up with the same number.
+ */
 export async function createProduct(input: ProductInput): Promise<number> {
   const created = await db
     .insert(products)
-    .values(input)
+    .values({ ...input, reference: input.reference || null })
     .returning({ id: products.id });
-  return created[0].id;
+  const id = created[0].id;
+
+  if (!input.reference) {
+    await db
+      .update(products)
+      .set({ reference: formatProductReference(id) })
+      .where(eq(products.id, id));
+  }
+
+  return id;
 }
 
 /** Returns the slug the product had before, so its old page can be revalidated. */
@@ -262,10 +359,17 @@ export async function updateProduct(
 ): Promise<string | null> {
   const before = await db.query.products.findFirst({
     where: eq(products.id, id),
-    columns: { slug: true },
+    columns: { slug: true, reference: true },
   });
 
-  await db.update(products).set(input).where(eq(products.id, id));
+  await db
+    .update(products)
+    .set({
+      ...input,
+      // A blank reference keeps the one already assigned.
+      reference: input.reference || before?.reference || formatProductReference(id),
+    })
+    .where(eq(products.id, id));
 
   return before?.slug ?? null;
 }

@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { PackageIcon, ShoppingBagIcon } from "lucide-react";
+import { PackageIcon, ShoppingBagIcon, TagIcon } from "lucide-react";
 
-import { strings } from "@/lib/strings";
+import { strings } from "@/lib/constants/strings";
 
 /**
  * Sidebar navigation for the admin.
@@ -21,6 +21,12 @@ export function AdminNav() {
         icon={<PackageIcon className="size-4" />}
         label={strings.admin.products}
         active={pathname.startsWith("/admin/products")}
+      />
+      <NavLink
+        href="/admin/categories"
+        icon={<TagIcon className="size-4" />}
+        label={strings.admin.categories}
+        active={pathname.startsWith("/admin/categories")}
       />
       <NavLink
         href="/admin/orders"

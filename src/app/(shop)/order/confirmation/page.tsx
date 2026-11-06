@@ -1,23 +1,30 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { CheckCircle2Icon, MessageCircleIcon } from "lucide-react";
 
 import { ClearCartOnMount } from "@/components/cart/clear-cart-on-mount";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { formatPrice } from "@/lib/money";
-import { orderReference } from "@/lib/checkout";
-import { getOrderSummary, ORDER_STATUS_LABELS } from "@/lib/orders";
-import { strings } from "@/lib/strings";
-import { whatsappUrl } from "@/lib/whatsapp";
+import { formatPrice } from "@/lib/format/money";
+import {
+  buildOrderWhatsappMessage,
+  getOrderSummary,
+  ORDER_STATUS_LABELS,
+} from "@/lib/data/orders";
+import { SITE_URL, strings } from "@/lib/constants/strings";
+import { whatsappUrl } from "@/lib/integrations/whatsapp";
 
 export const metadata: Metadata = {
   title: `${strings.order.title} | ${strings.siteName}`,
   robots: { index: false, follow: false },
 };
 
-/** Next 16: `searchParams` is a Promise, so the page must be async. */
+/** Cookie set by `placeOrder`; its value is the id of the order just placed. */
+const ORDER_COOKIE = "cbn-order";
+
+/** Next 16: `searchParams` and `cookies()` are promises, so the page is async. */
 export default async function OrderConfirmationPage({
   searchParams,
 }: PageProps<"/order/confirmation">) {
@@ -28,13 +35,16 @@ export default async function OrderConfirmationPage({
   // Anything that is not a real order is simply a 404: no way to guess a page.
   if (!Number.isInteger(id) || id < 1) notFound();
 
-  const order = await getOrderSummary(id);
+  // Only the browser that just placed this order gets the name and city; a
+  // stranger who guesses the id gets the recap without any personal detail.
+  const cookieStore = await cookies();
+  const unlocked = cookieStore.get(ORDER_COOKIE)?.value === String(id);
+
+  const order = await getOrderSummary(id, { includeCustomer: unlocked });
   if (!order) notFound();
 
-  const reference = orderReference(order.id);
-
   const recap = [
-    `${strings.siteName} — ${strings.order.reference} ${reference}`,
+    `${strings.siteName} — ${strings.order.reference} ${order.reference}`,
     "",
     ...order.lines.map(
       (line) =>
@@ -43,6 +53,11 @@ export default async function OrderConfirmationPage({
     "",
     `${strings.cart.total} : ${formatPrice(order.total)}`,
   ].join("\n");
+
+  // Full message only for the customer; the fallback keeps the raw recap.
+  const whatsappHref = whatsappUrl(
+    unlocked ? buildOrderWhatsappMessage(order, SITE_URL) : recap,
+  );
 
   return (
     <div className="mx-auto w-full max-w-2xl px-5 py-14 sm:px-8 sm:py-20">
@@ -64,7 +79,7 @@ export default async function OrderConfirmationPage({
           <p className="text-[0.7rem] tracking-[0.18em] text-muted-foreground uppercase">
             {strings.order.reference}
           </p>
-          <p className="font-heading text-2xl tabular-nums">{reference}</p>
+          <p className="font-heading text-2xl tabular-nums">{order.reference}</p>
           <p className="mt-1 text-xs text-muted-foreground">
             {ORDER_STATUS_LABELS[order.status]}
           </p>
@@ -76,6 +91,9 @@ export default async function OrderConfirmationPage({
           <li key={index} className="flex justify-between gap-4 py-4 text-sm">
             <span className="text-muted-foreground">
               {line.nameFr} × {line.quantity}
+              <span className="mt-0.5 block text-xs tracking-[0.14em] uppercase">
+                {line.reference}
+              </span>
             </span>
             <span className="tabular-nums">
               {formatPrice(line.unitPrice * line.quantity)}
@@ -97,11 +115,12 @@ export default async function OrderConfirmationPage({
 
       <div className="flex flex-col items-center gap-3">
         <Button
+          variant="outline"
           size="lg"
           className="w-full sm:w-auto sm:px-8"
           render={
             <a
-              href={whatsappUrl(recap)}
+              href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
             />
@@ -110,6 +129,9 @@ export default async function OrderConfirmationPage({
           <MessageCircleIcon />
           {strings.order.whatsapp}
         </Button>
+        <p className="text-xs text-muted-foreground">
+          {strings.order.whatsappOptional}
+        </p>
 
         <Button variant="ghost" render={<Link href="/#boutique" />}>
           {strings.order.keepShopping}

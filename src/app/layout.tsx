@@ -3,7 +3,7 @@ import { DM_Sans, Fraunces } from "next/font/google";
 
 import { CartProvider } from "@/components/cart/cart-provider";
 import { Toaster } from "@/components/ui/sonner";
-import { SITE_URL, strings } from "@/lib/strings";
+import { SITE_URL, strings } from "@/lib/constants/strings";
 
 import "./globals.css";
 

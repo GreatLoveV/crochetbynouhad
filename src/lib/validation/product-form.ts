@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { madToCentimes } from "@/lib/money";
+import { madToCentimes } from "@/lib/format/money";
 
 /**
  * Validation for the product form in the admin.
@@ -45,7 +45,20 @@ export const productFormSchema = z.object({
     )
     .optional()
     .or(z.literal("")),
+  reference: z
+    .string()
+    .trim()
+    .max(40, "Référence trop longue.")
+    .regex(/^[A-Za-z0-9\-]+$/, "Caractères alphanumériques et tirets uniquement.")
+    .optional()
+    .or(z.literal("")),
   isActive: z.boolean(),
+  // One-of-a-kind piece: no quantity selector, and reserving it takes it off
+  // the shop until the order is cancelled.
+  isUnique: z.boolean(),
+  // Taken by an order. Only meaningful while `isUnique` is true; the toggle in
+  // the form lets Nouhad mark a piece available again by hand.
+  isSoldOut: z.boolean(),
 });
 
 export type ProductFormValues = z.infer<typeof productFormSchema>;

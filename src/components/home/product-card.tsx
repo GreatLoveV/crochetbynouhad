@@ -1,10 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { isOptimizableImageUrl } from "@/lib/images";
-import { formatPrice } from "@/lib/money";
-import type { ProductSummary } from "@/lib/products";
+import { isOptimizableImageUrl } from "@/lib/constants/images";
+import { formatPrice } from "@/lib/format/money";
+import type { ProductSummary } from "@/lib/data/products";
+import { strings } from "@/lib/constants/strings";
 
 /**
  * One tile in the catalog grid. Pure server component: the only thing the
@@ -32,6 +34,16 @@ export function ProductCard({ product }: { product: ProductSummary }) {
               {product.categoryNameFr}
             </div>
           )}
+
+          {/* A sold-out piece stays in the grid, clearly marked. */}
+          {product.isUnique && product.isSoldOut ? (
+            <Badge
+              variant="secondary"
+              className="absolute top-3 left-3 shadow-soft"
+            >
+              {strings.product.soldOut}
+            </Badge>
+          ) : null}
         </div>
 
         <div className="flex flex-1 flex-col gap-1 p-4">

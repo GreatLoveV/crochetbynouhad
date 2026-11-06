@@ -1,7 +1,14 @@
+import "server-only";
+
 import { desc, eq, sql } from "drizzle-orm";
 
 import { db } from "@/db";
-import { orderItems, orders, products, orderStatusEnum } from "@/db/schema";
+import { orderItems, orders, products } from "@/db/schema";
+import { formatOrderNumber, formatPrice } from "@/lib/format/money";
+import {
+  type OrderStatus,
+  ORDER_STATUSES,
+} from "@/lib/constants/order-statuses";
 
 /**
  * Order queries for the admin.
@@ -10,15 +17,10 @@ import { orderItems, orders, products, orderStatusEnum } from "@/db/schema";
  * gets its lines back from the transaction that created them. Everything here is
  * Nouhad's side.
  *
- * Note on item names: `order_items` stores the price but not the name, so a
- * product renamed later also shows its new name on old orders. The money is
- * frozen, the wording is not. Worth a `name_fr` column later if the history has
- * to read exactly as it was.
+ * Item name and reference are read from `order_items` (snapshotted at order
+ * time), not from `products`, so renaming or deactivating a piece never rewrites
+ * a past order. `products` is still joined for the link back to the current page.
  */
-
-export type OrderStatus = (typeof orderStatusEnum.enumValues)[number];
-
-export const ORDER_STATUSES = orderStatusEnum.enumValues;
 
 export type AdminOrderRow = {
   id: number;
@@ -37,6 +39,7 @@ export type AdminOrderItem = {
   id: number;
   productId: number;
   nameFr: string;
+  reference: string | null;
   slug: string | null;
   quantity: number;
   unitPrice: number;
@@ -47,11 +50,6 @@ export type AdminOrderDetail = AdminOrderRow & {
   notes: string | null;
   items: AdminOrderItem[];
 };
-
-/** Same shape as `src/lib/checkout.ts` builds for the customer's receipt. */
-function reference(id: number): string {
-  return `CB-${id}`;
-}
 
 export async function getAdminOrders(): Promise<AdminOrderRow[]> {
   const [rows, totals] = await Promise.all([
@@ -85,7 +83,7 @@ export async function getAdminOrders(): Promise<AdminOrderRow[]> {
 
   return rows.map((row) => ({
     ...row,
-    reference: reference(row.id),
+    reference: formatOrderNumber(row.id),
     pieceCount: piecesByOrder.get(row.id) ?? 0,
   }));
 }
@@ -98,13 +96,17 @@ export async function getAdminOrder(id: number): Promise<AdminOrderDetail | null
       .select({
         id: orderItems.id,
         productId: orderItems.productId,
-        nameFr: products.nameFr,
+        // Snapshotted on the line; the join only supplies the current slug so
+        // the admin can still open the piece if it is still active. The
+        // `coalesce` only matters for a row written before the backfill.
+        nameFr: sql<string>`coalesce(${orderItems.productName}, ${products.nameFr})`,
+        reference: sql<string | null>`coalesce(${orderItems.productReference}, ${products.reference})`,
         slug: products.slug,
         quantity: orderItems.quantity,
         unitPrice: orderItems.unitPrice,
       })
       .from(orderItems)
-      .innerJoin(products, eq(orderItems.productId, products.id))
+      .leftJoin(products, eq(orderItems.productId, products.id))
       .where(eq(orderItems.orderId, id))
       .orderBy(orderItems.id),
   ]);
@@ -113,7 +115,7 @@ export async function getAdminOrder(id: number): Promise<AdminOrderDetail | null
 
   return {
     id: order.id,
-    reference: reference(order.id),
+    reference: formatOrderNumber(order.id),
     customerName: order.customerName,
     phone: order.phone,
     city: order.city,
@@ -141,7 +143,22 @@ export async function getOrderStatusCounts(): Promise<Record<OrderStatus, number
   return counts;
 }
 
-/** Guards a status coming from a form before it reaches the enum column. */
-export function isOrderStatus(value: string): value is OrderStatus {
-  return (ORDER_STATUSES as readonly string[]).includes(value);
+/**
+ * Prefilled message for "Contacter le client sur WhatsApp" in the admin.
+ *
+ * The delivery fee is left as "…" on purpose: wa.me opens the composer with
+ * the text ready to edit, so Nouhad has to fill the amount for the city before
+ * sending — the message never claims a price it does not know.
+ */
+export function buildAdminOrderWhatsappMessage(order: AdminOrderDetail): string {
+  const items = order.items
+    .map(
+      (item) =>
+        `${item.nameFr}${item.reference ? ` (${item.reference})` : ""} x${item.quantity}`,
+    )
+    .join(", ");
+
+  return [
+    `Bonjour ${order.customerName}, c'est Nouhad de Crochet by Nouhad. Je confirme votre commande ${order.reference} : ${items}. Total : ${formatPrice(order.total)}, paiement à la livraison. Les frais de livraison pour ${order.city} sont de … MAD. Merci !`,
+  ].join("");
 }

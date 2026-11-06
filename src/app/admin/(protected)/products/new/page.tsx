@@ -5,8 +5,8 @@ import {
   ProductForm,
   type ProductFormDefaults,
 } from "@/components/admin/product-form";
-import { getAdminCategories } from "@/lib/admin-products";
-import { strings } from "@/lib/strings";
+import { getAdminCategories } from "@/lib/data/admin-products";
+import { strings } from "@/lib/constants/strings";
 
 export const metadata = { title: "Nouvelle pièce — Administration" };
 
@@ -21,7 +21,10 @@ export default async function NewProductPage() {
     categoryId: "",
     price: 0,
     slug: "",
+    reference: "",
     isActive: true,
+    isUnique: true,
+    isSoldOut: false,
   };
 
   return (

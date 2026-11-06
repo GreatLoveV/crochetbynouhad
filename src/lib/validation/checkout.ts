@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { MAX_QUTY_PER_LINE } from "@/lib/cart";
+import { MAX_QUTY_PER_LINE } from "@/lib/constants/cart";
 
 /**
  * Everything the checkout form sends, validated on the server.
@@ -54,15 +54,15 @@ export const checkoutSchema = z.object({
     .trim()
     .min(2, "Indiquez votre nom.")
     .max(80, "Nom trop long (80 caractères maximum)."),
-  // Moroccan numbers are written many ways (+212 6 12 34 56 78, 0612345678…),
-  // so we accept the punctuation and normalise it ourselves.
+  // Moroccan mobiles are written many ways (0612345678, +212 6 12 34 56 78,
+  // 00212612345678). We accept all of them and check the normalised 212… form.
   phone: z
     .string()
     .trim()
-    .regex(/^\+?[\d\s().-]{9,20}$/, "Numéro de téléphone invalide.")
+    .min(1, "Indiquez votre numéro de téléphone.")
     .refine(
-      (value) => value.replace(/\D/g, "").length >= 9,
-      "Numéro de téléphone trop court.",
+      (value) => isValidMoroccanPhone(value),
+      "Numéro de téléphone invalide (ex. 06 12 34 56 78).",
     ),
   city: z
     .string()
@@ -85,12 +85,30 @@ export const checkoutSchema = z.object({
 export type CheckoutInput = z.infer<typeof checkoutSchema>;
 export type CheckoutLine = z.infer<typeof cartLineSchema>;
 
-/** Human-friendly order reference, e.g. `CB-1042`. */
-export function orderReference(id: number): string {
-  return `CB-${id}`;
-}
+/**
+ * Human-friendly order number, e.g. `CMD-0012`.
+ *
+ * Kept as a re-export so existing imports keep working while there is a single
+ * formatter (`formatOrderNumber` in `@/lib/format/money`).
+ */
+export { formatOrderNumber as orderReference } from "@/lib/format/money";
 
 /** Keeps only the digits, e.g. `+212 6 12 34 56 78` becomes `212612345678`. */
 export function normalizePhone(value: string): string {
   return value.replace(/\D/g, "");
+}
+
+/**
+ * True for a Moroccan mobile in any of the common writings:
+ * `0612345678`, `+212612345678`, `00212612345678`. Normalised, they all become
+ * `2126xxxxxxxx` / `2127xxxxxxxx`. Kept here (not in `whatsapp.ts`) so no client
+ * bundle pulls in the WhatsApp env var just to validate a phone number.
+ */
+export function isValidMoroccanPhone(value: string): boolean {
+  let digits = value.replace(/\D/g, "");
+  if (digits.startsWith("00")) digits = digits.slice(2);
+  else if (digits.startsWith("0") && digits.length === 10) {
+    digits = `212${digits.slice(1)}`;
+  }
+  return /^212[67]\d{8}$/.test(digits);
 }

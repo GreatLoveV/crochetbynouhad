@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
-import { getActiveProductSlugs } from "@/lib/products";
-import { SITE_URL } from "@/lib/strings";
+import { getActiveProductSlugs } from "@/lib/data/products";
+import { SITE_URL } from "@/lib/constants/strings";
 
 /**
  * Every page Google should know about.

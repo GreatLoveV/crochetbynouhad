@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { CartPageView } from "@/components/cart/cart-page-view";
-import { strings } from "@/lib/strings";
+import { strings } from "@/lib/constants/strings";
 
 export const metadata: Metadata = {
   title: `${strings.cart.title} | ${strings.siteName}`,

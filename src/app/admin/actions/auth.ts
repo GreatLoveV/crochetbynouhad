@@ -2,9 +2,9 @@
 
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 
-import { signIn, signOut } from "@/lib/auth";
-import { ADMIN_LOGIN_PATH } from "@/lib/admin";
-import { strings } from "@/lib/strings";
+import { signIn, signOut } from "@/lib/auth/auth";
+import { ADMIN_LOGIN_PATH } from "@/lib/auth/admin";
+import { strings } from "@/lib/constants/strings";
 
 export type LoginState = {
   error?: string;

@@ -21,9 +21,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
-import { formatPrice } from "@/lib/money";
-import { strings } from "@/lib/strings";
-import { whatsappUrl } from "@/lib/whatsapp";
+import { formatPrice } from "@/lib/format/money";
+import { strings } from "@/lib/constants/strings";
 import { cn } from "cn";
 
 /**
@@ -138,21 +137,6 @@ function DrawerLines({
   }
 
   const total = cartTotal(products, items);
-  const quantities = new Map(items.map((i) => [i.productId, i.quantity]));
-  const orderLines = products
-    .map((product) => {
-      const quantity = quantities.get(product.id) ?? 0;
-      return `• ${product.nameFr} x${quantity} — ${formatPrice(product.price * quantity)}`;
-    })
-    .join("\n");
-
-  const message = [
-    strings.cart.whatsapp,
-    "",
-    orderLines,
-    "",
-    `${strings.cart.total} : ${formatPrice(total)}`,
-  ].join("\n");
 
   return (
     <>
@@ -193,19 +177,6 @@ function DrawerLines({
           >
             {strings.cart.viewPage}
           </Link>
-          <Button
-            variant="ghost"
-            size="sm"
-            render={
-              <a
-                href={whatsappUrl(message)}
-                target="_blank"
-                rel="noopener noreferrer"
-              />
-            }
-          >
-            {strings.cart.whatsapp}
-          </Button>
         </div>
 
         <p className="text-center text-xs text-muted-foreground">

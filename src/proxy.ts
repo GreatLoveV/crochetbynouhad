@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/auth";
 
 /**
  * Fast redirect for the admin screens.
  *
  * This only reads the session cookie — no database query — because it runs on
  * every request. It is a convenience, not the security boundary: the real check
- * is `requireAdmin()` in `src/lib/admin.ts`, called by every admin page and
+ * is `requireAdmin()` in `src/lib/auth/admin.ts`, called by every admin page and
  * every admin server action. (A server action is a POST to the page it is used
  * on, so a matcher gap would otherwise leave it wide open.)
  */

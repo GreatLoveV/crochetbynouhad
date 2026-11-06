@@ -1,9 +1,10 @@
 import Link from "next/link";
 
-import { getAdminOrders, getOrderStatusCounts, ORDER_STATUSES } from "@/lib/admin-orders";
-import { formatPrice } from "@/lib/money";
+import { getAdminOrders, getOrderStatusCounts } from "@/lib/data/admin-orders";
+import { formatPrice } from "@/lib/format/money";
+import { ORDER_STATUSES } from "@/lib/constants/order-statuses";
 import { orderStatusLabel } from "@/components/admin/order-status-badge";
-import { strings } from "@/lib/strings";
+import { strings } from "@/lib/constants/strings";
 
 /** ISO date, rendered by the server to keep the list free of client JS. */
 function formatDate(date: Date): string {

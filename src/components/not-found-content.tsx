@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { strings } from "@/lib/strings";
+import { strings } from "@/lib/constants/strings";
 
 /**
  * The 404 message, with no header or footer of its own.

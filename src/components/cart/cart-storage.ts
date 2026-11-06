@@ -16,7 +16,7 @@ import {
   CART_STORAGE_KEY,
   MAX_QUTY_PER_LINE,
   type CartItem,
-} from "@/lib/cart";
+} from "@/lib/constants/cart";
 
 export { CART_STORAGE_KEY, MAX_QUTY_PER_LINE, type CartItem };
 

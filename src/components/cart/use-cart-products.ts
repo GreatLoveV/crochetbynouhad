@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { fetchCartProducts } from "@/app/actions/cart";
-import type { ProductSummary } from "@/lib/products";
+import type { ProductSummary } from "@/lib/data/products";
 
 /**
  * Asks the server for the current data behind a set of cart ids.

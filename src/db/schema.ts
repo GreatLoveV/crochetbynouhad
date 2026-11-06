@@ -32,6 +32,9 @@ export const categories = pgTable("categories", {
   slug: text("slug").notNull().unique(),
   nameEn: text("name_en").notNull(),
   nameFr: text("name_fr").notNull(),
+  // A category with no pieces yet: shown with a "Bientôt" badge instead of
+  // being hidden, so visitors know it is coming.
+  isComingSoon: boolean("is_coming_soon").notNull().default(false),
 });
 
 export const products = pgTable("products", {
@@ -45,7 +48,12 @@ export const products = pgTable("products", {
   descriptionFr: text("description_fr").notNull(),
   descriptionEn: text("description_en").notNull(),
   price: integer("price").notNull(),
+  reference: text("reference").unique(),
   isActive: boolean("is_active").notNull().default(true),
+  // Most pieces exist only once: no quantity selector, and the piece is taken
+  // out of circulation as soon as an order is placed.
+  isUnique: boolean("is_unique").notNull().default(true),
+  isSoldOut: boolean("is_sold_out").notNull().default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
@@ -80,6 +88,8 @@ export const orderItems = pgTable("order_items", {
     .references(() => products.id),
   quantity: integer("quantity").notNull(),
   unitPrice: integer("unit_price").notNull(),
+  productName: text("product_name"),
+  productReference: text("product_reference"),
 });
 
 export const categoriesRelations = relations(categories, ({ many }) => ({

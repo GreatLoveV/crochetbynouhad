@@ -1,6 +1,6 @@
 "use server";
 
-import { getProductsByIds, type ProductSummary } from "@/lib/products";
+import { getProductsByIds, type ProductSummary } from "@/lib/data/products";
 
 /**
  * Server Action used by the cart drawer.

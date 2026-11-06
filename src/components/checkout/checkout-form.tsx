@@ -4,17 +4,33 @@ import Link from "next/link";
 import { useActionState } from "react";
 import { Loader2Icon, LockIcon, ShoppingBagIcon } from "lucide-react";
 
-import { emptyOrderFormState, placeOrder } from "@/app/actions/orders";
+import { placeOrder } from "@/app/actions/orders";
 import { useCart } from "@/components/cart/cart-provider";
-import { cartTotal } from "@/components/cart/cart-line-rows";
+import { cartTotal, lineQuantity } from "@/components/cart/cart-line-rows";
 import { useCartProducts } from "@/components/cart/use-cart-products";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { formatPrice } from "@/lib/money";
-import { strings } from "@/lib/strings";
+import { formatPrice } from "@/lib/format/money";
+import { emptyOrderFormState } from "@/lib/validation/order-form";
+import { strings } from "@/lib/constants/strings";
+
+/** Suggestions for the city field; the customer can still type anything. */
+const MOROCCAN_CITIES = [
+  "Casablanca",
+  "Rabat",
+  "Salé",
+  "Marrakech",
+  "Tanger",
+  "Fès",
+  "Agadir",
+  "Meknès",
+  "Oujda",
+  "Kénitra",
+  "Tétouan",
+];
 
 /**
  * Guest checkout: a short form plus the order summary.
@@ -69,6 +85,8 @@ export function CheckoutForm() {
 
   const total = cartTotal(products, items);
   const errors = state.fieldErrors ?? {};
+  // On a failed submit the action echoes the fields back, so nothing is lost.
+  const kept = state.values;
 
   return (
     <form action={formAction} className="grid gap-10 lg:grid-cols-[1fr_20rem] lg:items-start">
@@ -105,6 +123,7 @@ export function CheckoutForm() {
                 {...props}
                 name="name"
                 autoComplete="name"
+                defaultValue={kept?.name ?? ""}
                 placeholder={strings.checkout.namePlaceholder}
               />
             )}
@@ -122,6 +141,7 @@ export function CheckoutForm() {
                 type="tel"
                 inputMode="tel"
                 autoComplete="tel"
+                defaultValue={kept?.phone ?? ""}
                 placeholder={strings.checkout.phonePlaceholder}
               />
             )}
@@ -132,12 +152,22 @@ export function CheckoutForm() {
             label={strings.checkout.city}
             error={errors.city}
             render={(props) => (
-              <Input
-                {...props}
-                name="city"
-                autoComplete="address-level2"
-                placeholder={strings.checkout.cityPlaceholder}
-              />
+              <>
+                <Input
+                  {...props}
+                  name="city"
+                  list="moroccan-cities"
+                  autoComplete="address-level2"
+                  defaultValue={kept?.city ?? ""}
+                  placeholder={strings.checkout.cityPlaceholder}
+                />
+                {/* Suggestions only: any city can still be typed. */}
+                <datalist id="moroccan-cities">
+                  {MOROCCAN_CITIES.map((city) => (
+                    <option key={city} value={city} />
+                  ))}
+                </datalist>
+              </>
             )}
           />
 
@@ -150,6 +180,7 @@ export function CheckoutForm() {
                 {...props}
                 name="address"
                 autoComplete="street-address"
+                defaultValue={kept?.address ?? ""}
                 placeholder={strings.checkout.addressPlaceholder}
               />
             )}
@@ -163,6 +194,7 @@ export function CheckoutForm() {
               <Textarea
                 {...props}
                 name="notes"
+                defaultValue={kept?.notes ?? ""}
                 placeholder={strings.checkout.notesPlaceholder}
               />
             )}
@@ -177,21 +209,30 @@ export function CheckoutForm() {
             </p>
           ) : null}
 
-          <Button type="submit" size="lg" className="h-13 w-full sm:w-auto sm:px-10" disabled={pending}>
-            {pending ? (
-              <>
-                <Loader2Icon className="animate-spin" />
-                {strings.checkout.submitting}
-              </>
-            ) : (
-              strings.checkout.submit
-            )}
-          </Button>
+          {/* Sticky on phones so the confirm button is always within reach;
+              back to a normal inline button from the laptop layout up. */}
+          <div className="sticky bottom-0 z-10 -mx-5 mt-2 border-t border-border bg-background/95 px-5 py-3 backdrop-blur-sm lg:static lg:mx-0 lg:border-0 lg:bg-transparent lg:px-0 lg:py-0 lg:backdrop-blur-none">
+            <Button
+              type="submit"
+              size="lg"
+              className="h-13 w-full lg:w-auto lg:px-10"
+              disabled={pending}
+            >
+              {pending ? (
+                <>
+                  <Loader2Icon className="animate-spin" />
+                  {strings.checkout.submitting}
+                </>
+              ) : (
+                strings.checkout.submit
+              )}
+            </Button>
 
-          <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
-            <LockIcon className="size-3.5" />
-            {strings.checkout.paymentNote}
-          </p>
+            <p className="mt-2 flex items-center justify-center gap-1.5 text-xs text-muted-foreground lg:justify-start">
+              <LockIcon className="size-3.5" />
+              {strings.checkout.paymentNote}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -201,12 +242,16 @@ export function CheckoutForm() {
 
         <ul className="mt-4 flex flex-col gap-3 text-sm">
           {products.map((product) => {
-            const quantity =
-              items.find((item) => item.productId === product.id)?.quantity ?? 0;
+            const quantity = lineQuantity(product, items);
             return (
               <li key={product.id} className="flex justify-between gap-4">
                 <span className="text-muted-foreground">
                   {product.nameFr} × {quantity}
+                  {product.reference ? (
+                    <span className="mt-0.5 block text-xs tracking-[0.14em] uppercase">
+                      {product.reference}
+                    </span>
+                  ) : null}
                 </span>
                 <span className="tabular-nums">
                   {formatPrice(product.price * quantity)}

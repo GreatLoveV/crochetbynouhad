@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-import { SITE_URL } from "@/lib/strings";
+import { SITE_URL } from "@/lib/constants/strings";
 
 /**
  * Keeps search engines out of everything that is not a public page.

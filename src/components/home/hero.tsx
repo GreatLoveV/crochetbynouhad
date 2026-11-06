@@ -3,9 +3,9 @@ import { MessageCircleIcon, SparklesIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import type { ProductSummary } from "@/lib/products";
-import { strings } from "@/lib/strings";
-import { whatsappUrl } from "@/lib/whatsapp";
+import type { ProductSummary } from "@/lib/data/products";
+import { strings } from "@/lib/constants/strings";
+import { whatsappUrl } from "@/lib/integrations/whatsapp";
 
 /**
  * Short hero above the catalog. `showcase` is the cover photo of the first

@@ -4,9 +4,9 @@ import { ArrowLeftIcon } from "lucide-react";
 
 import { ProductImageManager } from "@/components/admin/product-image-manager";
 import { ProductForm } from "@/components/admin/product-form";
-import { getAdminCategories, getAdminProduct } from "@/lib/admin-products";
-import { formatPrice } from "@/lib/money";
-import { strings } from "@/lib/strings";
+import { getAdminCategories, getAdminProduct } from "@/lib/data/admin-products";
+import { formatPrice } from "@/lib/format/money";
+import { strings } from "@/lib/constants/strings";
 
 export const metadata = { title: "Modifier la pièce — Administration" };
 
@@ -55,7 +55,10 @@ export default async function EditProductPage({
             categoryId: product.categoryId,
             price: product.price,
             slug: product.slug,
+            reference: product.reference ?? "",
             isActive: product.isActive,
+            isUnique: product.isUnique,
+            isSoldOut: product.isSoldOut,
           }}
         />
 

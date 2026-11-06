@@ -4,8 +4,8 @@ import { redirect } from "next/navigation";
 
 import { LoginForm } from "@/components/admin/login-form";
 import { Button } from "@/components/ui/button";
-import { auth } from "@/lib/auth";
-import { strings } from "@/lib/strings";
+import { auth } from "@/lib/auth/auth";
+import { strings } from "@/lib/constants/strings";
 
 export const metadata: Metadata = {
   title: strings.admin.loginTitle,

@@ -4,8 +4,8 @@ import { MessageCircleIcon } from "lucide-react";
 import { CartButton } from "@/components/cart/cart-sheet";
 import { InstagramIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { INSTAGRAM_URL, strings } from "@/lib/strings";
-import { whatsappUrl } from "@/lib/whatsapp";
+import { INSTAGRAM_URL, strings } from "@/lib/constants/strings";
+import { whatsappUrl } from "@/lib/integrations/whatsapp";
 
 /**
  * Sticky site header. Server component — only the cart drawer is a client

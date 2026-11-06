@@ -1,5 +1,5 @@
-import { strings } from "@/lib/strings";
-import type { OrderStatus } from "@/lib/admin-orders";
+import { strings } from "@/lib/constants/strings";
+import type { OrderStatus } from "@/lib/constants/order-statuses";
 
 /**
  * Status shown as words, not colours: Nouhad reads the list first and the badge

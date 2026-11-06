@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-import { strings } from "@/lib/strings";
+import { strings } from "@/lib/constants/strings";
 
 /**
  * The card WhatsApp and social platforms show when someone shares a link.

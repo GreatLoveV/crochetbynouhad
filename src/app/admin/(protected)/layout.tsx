@@ -3,8 +3,8 @@ import Link from "next/link";
 import { logoutAction } from "@/app/admin/actions/auth";
 import { AdminNav } from "@/components/admin/admin-nav";
 import { Button } from "@/components/ui/button";
-import { requireAdmin } from "@/lib/admin";
-import { strings } from "@/lib/strings";
+import { requireAdmin } from "@/lib/auth/admin";
+import { strings } from "@/lib/constants/strings";
 
 /**
  * Layout for every admin screen except the login page.

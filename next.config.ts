@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   images: {
     // Product photos are added in the admin as plain links, so they can come from
     // any host. Only these two get Next's image optimisation; anything else is
-    // rendered `unoptimized` (see `isOptimizableImageUrl` in `src/lib/images.ts`),
+    // rendered `unoptimized` (see `isOptimizableImageUrl` in `src/lib/constants/images.ts`),
     // which is why an unknown host shows the photo instead of a broken image.
     //
     // Keep this list and `OPTIMIZABLE_IMAGE_HOSTS` in step.
