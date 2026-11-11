@@ -36,7 +36,7 @@ export function ProductCard({ product }: { product: ProductSummary }) {
           )}
 
           {/* A sold-out piece stays in the grid, clearly marked. */}
-          {product.isUnique && product.isSoldOut ? (
+          {product.isSoldOut ? (
             <Badge
               variant="secondary"
               className="absolute top-3 left-3 shadow-soft"
@@ -50,7 +50,7 @@ export function ProductCard({ product }: { product: ProductSummary }) {
           <p className="text-[0.7rem] tracking-[0.18em] text-muted-foreground uppercase">
             {product.categoryNameFr}
           </p>
-          <h3 className="font-heading text-base leading-snug font-medium">
+          <h3 className="font-heading text-lg leading-snug font-semibold">
             {product.nameFr}
           </h3>
           <p className="mt-1 text-sm font-medium text-primary tabular-nums">

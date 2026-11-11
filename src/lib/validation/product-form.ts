@@ -53,12 +53,9 @@ export const productFormSchema = z.object({
     .optional()
     .or(z.literal("")),
   isActive: z.boolean(),
-  // One-of-a-kind piece: no quantity selector, and reserving it takes it off
-  // the shop until the order is cancelled.
-  isUnique: z.boolean(),
-  // Taken by an order. Only meaningful while `isUnique` is true; the toggle in
-  // the form lets Nouhad mark a piece available again by hand.
-  isSoldOut: z.boolean(),
+  // No `isSoldOut` here on purpose: the form must never write it. An edit page
+  // opened before an order came in would otherwise put a sold bag back on sale
+  // when saved. Sold / available are separate, explicit actions.
 });
 
 export type ProductFormValues = z.infer<typeof productFormSchema>;

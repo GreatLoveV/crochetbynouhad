@@ -1,12 +1,32 @@
 import "server-only";
 
-import NextAuth from "next-auth";
+import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 
 import { db } from "@/db";
 import { users } from "@/db/schema";
+import {
+  clearAttempts,
+  clientIpFrom,
+  isRateLimited,
+  recordAttempt,
+} from "@/lib/security/rate-limit";
+
+/**
+ * Brute-force protection. Checked inside `authorize`, not only in the login
+ * form's action, because Auth.js also exposes the credentials callback as a
+ * plain POST endpoint that never goes through the form.
+ */
+const LOGIN_WINDOW_SECONDS = 15 * 60;
+const MAX_FAILURES_PER_EMAIL = 5;
+const MAX_FAILURES_PER_IP = 10;
+
+/** Thrown when there were too many failed attempts; the form shows its own message. */
+export class TooManyLoginAttempts extends CredentialsSignin {
+  code = "rate_limited";
+}
 
 /**
  * Authentication for the admin area.
@@ -24,12 +44,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         email: { label: "E-mail", type: "email" },
         password: { label: "Mot de passe", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials, request) {
         const email = String(credentials?.email ?? "")
           .trim()
           .toLowerCase();
         const password = String(credentials?.password ?? "");
         if (!email || !password) return null;
+
+        const emailKey = `login:email:${email}`;
+        const ipKey = `login:ip:${clientIpFrom(request.headers)}`;
+        if (
+          (await isRateLimited(emailKey, MAX_FAILURES_PER_EMAIL, LOGIN_WINDOW_SECONDS)) ||
+          (await isRateLimited(ipKey, MAX_FAILURES_PER_IP, LOGIN_WINDOW_SECONDS))
+        ) {
+          throw new TooManyLoginAttempts();
+        }
 
         const user = await db.query.users.findFirst({
           where: eq(users.email, email),
@@ -37,10 +66,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         // Same answer for "no such account" and "wrong password", so the form
         // cannot be used to find out which addresses are registered.
-        if (!user) return null;
+        const passwordMatches = user
+          ? await bcrypt.compare(password, user.passwordHash)
+          : false;
+        if (!user || !passwordMatches) {
+          await recordAttempt(emailKey, ipKey);
+          return null;
+        }
 
-        const passwordMatches = await bcrypt.compare(password, user.passwordHash);
-        if (!passwordMatches) return null;
+        await clearAttempts(emailKey);
 
         return { id: String(user.id), email: user.email, role: user.role };
       },

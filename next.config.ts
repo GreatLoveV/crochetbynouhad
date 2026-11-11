@@ -7,16 +7,12 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ["@neondatabase/serverless", "ws"],
   images: {
     // Product photos are added in the admin as plain links, so they can come from
-    // any host. Only these two get Next's image optimisation; anything else is
+    // any host. Only this one gets Next's image optimisation; anything else is
     // rendered `unoptimized` (see `isOptimizableImageUrl` in `src/lib/constants/images.ts`),
     // which is why an unknown host shows the photo instead of a broken image.
     //
     // Keep this list and `OPTIMIZABLE_IMAGE_HOSTS` in step.
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "placehold.co",
-      },
       {
         protocol: "https",
         hostname: "*.public.blob.vercel-storage.com",

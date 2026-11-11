@@ -55,7 +55,6 @@ export const strings = {
   },
 
   product: {
-    quantity: "Quantité",
     addToCart: "Ajouter au panier",
     askWhatsapp: "Une question ? WhatsApp",
     backToShop: "Retour à la boutique",
@@ -94,6 +93,8 @@ export const strings = {
     reserved: "Cette pièce vient d'être réservée.",
     submitError:
       "La commande n'a pas pu être enregistrée. Réessayez, ou commandez via WhatsApp.",
+    tooMany:
+      "Vous avez déjà passé plusieurs commandes récemment. Écrivez-nous sur WhatsApp pour en ajouter une autre.",
   },
 
   order: {
@@ -164,12 +165,20 @@ export const strings = {
     productActive: "Visible dans la boutique",
     productActiveHint:
       "Décochez pour retirer la pièce de la boutique sans la supprimer.",
-    productUnique: "Pièce unique",
-    productUniqueHint:
-      "Une seule pièce disponible : pas de choix de quantité, elle est réservée dès la commande.",
-    productSoldOut: "Pièce vendue",
-    productSoldOutHint:
-      "Cochez si la pièce n'est plus disponible. Décochez pour la remettre en vente.",
+    saleStatus: "Disponibilité",
+    saleStatusSold: "Vendue — n'apparaît plus comme disponible à la boutique.",
+    saleStatusAvailable: "En vente.",
+    markSold: "Marquer comme vendue",
+    markSoldHint: "Pour une pièce vendue en dehors du site (WhatsApp, en main propre).",
+    markAvailable: "Remettre en vente",
+    markedSold: "Pièce marquée comme vendue.",
+    markedAvailable: "Pièce remise en vente.",
+    errorHeldByOrder:
+      "Une commande en cours contient cette pièce. Annulez d'abord la commande.",
+    errorResold:
+      "Une pièce de cette commande a été revendue entre-temps : impossible de la réactiver.",
+    loginTooMany:
+      "Trop de tentatives. Réessayez dans 15 minutes.",
     save: "Enregistrer",
     saving: "Enregistrement…",
     cancel: "Annuler",

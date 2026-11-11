@@ -28,8 +28,11 @@ export default function OpengraphImage() {
           alignItems: "center",
           justifyContent: "center",
           gap: 28,
-          backgroundColor: "#fbf4ea",
-          color: "#4a3a30",
+          // Velvet: aubergine-black ground, ivory text, gold accent.
+          backgroundColor: "#140b12",
+          backgroundImage:
+            "radial-gradient(80% 70% at 15% 0%, #3a1a33 0%, transparent 65%)",
+          color: "#eee7db",
           fontFamily: "sans-serif",
           padding: 80,
         }}
@@ -42,16 +45,16 @@ export default function OpengraphImage() {
             fontSize: 34,
             letterSpacing: 4,
             textTransform: "uppercase",
-            color: "#8a7261",
+            color: "#dfb35f",
           }}
         >
           <div
             style={{
               display: "flex",
-              width: 14,
-              height: 14,
-              borderRadius: 9999,
-              backgroundColor: "#b45309",
+              width: 12,
+              height: 12,
+              transform: "rotate(45deg)",
+              backgroundColor: "#dfb35f",
             }}
           />
           Fait main
@@ -69,7 +72,7 @@ export default function OpengraphImage() {
           {strings.siteName}
         </div>
 
-        <div style={{ display: "flex", fontSize: 40, color: "#8a7261" }}>
+        <div style={{ display: "flex", fontSize: 40, color: "#b1a2af" }}>
           {strings.tagline}
         </div>
       </div>

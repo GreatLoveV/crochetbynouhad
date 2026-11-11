@@ -7,7 +7,6 @@ import {
   cartStore,
   clearCart,
   removeFromCart,
-  setCartQuantity,
   type CartItem,
 } from "@/components/cart/cart-storage";
 
@@ -15,18 +14,17 @@ import {
  * React context around the cart store, so components can call
  * `useCart()` instead of importing the storage helpers directly.
  *
- * The cart lives in the BROWSER only, and only as { productId, quantity }.
+ * The cart lives in the BROWSER only, and only as a list of product ids.
  * Names and prices are re-fetched from the database every time the cart is
  * rendered, so editing localStorage can never change a price.
  */
 type CartContextValue = {
   items: CartItem[];
-  /** Total number of pieces across all lines — what the header badge shows. */
+  /** Number of bags in the cart — what the header badge shows. */
   count: number;
   /** False until the browser has taken over from the server render. */
   isReady: boolean;
-  addItem: (productId: number, quantity?: number) => void;
-  setQuantity: (productId: number, quantity: number) => void;
+  addItem: (productId: number) => void;
   removeItem: (productId: number) => void;
   clearCart: () => void;
 };
@@ -50,10 +48,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(
     () => ({
       items,
-      count: items.reduce((total, item) => total + item.quantity, 0),
+      count: items.length,
       isReady,
       addItem: addToCart,
-      setQuantity: setCartQuantity,
       removeItem: removeFromCart,
       clearCart,
     }),

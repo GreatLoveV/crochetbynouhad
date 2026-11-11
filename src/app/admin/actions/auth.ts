@@ -1,6 +1,7 @@
 "use server";
 
-import { isRedirectError } from "next/dist/client/components/redirect-error";
+import { unstable_rethrow } from "next/navigation";
+import { CredentialsSignin } from "next-auth";
 
 import { signIn, signOut } from "@/lib/auth/auth";
 import { ADMIN_LOGIN_PATH } from "@/lib/auth/admin";
@@ -32,7 +33,11 @@ export async function loginAction(
   try {
     await signIn("credentials", { email, password, redirectTo });
   } catch (error) {
-    if (isRedirectError(error)) throw error;
+    // Lets Next's own redirect (the success path) through untouched.
+    unstable_rethrow(error);
+    if (error instanceof CredentialsSignin && error.code === "rate_limited") {
+      return { error: strings.admin.loginTooMany };
+    }
     return { error: strings.admin.invalidCredentials };
   }
 

@@ -9,11 +9,11 @@ import { strings } from "@/lib/constants/strings";
 /**
  * Read-only view of a placed order, for the confirmation page.
  *
+ * Looked up by the order's random `publicToken`, never by its sequential id,
+ * so nobody can walk through /order/confirmation?… and read every order.
  * Name and city are only returned when the caller explicitly asks for them
- * (`includeCustomer`). The confirmation URL carries a sequential id, so without
- * that gate anyone could enumerate /order/confirmation?order=1, =2, … and read
- * Nouhad's customers. The page unlocks them with a cookie set when the order is
- * placed, so only the customer who just ordered sees their own details.
+ * (`includeCustomer`), which the page does only for the browser holding the
+ * cookie set when the order was placed.
  */
 export type OrderSummary = {
   id: number;
@@ -34,12 +34,17 @@ export type OrderSummary = {
   city?: string;
 };
 
-export async function getOrderSummary(
-  id: number,
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export async function getOrderSummaryByToken(
+  token: string,
   options: { includeCustomer?: boolean } = {},
 ): Promise<OrderSummary | null> {
+  // Anything that is not a UUID would only make Postgres throw.
+  if (!UUID.test(token)) return null;
+
   const order = await db.query.orders.findFirst({
-    where: eq(orders.id, id),
+    where: eq(orders.publicToken, token),
     columns: {
       id: true,
       total: true,

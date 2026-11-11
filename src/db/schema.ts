@@ -6,6 +6,8 @@ import {
   boolean,
   timestamp,
   pgEnum,
+  index,
+  uuid,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
@@ -50,9 +52,8 @@ export const products = pgTable("products", {
   price: integer("price").notNull(),
   reference: text("reference").unique(),
   isActive: boolean("is_active").notNull().default(true),
-  // Most pieces exist only once: no quantity selector, and the piece is taken
-  // out of circulation as soon as an order is placed.
-  isUnique: boolean("is_unique").notNull().default(true),
+  // Every bag is one of a kind: no quantity, and the bag is taken out of
+  // circulation the moment an order is placed (until that order is cancelled).
   isSoldOut: boolean("is_sold_out").notNull().default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
@@ -74,6 +75,9 @@ export const orders = pgTable("orders", {
   address: text("address").notNull(),
   notes: text("notes"),
   status: orderStatusEnum("status").notNull().default("new"),
+  // Unguessable id for the customer's confirmation link. The numeric id is
+  // sequential, so using it in a public URL would let anyone read every order.
+  publicToken: uuid("public_token").notNull().defaultRandom().unique(),
   total: integer("total").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
@@ -86,11 +90,27 @@ export const orderItems = pgTable("order_items", {
   productId: integer("product_id")
     .notNull()
     .references(() => products.id),
-  quantity: integer("quantity").notNull(),
+  // Always 1 (every bag is unique). Kept so old order rows stay readable.
+  quantity: integer("quantity").notNull().default(1),
   unitPrice: integer("unit_price").notNull(),
   productName: text("product_name"),
   productReference: text("product_reference"),
 });
+
+/**
+ * One row per rate-limited event (a failed login, a placed order), keyed by
+ * what is being limited, e.g. `login:ip:1.2.3.4`. Counted over a time window by
+ * `src/lib/security/rate-limit.ts`; rows older than a day are swept away.
+ */
+export const attempts = pgTable(
+  "attempts",
+  {
+    id: serial("id").primaryKey(),
+    key: text("key").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => [index("attempts_key_created_at_idx").on(table.key, table.createdAt)],
+);
 
 export const categoriesRelations = relations(categories, ({ many }) => ({
   products: many(products),

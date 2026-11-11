@@ -15,10 +15,14 @@ import {
 } from "@/components/ui/table";
 import { getAdminProducts } from "@/lib/data/admin-products";
 import { formatPrice } from "@/lib/format/money";
+import { requireAdmin } from "@/lib/auth/admin";
 import { strings } from "@/lib/constants/strings";
 
 export default async function AdminProductsPage() {
-  // The protected layout already ran `requireAdmin()`; this page only reads.
+  // Checked here too, not only in the layout: a layout is not re-run on
+  // client-side navigation, so it cannot be the only guard for a page's data.
+  await requireAdmin();
+
   const products = await getAdminProducts();
 
   return (
@@ -101,7 +105,7 @@ export default async function AdminProductsPage() {
                       >
                         {product.isActive ? "En ligne" : "Retirée"}
                       </Badge>
-                      {product.isUnique && product.isSoldOut ? (
+                      {product.isSoldOut ? (
                         <Badge variant="secondary">{strings.product.soldOut}</Badge>
                       ) : null}
                     </div>

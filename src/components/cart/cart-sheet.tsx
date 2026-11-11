@@ -63,7 +63,7 @@ export function CartButton() {
 }
 
 function CartDrawerBody({ onClose }: { onClose: () => void }) {
-  const { items, count, isReady, setQuantity, removeItem } = useCart();
+  const { items, count, isReady, removeItem } = useCart();
   const idsKey = items.map((item) => item.productId).join(",");
 
   return (
@@ -72,7 +72,7 @@ function CartDrawerBody({ onClose }: { onClose: () => void }) {
         <SheetTitle>{strings.cart.title}</SheetTitle>
         <SheetDescription>
           {isReady && count > 0
-            ? `${count} article${count > 1 ? "s" : ""}`
+            ? `${count} pièce${count > 1 ? "s" : ""}`
             : strings.cart.emptyHint}
         </SheetDescription>
       </SheetHeader>
@@ -82,9 +82,7 @@ function CartDrawerBody({ onClose }: { onClose: () => void }) {
       ) : (
         <DrawerLines
           idsKey={idsKey}
-          items={items}
           onClose={onClose}
-          onQuantityChange={setQuantity}
           onRemove={removeItem}
         />
       )}
@@ -115,15 +113,11 @@ function EmptyCart({ onClose }: { onClose: () => void }) {
 
 function DrawerLines({
   idsKey,
-  items,
   onClose,
-  onQuantityChange,
   onRemove,
 }: {
   idsKey: string;
-  items: ReturnType<typeof useCart>["items"];
   onClose: () => void;
-  onQuantityChange: (productId: number, quantity: number) => void;
   onRemove: (productId: number) => void;
 }) {
   const products = useCartProducts(idsKey);
@@ -136,15 +130,13 @@ function DrawerLines({
     );
   }
 
-  const total = cartTotal(products, items);
+  const total = cartTotal(products);
 
   return (
     <>
       <div className="flex-1 overflow-y-auto px-6">
         <CartLineRows
           products={products}
-          items={items}
-          onQuantityChange={onQuantityChange}
           onRemove={onRemove}
           onNavigate={onClose}
         />

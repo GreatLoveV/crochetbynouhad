@@ -28,17 +28,29 @@ export type NewOrder = {
   cart: CheckoutLine[];
 };
 
+export type CreatedOrder = {
+  id: number;
+  /** Unguessable id for the customer's confirmation link. */
+  publicToken: string;
+};
+
 /**
- * Saves the order and returns its id.
+ * Saves the order and returns its id and public token.
  *
  * The prices are read from the database inside the transaction, never taken
- * from the caller: this is the whole point of the function. Unique pieces are
- * reserved here too, so two people can never buy the same bag.
+ * from the caller.
+ *
+ * Every bag is one of a kind. The bags are reserved with ONE conditional UPDATE
+ * (`... WHERE is_sold_out = false`) before anything is written. Two checkouts
+ * racing for the same bag both reach that UPDATE, but Postgres row locks make
+ * the second one wait, re-check the condition once the first commits, find the
+ * bag already sold, and update nothing — so it fails and rolls back. A plain
+ * "read, then write" would let both succeed.
  *
  * @throws ProductUnavailableError if a product is gone (nothing is written).
  * @throws ProductReservedError if a unique piece was taken meanwhile.
  */
-export async function createOrder(input: NewOrder): Promise<number> {
+export async function createOrder(input: NewOrder): Promise<CreatedOrder> {
   const db = getTxDb();
   const ids = input.cart.map((line) => line.productId);
 
@@ -49,7 +61,6 @@ export async function createOrder(input: NewOrder): Promise<number> {
         price: products.price,
         nameFr: products.nameFr,
         reference: products.reference,
-        isUnique: products.isUnique,
         isSoldOut: products.isSoldOut,
       })
       .from(products)
@@ -65,15 +76,15 @@ export async function createOrder(input: NewOrder): Promise<number> {
           `Product ${line.productId} is not available`,
         );
       }
-      // A unique piece is reserved the moment it is ordered.
-      if (product.isUnique && product.isSoldOut) {
+      // Early exit for the common case; the UPDATE below is what guarantees it.
+      if (product.isSoldOut) {
         throw new ProductReservedError(
           `Product ${line.productId} was just reserved`,
         );
       }
       return {
         productId: line.productId,
-        quantity: product.isUnique ? 1 : line.quantity,
+        quantity: 1,
         unitPrice: product.price,
         // Snapshotted here so a later rename or deactivation does not rewrite
         // what the customer actually ordered.
@@ -82,10 +93,23 @@ export async function createOrder(input: NewOrder): Promise<number> {
       };
     });
 
-    const total = lines.reduce(
-      (sum, line) => sum + line.unitPrice * line.quantity,
-      0,
-    );
+    // Reserve every bag atomically, before writing the order.
+    const reserved = await tx
+      .update(products)
+      .set({ isSoldOut: true })
+      .where(
+        and(
+          inArray(products.id, ids),
+          eq(products.isSoldOut, false),
+          eq(products.isActive, true),
+        ),
+      )
+      .returning({ id: products.id });
+    if (reserved.length !== ids.length) {
+      throw new ProductReservedError("A bag was just reserved");
+    }
+
+    const total = lines.reduce((sum, line) => sum + line.unitPrice, 0);
 
     const [order] = await tx
       .insert(orders)
@@ -97,23 +121,12 @@ export async function createOrder(input: NewOrder): Promise<number> {
         notes: input.notes || null,
         total,
       })
-      .returning({ id: orders.id });
+      .returning({ id: orders.id, publicToken: orders.publicToken });
 
     await tx.insert(orderItems).values(
       lines.map((line) => ({ orderId: order.id, ...line })),
     );
 
-    // Reserve every unique piece on this order in one statement.
-    const uniqueIds = lines
-      .filter((line) => byId.get(line.productId)?.isUnique)
-      .map((line) => line.productId);
-    if (uniqueIds.length > 0) {
-      await tx
-        .update(products)
-        .set({ isSoldOut: true })
-        .where(inArray(products.id, uniqueIds));
-    }
-
-    return order.id;
+    return order;
   });
 }

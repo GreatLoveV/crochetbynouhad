@@ -47,91 +47,60 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
-  /* Warm, soft-tinted shadows instead of neutral black. */
-  --shadow-soft: 0 1px 2px oklch(0.29 0.042 52 / 0.05), 0 10px 24px -12px oklch(0.29 0.042 52 / 0.18);
-  --shadow-lift: 0 2px 6px oklch(0.29 0.042 52 / 0.07), 0 22px 40px -18px oklch(0.29 0.042 52 / 0.28);
+  /* Deep shadows: on a dark ground, depth comes from darker, not lighter. */
+  --shadow-soft: 0 1px 2px oklch(0.08 0.02 335 / 0.5), 0 12px 28px -14px oklch(0.06 0.02 335 / 0.7);
+  --shadow-lift: 0 2px 8px oklch(0.08 0.02 335 / 0.55), 0 26px 48px -20px oklch(0.05 0.02 335 / 0.85), 0 0 0 1px oklch(0.79 0.115 82 / 0.12);
   /* Gentler-than-default easing for hover/expand transitions. */
   --ease-soft: cubic-bezier(0.32, 0.72, 0.28, 1);
 }
 
 /*
-  Light mode — "warm handmade boutique".
-  cream paper background, deep warm brown text, terracotta as the one
-  strong accent, dusty rose as the soft secondary.
+  "Velvet" — the only theme.
+  Aubergine-black ground, warm ivory text, gold as the single accent.
+  The site is always dark; the `dark` class on <html> keeps shadcn's own
+  `dark:` refinements (inputs, focus rings) in step with these tokens.
+
+  Contrast (WCAG, against --background): foreground ~15:1, gold ~10:1,
+  muted-foreground ~8:1, so every text token passes AA, even small sizes.
 */
 :root {
-  --background: oklch(0.975 0.012 86);
-  --foreground: oklch(0.29 0.042 52);
-  --card: oklch(0.994 0.007 88);
-  --card-foreground: oklch(0.29 0.042 52);
-  --popover: oklch(0.994 0.007 88);
-  --popover-foreground: oklch(0.29 0.042 52);
-  --primary: oklch(0.6 0.135 42);
-  --primary-foreground: oklch(0.985 0.008 86);
-  --secondary: oklch(0.935 0.03 18);
-  --secondary-foreground: oklch(0.38 0.06 24);
-  --muted: oklch(0.945 0.016 80);
-  --muted-foreground: oklch(0.505 0.038 55);
-  --accent: oklch(0.925 0.028 68);
-  --accent-foreground: oklch(0.32 0.05 50);
-  --destructive: oklch(0.55 0.19 27);
-  --border: oklch(0.895 0.024 72);
-  --input: oklch(0.895 0.024 72);
-  --ring: oklch(0.6 0.135 42);
-  --chart-1: oklch(0.6 0.135 42);
-  --chart-2: oklch(0.7 0.09 40);
-  --chart-3: oklch(0.78 0.06 45);
-  --chart-4: oklch(0.86 0.04 50);
-  --chart-5: oklch(0.93 0.03 60);
-  /* Large radius: everything reads soft and hand-made, never boxy. */
-  --radius: 1rem;
-  --sidebar: oklch(0.965 0.014 84);
-  --sidebar-foreground: oklch(0.29 0.042 52);
-  --sidebar-primary: oklch(0.6 0.135 42);
-  --sidebar-primary-foreground: oklch(0.985 0.008 86);
-  --sidebar-accent: oklch(0.925 0.028 68);
-  --sidebar-accent-foreground: oklch(0.32 0.05 50);
-  --sidebar-border: oklch(0.895 0.024 72);
-  --sidebar-ring: oklch(0.6 0.135 42);
-}
-
-/*
-  Dark mode is optional for now: the tokens exist, but nothing adds the
-  `.dark` class yet. To enable it later, wrap the app in next-themes'
-  <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>.
-*/
-.dark {
-  --background: oklch(0.205 0.018 55);
-  --foreground: oklch(0.945 0.018 85);
-  --card: oklch(0.25 0.022 55);
-  --card-foreground: oklch(0.945 0.018 85);
-  --popover: oklch(0.25 0.022 55);
-  --popover-foreground: oklch(0.945 0.018 85);
-  --primary: oklch(0.72 0.13 45);
-  --primary-foreground: oklch(0.2 0.03 45);
-  --secondary: oklch(0.32 0.032 20);
-  --secondary-foreground: oklch(0.93 0.03 20);
-  --muted: oklch(0.29 0.02 55);
-  --muted-foreground: oklch(0.74 0.022 80);
-  --accent: oklch(0.34 0.032 65);
-  --accent-foreground: oklch(0.93 0.02 80);
-  --destructive: oklch(0.65 0.17 25);
-  --border: oklch(1 0 0 / 0.13);
-  --input: oklch(1 0 0 / 0.18);
-  --ring: oklch(0.72 0.13 45);
-  --chart-1: oklch(0.72 0.13 45);
-  --chart-2: oklch(0.66 0.1 40);
-  --chart-3: oklch(0.6 0.08 38);
-  --chart-4: oklch(0.52 0.06 36);
-  --chart-5: oklch(0.44 0.05 34);
-  --sidebar: oklch(0.235 0.02 55);
-  --sidebar-foreground: oklch(0.945 0.018 85);
-  --sidebar-primary: oklch(0.72 0.13 45);
-  --sidebar-primary-foreground: oklch(0.2 0.03 45);
-  --sidebar-accent: oklch(0.34 0.032 65);
-  --sidebar-accent-foreground: oklch(0.93 0.02 80);
-  --sidebar-border: oklch(1 0 0 / 0.13);
-  --sidebar-ring: oklch(0.72 0.13 45);
+  color-scheme: dark;
+  --background: oklch(0.165 0.022 335);
+  --foreground: oklch(0.93 0.018 80);
+  --card: oklch(0.205 0.028 335);
+  --card-foreground: oklch(0.93 0.018 80);
+  --popover: oklch(0.205 0.028 335);
+  --popover-foreground: oklch(0.93 0.018 80);
+  /* Gold. Text on it is the ground colour, never white. */
+  --primary: oklch(0.79 0.115 82);
+  --primary-foreground: oklch(0.17 0.025 335);
+  /* Plum, a step up from the ground: badges, quiet surfaces. */
+  --secondary: oklch(0.27 0.045 335);
+  --secondary-foreground: oklch(0.92 0.02 80);
+  --muted: oklch(0.235 0.03 335);
+  --muted-foreground: oklch(0.73 0.025 330);
+  --accent: oklch(0.29 0.05 335);
+  --accent-foreground: oklch(0.88 0.08 85);
+  --destructive: oklch(0.68 0.17 22);
+  /* Hairlines are a faint gold, like stitching. */
+  --border: oklch(0.79 0.06 82 / 0.16);
+  --input: oklch(0.79 0.06 82 / 0.26);
+  --ring: oklch(0.79 0.115 82);
+  --chart-1: oklch(0.79 0.115 82);
+  --chart-2: oklch(0.62 0.12 340);
+  --chart-3: oklch(0.7 0.06 80);
+  --chart-4: oklch(0.5 0.08 335);
+  --chart-5: oklch(0.4 0.05 335);
+  /* Crisper than before: velvet and gold read tailored, not bubbly. */
+  --radius: 0.625rem;
+  --sidebar: oklch(0.19 0.025 335);
+  --sidebar-foreground: oklch(0.93 0.018 80);
+  --sidebar-primary: oklch(0.79 0.115 82);
+  --sidebar-primary-foreground: oklch(0.17 0.025 335);
+  --sidebar-accent: oklch(0.29 0.05 335);
+  --sidebar-accent-foreground: oklch(0.88 0.08 85);
+  --sidebar-border: oklch(0.79 0.06 82 / 0.16);
+  --sidebar-ring: oklch(0.79 0.115 82);
 }
 
 @layer base {
@@ -145,12 +114,13 @@
     @apply font-sans;
     scroll-behavior: smooth;
   }
-  /* The whole look depends on serif headings, so set it once here. */
+  /* The whole look depends on serif headings, so set it once here.
+     Cormorant is a display face: it wants weight 500+ and tight tracking. */
   h1,
   h2,
   h3,
   h4 {
-    @apply font-heading;
+    @apply font-heading font-medium tracking-[-0.01em];
   }
   ::selection {
     background-color: var(--primary);
@@ -159,13 +129,12 @@
 }
 
 /*
-  Very faint speckle so large cream areas read like paper/fibre rather than
-  flat screen. Delete this block if you ever find it noisy.
+  Velvet sheen for large dark areas (the hero): a soft plum glow and a faint
+  gold catch-light, so the ground reads as fabric rather than flat black.
 */
-.texture-paper {
+.velvet-sheen {
   background-image:
-    radial-gradient(120% 90% at 15% 0%, oklch(0.93 0.03 70 / 0.55), transparent 60%),
-    radial-gradient(100% 80% at 100% 10%, oklch(0.94 0.026 20 / 0.45), transparent 55%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
-  background-blend-mode: normal, normal, soft-light;
+    radial-gradient(90% 70% at 12% 0%, oklch(0.3 0.07 335 / 0.55), transparent 65%),
+    radial-gradient(60% 50% at 95% 15%, oklch(0.79 0.115 82 / 0.07), transparent 60%),
+    radial-gradient(120% 80% at 50% 120%, oklch(0.12 0.02 335 / 0.9), transparent 70%);
 }

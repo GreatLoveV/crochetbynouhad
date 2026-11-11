@@ -13,16 +13,16 @@ import { whatsappUrl } from "@/lib/integrations/whatsapp";
  */
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-5 sm:h-20 lg:px-8">
         <Link href="/" className="group flex items-center gap-2.5">
-          {/* Small terracotta stitch mark, purely decorative. */}
+          {/* Small gold stitch mark, purely decorative. */}
           <span
             aria-hidden
-            className="size-2.5 rounded-full bg-primary transition-transform duration-300 ease-soft group-hover:scale-125"
+            className="size-2 rotate-45 bg-primary transition-transform duration-300 ease-soft group-hover:rotate-[135deg]"
           />
           <span className="flex flex-col leading-none">
-            <span className="font-heading text-lg tracking-tight sm:text-xl">
+            <span className="font-heading text-xl font-semibold tracking-tight sm:text-2xl">
               {strings.siteName}
             </span>
             <span className="mt-0.5 hidden text-[0.7rem] tracking-[0.18em] text-muted-foreground uppercase sm:block">
@@ -74,10 +74,10 @@ export function SiteHeader() {
 /** Site footer: contact channels, legal links and the cash-on-delivery note. */
 export function SiteFooter() {
   return (
-    <footer className="mt-24 border-t border-border/70 bg-secondary/40">
+    <footer className="mt-24 border-t border-border bg-card/60">
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 sm:grid-cols-2 lg:grid-cols-3 lg:px-8">
         <div className="flex flex-col gap-3">
-          <span className="font-heading text-xl">{strings.siteName}</span>
+          <span className="font-heading text-2xl font-semibold">{strings.siteName}</span>
           <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
             {strings.footer.blurb}
           </p>
@@ -127,7 +127,7 @@ export function SiteFooter() {
         </nav>
       </div>
 
-      <div className="border-t border-border/70">
+      <div className="border-t border-border">
         <div className="mx-auto flex max-w-6xl flex-col gap-1 px-5 py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between lg:px-8">
           <span>
             © {new Date().getFullYear()} {strings.siteName}.{" "}

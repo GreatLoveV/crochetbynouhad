@@ -11,6 +11,8 @@ import {
   createProduct,
   isAllowedImageUrl,
   addProductImage as insertProductImage,
+  markProductAvailable,
+  markProductSold,
   moveProductImage as shiftProductImage,
   removeProductImage as deleteProductImage,
   resolveProductSlug,
@@ -21,6 +23,7 @@ import {
 import { madToCentimes } from "@/lib/format/money";
 import { productFormSchema, type ProductFormState } from "@/lib/validation/product-form";
 import { strings } from "@/lib/constants/strings";
+import type { ActionMessage } from "@/lib/validation/action-message";
 
 /**
  * Everything the admin can change about a product.
@@ -45,8 +48,6 @@ function formValues(formData: FormData) {
     slug: String(formData.get("slug") ?? ""),
     reference: String(formData.get("reference") ?? ""),
     isActive: formData.get("isActive") === "on",
-    isUnique: formData.get("isUnique") === "on",
-    isSoldOut: formData.get("isSoldOut") === "on",
   };
 }
 
@@ -149,6 +150,48 @@ export async function toggleProductActive(formData: FormData): Promise<void> {
   revalidatePath(`/products/${updated.slug}`);
 }
 
+/**
+ * "Marquer comme vendue" / "Remettre en vente" on the edit page.
+ *
+ * Separate from `saveProduct` on purpose: the form never writes the sold flag,
+ * so saving an edit page that was opened before an order came in cannot put a
+ * sold bag back on sale.
+ */
+export async function setProductSaleStatus(
+  _previous: ActionMessage,
+  formData: FormData,
+): Promise<ActionMessage> {
+  if (!(await getAdmin())) return { error: strings.admin.errorGeneric };
+
+  const id = Number(formData.get("id"));
+  const sold = formData.get("sold") === "true";
+  if (!Number.isInteger(id) || id < 1) return { error: strings.admin.errorNotFound };
+
+  let slug: string;
+  if (sold) {
+    const result = await markProductSold(id);
+    if (!result) return { error: strings.admin.errorNotFound };
+    slug = result;
+  } else {
+    const result = await markProductAvailable(id);
+    if (!result.ok) {
+      return {
+        error:
+          result.reason === "held"
+            ? strings.admin.errorHeldByOrder
+            : strings.admin.errorNotFound,
+      };
+    }
+    slug = result.slug;
+  }
+
+  revalidatePath("/");
+  revalidatePath("/admin/products");
+  revalidatePath(`/admin/products/${id}`);
+  revalidatePath(`/products/${slug}`);
+  return { ok: sold ? strings.admin.markedSold : strings.admin.markedAvailable };
+}
+
 export async function addProductImage(formData: FormData): Promise<void> {
   if (!(await getAdmin())) return;
 
@@ -159,7 +202,7 @@ export async function addProductImage(formData: FormData): Promise<void> {
 
   await insertProductImage(productId, url);
 
-  revalidatePath("/admin/products");
+  revalidateImagePages();
 }
 
 export async function removeProductImage(formData: FormData): Promise<void> {
@@ -170,7 +213,7 @@ export async function removeProductImage(formData: FormData): Promise<void> {
 
   await deleteProductImage(imageId);
 
-  revalidatePath("/admin/products");
+  revalidateImagePages();
 }
 
 export async function moveProductImage(formData: FormData): Promise<void> {
@@ -183,7 +226,14 @@ export async function moveProductImage(formData: FormData): Promise<void> {
 
   if (!(await shiftProductImage(imageId, direction))) return;
 
-  revalidatePath("/admin/products");
+  revalidateImagePages();
+}
+
+/** Photos show in the admin, on the home grid and on the bag's own page. */
+function revalidateImagePages() {
+  revalidatePath("/admin/products", "layout");
+  revalidatePath("/");
+  revalidatePath("/products/[slug]", "page");
 }
 
 function toFieldErrors(error: z.ZodError): Record<string, string> {

@@ -11,7 +11,8 @@
  * components ask.
  */
 export const OPTIMIZABLE_IMAGE_HOSTS = [
-  "placehold.co",
+  // Not placehold.co: it serves SVG, which the optimiser refuses, so its
+  // demo images are loaded as-is like any other unknown host.
   "*.public.blob.vercel-storage.com",
 ] as const;
 

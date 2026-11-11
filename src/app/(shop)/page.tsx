@@ -186,8 +186,8 @@ function FilterPill({
       aria-current={active ? "true" : undefined}
       className={
         active
-          ? "inline-flex h-10 items-center rounded-full bg-primary px-5 text-sm font-medium whitespace-nowrap text-primary-foreground transition-all duration-300 ease-soft hover:-translate-y-0.5 hover:bg-primary/90"
-          : "inline-flex h-10 items-center rounded-full border border-border bg-card px-5 text-sm whitespace-nowrap transition-all duration-300 ease-soft hover:-translate-y-0.5 hover:border-foreground/25 hover:bg-accent hover:text-accent-foreground"
+          ? "inline-flex h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold whitespace-nowrap text-primary-foreground transition-all duration-300 ease-soft"
+          : "inline-flex h-10 items-center rounded-full border border-border bg-transparent px-5 text-sm whitespace-nowrap text-muted-foreground transition-all duration-300 ease-soft hover:border-primary/60 hover:text-foreground"
       }
     >
       {children}

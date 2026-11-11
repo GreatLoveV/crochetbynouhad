@@ -6,7 +6,7 @@ import { Loader2Icon, LockIcon, ShoppingBagIcon } from "lucide-react";
 
 import { placeOrder } from "@/app/actions/orders";
 import { useCart } from "@/components/cart/cart-provider";
-import { cartTotal, lineQuantity } from "@/components/cart/cart-line-rows";
+import { cartTotal } from "@/components/cart/cart-line-rows";
 import { useCartProducts } from "@/components/cart/use-cart-products";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -83,7 +83,7 @@ export function CheckoutForm() {
     );
   }
 
-  const total = cartTotal(products, items);
+  const total = cartTotal(products);
   const errors = state.fieldErrors ?? {};
   // On a failed submit the action echoes the fields back, so nothing is lost.
   const kept = state.values;
@@ -91,15 +91,24 @@ export function CheckoutForm() {
   return (
     <form action={formAction} className="grid gap-10 lg:grid-cols-[1fr_20rem] lg:items-start">
       {/*
-        The only cart data the server receives: which product, how many.
+        The only cart data the server receives: which bags.
         Prices are deliberately absent — the server looks them up itself.
       */}
       <input type="hidden" name="cart" value={JSON.stringify(items)} />
 
+      {/* Honeypot: invisible to people and screen readers, filled by bots.
+          The server rejects any submit where it is not empty. */}
+      <div aria-hidden className="absolute -left-[9999px] h-px w-px overflow-hidden">
+        <label>
+          Website
+          <input type="text" name="website" tabIndex={-1} autoComplete="off" defaultValue="" />
+        </label>
+      </div>
+
       <div>
         <h2 className="font-heading text-xl">{strings.checkout.summaryTitle}</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          {count} article{count > 1 ? "s" : ""}
+          {count} pièce{count > 1 ? "s" : ""}
         </p>
 
         <Separator className="my-5" />
@@ -242,11 +251,10 @@ export function CheckoutForm() {
 
         <ul className="mt-4 flex flex-col gap-3 text-sm">
           {products.map((product) => {
-            const quantity = lineQuantity(product, items);
             return (
               <li key={product.id} className="flex justify-between gap-4">
                 <span className="text-muted-foreground">
-                  {product.nameFr} × {quantity}
+                  {product.nameFr}
                   {product.reference ? (
                     <span className="mt-0.5 block text-xs tracking-[0.14em] uppercase">
                       {product.reference}
@@ -254,7 +262,7 @@ export function CheckoutForm() {
                   ) : null}
                 </span>
                 <span className="tabular-nums">
-                  {formatPrice(product.price * quantity)}
+                  {formatPrice(product.price)}
                 </span>
               </li>
             );

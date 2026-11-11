@@ -1,9 +1,9 @@
 import "server-only";
 
-import { asc, desc, eq, max, sql } from "drizzle-orm";
+import { and, asc, desc, eq, max, ne, notExists, sql } from "drizzle-orm";
 
 import { db } from "@/db";
-import { categories, orderItems, productImages, products } from "@/db/schema";
+import { categories, orderItems, orders, productImages, products } from "@/db/schema";
 import { formatProductReference } from "@/lib/format/money";
 import { slugify, type ProductFormValues } from "@/lib/validation/product-form";
 
@@ -25,7 +25,6 @@ export type AdminProductRow = {
   price: number;
   isActive: boolean;
   reference: string | null;
-  isUnique: boolean;
   isSoldOut: boolean;
   categoryNameFr: string;
   imageUrl: string | null;
@@ -42,7 +41,6 @@ export async function getAdminProducts(): Promise<AdminProductRow[]> {
       price: products.price,
       isActive: products.isActive,
       reference: products.reference,
-      isUnique: products.isUnique,
       isSoldOut: products.isSoldOut,
       categoryNameFr: categories.nameFr,
     })
@@ -113,7 +111,6 @@ export type AdminProductDetail = {
   price: number;
   reference: string | null;
   isActive: boolean;
-  isUnique: boolean;
   isSoldOut: boolean;
   images: { id: number; url: string; position: number }[];
 };
@@ -135,7 +132,6 @@ export async function getAdminProduct(
       price: true,
       reference: true,
       isActive: true,
-      isUnique: true,
       isSoldOut: true,
     },
     with: {
@@ -162,7 +158,6 @@ export async function getAdminProduct(
     price: row.price,
     reference: row.reference,
     isActive: row.isActive,
-    isUnique: row.isUnique,
     isSoldOut: row.isSoldOut,
     images: row.images,
   };
@@ -270,8 +265,6 @@ export type ProductInput = {
   categoryId: number;
   price: number;
   isActive: boolean;
-  isUnique: boolean;
-  isSoldOut: boolean;
   reference: string;
 };
 
@@ -296,8 +289,6 @@ export function toProductInput(
     categoryId: data.categoryId,
     price,
     isActive: data.isActive,
-    isUnique: data.isUnique,
-    isSoldOut: data.isSoldOut,
     reference,
   };
 }
@@ -391,13 +382,54 @@ export async function setProductActive(
 }
 
 /**
- * Only http(s) links, so a `javascript:` URL can never end up in an `src`.
+ * Marks a piece sold by hand — sold over WhatsApp or in person, outside the
+ * checkout. Returns its slug so the public page can be refreshed.
+ */
+export async function markProductSold(id: number): Promise<string | null> {
+  const [row] = await db
+    .update(products)
+    .set({ isSoldOut: true })
+    .where(eq(products.id, id))
+    .returning({ slug: products.slug });
+  return row?.slug ?? null;
+}
+
+/**
+ * Puts a piece back on sale — unless an order that is not cancelled still
+ * holds it. Check and write are ONE statement, so nothing can slip in between.
+ */
+export async function markProductAvailable(
+  id: number,
+): Promise<{ ok: true; slug: string } | { ok: false; reason: "held" | "missing" }> {
+  const heldByLiveOrder = db
+    .select({ one: sql`1` })
+    .from(orderItems)
+    .innerJoin(orders, eq(orders.id, orderItems.orderId))
+    .where(and(eq(orderItems.productId, id), ne(orders.status, "cancelled")));
+
+  const [row] = await db
+    .update(products)
+    .set({ isSoldOut: false })
+    .where(and(eq(products.id, id), notExists(heldByLiveOrder)))
+    .returning({ slug: products.slug });
+  if (row) return { ok: true, slug: row.slug };
+
+  const exists = await db.query.products.findFirst({
+    where: eq(products.id, id),
+    columns: { id: true },
+  });
+  return { ok: false, reason: exists ? "held" : "missing" };
+}
+
+/**
+ * Only https links: a `javascript:` URL can never end up in an `src`, and an
+ * `http:` photo would make the browser flag the page as not secure.
  */
 export function isAllowedImageUrl(url: string): boolean {
   if (url.length > 2000) return false;
   try {
     const { protocol } = new URL(url);
-    return protocol === "https:" || protocol === "http:";
+    return protocol === "https:";
   } catch {
     return false;
   }

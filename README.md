@@ -40,8 +40,9 @@ types are generated during the build and typecheck fails without them.
 otherwise every page would silently advertise `http://localhost:3000` as its
 canonical address.
 
-Set a real WhatsApp number (digits only, country code, no `+`). The placeholder
-`212600000000` is not a valid number.
+Set a real WhatsApp number (digits only, country code, no `+`). A production
+build **refuses to run** with a missing, non-Moroccan or placeholder
+(`212600000000`) number, since every order and question goes through WhatsApp.
 
 ### Local production run
 
@@ -64,11 +65,22 @@ renaming a product updates how old orders read in the admin.
 
 ## Security notes
 
-- Every admin Server Action re-checks `getAdmin()` on its own. `src/proxy.ts`
-  is a redirect fast path, not the guarantee — a POST never passes through it
-  with the check.
+- Every admin Server Action re-checks `getAdmin()`, and every admin page calls
+  `requireAdmin()` itself (a layout is not re-run on client navigation).
+  `src/proxy.ts` is only a redirect fast path.
 - Checkout re-prices every line inside a database transaction, so the client
   can never name its own price.
+- Every bag is one of a kind. Checkout reserves bags with one conditional
+  `UPDATE ... WHERE is_sold_out = false`, so two simultaneous orders for the
+  same bag cannot both succeed. Cancelling an order frees its bags; reviving it
+  re-reserves them or refuses if one was sold meanwhile. The product form never
+  writes the sold flag — "Marquer comme vendue" / "Remettre en vente" do.
+- Spam limits (table `attempts`): 3 orders per phone and 5 per IP per hour, a
+  honeypot field on checkout, and 5 failed logins per email / 10 per IP per
+  15 minutes (checked inside Auth.js `authorize`, so the raw endpoint is
+  covered too).
+- The confirmation link uses a random `orders.public_token`, never the
+  sequential id.
 - Checkout and admin pages ship `noindex`, and `/robots.txt` disallows them.
 - Images are added as plain URLs in the admin. Anything outside the
   `next/image` allowlist renders `unoptimized`, so an unknown host shows the

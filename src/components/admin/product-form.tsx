@@ -26,8 +26,6 @@ export type ProductFormDefaults = {
   slug: string;
   reference: string;
   isActive: boolean;
-  isUnique: boolean;
-  isSoldOut: boolean;
 };
 
 const initialState: ProductFormState = { status: "idle" };
@@ -226,47 +224,7 @@ export function ProductForm({
           </span>
         </label>
 
-        <label className="flex items-start gap-3">
-          <input
-            type="checkbox"
-            name="isUnique"
-            defaultChecked={
-              kept?.isUnique === undefined
-                ? defaults.isUnique
-                : Boolean(kept.isUnique)
-            }
-            className="mt-0.5 size-5 accent-primary"
-          />
-          <span className="flex flex-col gap-1">
-            <span className="text-sm font-medium">
-              {strings.admin.productUnique}
-            </span>
-            <span className="text-xs text-muted-foreground">
-              {strings.admin.productUniqueHint}
-            </span>
-          </span>
-        </label>
 
-        <label className="flex items-start gap-3">
-          <input
-            type="checkbox"
-            name="isSoldOut"
-            defaultChecked={
-              kept?.isSoldOut === undefined
-                ? defaults.isSoldOut
-                : Boolean(kept.isSoldOut)
-            }
-            className="mt-0.5 size-5 accent-primary"
-          />
-          <span className="flex flex-col gap-1">
-            <span className="text-sm font-medium">
-              {strings.admin.productSoldOut}
-            </span>
-            <span className="text-xs text-muted-foreground">
-              {strings.admin.productSoldOutHint}
-            </span>
-          </span>
-        </label>
       </div>
 
       <div className="flex gap-3">

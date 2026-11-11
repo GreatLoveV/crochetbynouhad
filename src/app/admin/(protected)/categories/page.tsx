@@ -10,12 +10,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getAdminCategoryList } from "@/lib/data/admin-products";
+import { requireAdmin } from "@/lib/auth/admin";
 import { strings } from "@/lib/constants/strings";
 
 export const metadata = { title: "Catégories — Administration" };
 
 export default async function AdminCategoriesPage() {
-  // The protected layout already ran `requireAdmin()`; this page only reads.
+  // Checked here too, not only in the layout: a layout is not re-run on
+  // client-side navigation, so it cannot be the only guard for a page's data.
+  await requireAdmin();
+
   const categories = await getAdminCategoryList();
 
   return (

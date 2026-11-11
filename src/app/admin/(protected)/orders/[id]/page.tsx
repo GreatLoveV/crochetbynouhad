@@ -10,6 +10,7 @@ import {
   getAdminOrder,
 } from "@/lib/data/admin-orders";
 import { formatPrice } from "@/lib/format/money";
+import { requireAdmin } from "@/lib/auth/admin";
 import { strings } from "@/lib/constants/strings";
 import { normalizeMoroccanPhone, whatsappUrlTo } from "@/lib/integrations/whatsapp";
 
@@ -18,6 +19,8 @@ export const metadata = { title: "Commande — Administration" };
 export default async function AdminOrderPage({
   params,
 }: PageProps<"/admin/orders/[id]">) {
+  await requireAdmin();
+
   const { id } = await params;
   const orderId = Number(id);
   if (!Number.isInteger(orderId) || orderId < 1) notFound();

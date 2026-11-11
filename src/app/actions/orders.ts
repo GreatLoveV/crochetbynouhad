@@ -1,18 +1,38 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
+import { cookies, headers } from "next/headers";
+import { after } from "next/server";
 import { redirect } from "next/navigation";
+import { and, eq, gt, sql } from "drizzle-orm";
 import { z } from "zod";
+
+import { db } from "@/db";
+import { orders } from "@/db/schema";
 
 import {
   createOrder,
   ProductReservedError,
   ProductUnavailableError,
 } from "@/lib/data/place-order";
-import { checkoutSchema } from "@/lib/validation/checkout";
+import { checkoutSchema, normalizePhone } from "@/lib/validation/checkout";
+import {
+  clientIpFrom,
+  isRateLimited,
+  recordAttempt,
+} from "@/lib/security/rate-limit";
 import { notifyNewOrder } from "@/lib/integrations/notify";
 import { type OrderFormState } from "@/lib/validation/order-form";
 import { strings } from "@/lib/constants/strings";
+
+/**
+ * Spam limits. Every order instantly takes its bags off the shop, so without
+ * these a script could "sell out" the whole collection with fake orders.
+ * Generous for a real customer, who places one order and talks on WhatsApp.
+ */
+const MAX_ORDERS_PER_PHONE_PER_HOUR = 3;
+const MAX_ORDERS_PER_IP_PER_HOUR = 5;
+const HOUR = 60 * 60;
 
 /**
  * Places an order from the checkout form.
@@ -33,6 +53,12 @@ export async function placeOrder(
     notes: String(formData.get("notes") ?? ""),
   };
 
+  // Honeypot: a field hidden from people. Only a bot fills it in. Answer with
+  // the generic error so the bot learns nothing.
+  if (String(formData.get("website") ?? "") !== "") {
+    return { status: "error", message: strings.checkout.submitError, values };
+  }
+
   const parsed = checkoutSchema.safeParse({
     ...values,
     cart: formData.get("cart"),
@@ -49,9 +75,18 @@ export async function placeOrder(
 
   const { name, phone, city, address, notes, cart } = parsed.data;
 
-  let orderId: number;
+  const ip = clientIpFrom(await headers());
+  const ipKey = `order:ip:${ip}`;
+  if (
+    (await countRecentOrdersForPhone(phone)) >= MAX_ORDERS_PER_PHONE_PER_HOUR ||
+    (await isRateLimited(ipKey, MAX_ORDERS_PER_IP_PER_HOUR, HOUR))
+  ) {
+    return { status: "error", message: strings.checkout.tooMany, values };
+  }
+
+  let order: { id: number; publicToken: string };
   try {
-    orderId = await createOrder({ name, phone, city, address, notes, cart });
+    order = await createOrder({ name, phone, city, address, notes, cart });
   } catch (error) {
     if (error instanceof ProductReservedError) {
       return { status: "error", message: strings.checkout.reserved, values };
@@ -63,13 +98,21 @@ export async function placeOrder(
     return { status: "error", message: strings.checkout.submitError, values };
   }
 
-  // Best-effort: a broken notification must never block a saved order.
-  await notifyNewOrder(orderId);
+  await recordAttempt(ipKey);
 
-  // Lets the confirmation page show the customer their own name and city
-  // without exposing them to anyone who guesses an order id.
+  // The bags just ordered are now sold: refresh the pages that show them.
+  revalidatePath("/");
+  revalidatePath("/products/[slug]", "page");
+
+  // Sent after the response, so the customer is not kept waiting on the
+  // email. Best-effort: a broken notification never affects a saved order.
+  const orderId = order.id;
+  after(() => notifyNewOrder(orderId));
+
+  // Lets the confirmation page show the customer their own name and city,
+  // and empty their cart, only in the browser that placed the order.
   const cookieStore = await cookies();
-  cookieStore.set("cbn-order", String(orderId), {
+  cookieStore.set("cbn-order", order.publicToken, {
     httpOnly: true,
     sameSite: "lax",
     path: "/",
@@ -79,7 +122,22 @@ export async function placeOrder(
 
   // Outside the try/catch on purpose: redirect() works by throwing, and we do
   // not want to catch it and show an error instead of moving on.
-  redirect(`${strings.order.confirmationPath}?order=${orderId}`);
+  // The link carries the random token, never the sequential id.
+  redirect(`${strings.order.confirmationPath}?t=${order.publicToken}`);
+}
+
+/** Orders placed from this phone (in its stored, normalised form) in the last hour. */
+async function countRecentOrdersForPhone(phone: string): Promise<number> {
+  const [row] = await db
+    .select({ total: sql<number>`count(*)::int` })
+    .from(orders)
+    .where(
+      and(
+        eq(orders.phone, normalizePhone(phone)),
+        gt(orders.createdAt, sql`now() - make_interval(secs => ${HOUR})`),
+      ),
+    );
+  return row?.total ?? 0;
 }
 
 /** Keeps the first message per field so the form shows one error at a time. */

@@ -1,5 +1,6 @@
 "use server";
 
+import { MAX_CART_ITEMS } from "@/lib/constants/cart";
 import { getProductsByIds, type ProductSummary } from "@/lib/data/products";
 
 /**
@@ -11,9 +12,11 @@ import { getProductsByIds, type ProductSummary } from "@/lib/data/products";
  * order — this one is only for display.
  */
 export async function fetchCartProducts(ids: number[]): Promise<ProductSummary[]> {
-  const wanted = Array.from(new Set(ids)).filter(
-    (id) => Number.isInteger(id) && id > 0,
-  );
+  // A public endpoint: never trust the size or content of what it is sent.
+  if (!Array.isArray(ids)) return [];
+  const wanted = Array.from(new Set(ids))
+    .filter((id) => Number.isInteger(id) && id > 0)
+    .slice(0, MAX_CART_ITEMS);
   if (wanted.length === 0) return [];
 
   const products = await getProductsByIds(wanted);

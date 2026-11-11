@@ -99,7 +99,7 @@ export default async function ProductPage({
               <p className="text-xs tracking-[0.18em] text-muted-foreground uppercase">
                 {product.categoryNameFr}
               </p>
-              {product.isUnique && product.isSoldOut ? (
+              {product.isSoldOut ? (
                 <Badge variant="secondary">{strings.product.soldOut}</Badge>
               ) : null}
             </div>
@@ -126,7 +126,6 @@ export default async function ProductPage({
             price={product.price}
             productUrl={productUrl}
             reference={product.reference}
-            isUnique={product.isUnique}
             isSoldOut={product.isSoldOut}
           />
         </div>

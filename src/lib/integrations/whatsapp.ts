@@ -10,6 +10,25 @@ const RAW_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "";
 export const WHATSAPP_NUMBER = RAW_NUMBER.replace(/\D/g, "");
 
 /**
+ * Every order and every question goes through WhatsApp, so a missing or
+ * placeholder number would silently break the whole shop. A production build
+ * refuses to run instead. Server-only, like the SITE_URL guard in strings.ts:
+ * throwing in the browser would take every page down.
+ */
+if (
+  typeof window === "undefined" &&
+  process.env.NODE_ENV === "production" &&
+  (!/^212[5-7]\d{8}$/.test(WHATSAPP_NUMBER) ||
+    // The README's placeholder looks valid but reaches nobody.
+    WHATSAPP_NUMBER === "212600000000")
+) {
+  throw new Error(
+    "NEXT_PUBLIC_WHATSAPP_NUMBER is missing or not a Moroccan number " +
+      "(digits only, e.g. 212612345678). Set it before building.",
+  );
+}
+
+/**
  * Builds a wa.me deep link to an arbitrary number with a prefilled message.
  * `number` is reduced to its digits, so either format works.
  * `message` is URL-encoded for you, so French accents are safe.
@@ -19,9 +38,9 @@ export function whatsappUrlTo(number: string, message: string): string {
   return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
 }
 
-/** Same, but to the shop's own number (the fallback is only a placeholder). */
+/** Same, but to the shop's own number. */
 export function whatsappUrl(message: string): string {
-  return whatsappUrlTo(WHATSAPP_NUMBER || "0000000000", message);
+  return whatsappUrlTo(WHATSAPP_NUMBER, message);
 }
 
 /**

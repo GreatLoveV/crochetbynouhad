@@ -2,7 +2,7 @@ import "server-only";
 
 import { db } from "@/db";
 import { products } from "@/db/schema";
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 
 /** Just enough to render a product tile (home grid, cart list). */
 export type ProductSummary = {
@@ -13,7 +13,6 @@ export type ProductSummary = {
   imageUrl: string | null;
   categoryNameFr: string;
   reference: string | null;
-  isUnique: boolean;
   isSoldOut: boolean;
 };
 
@@ -29,7 +28,6 @@ export type ProductDetail = {
   /** Already ordered by `position`, so [0] is the main photo. */
   images: { url: string; position: number }[];
   reference: string | null;
-  isUnique: boolean;
   isSoldOut: boolean;
 };
 
@@ -66,7 +64,8 @@ export async function getActiveProducts(
       images: { orderBy: (img, { asc }) => [asc(img.position)] },
       category: true,
     },
-    orderBy: (p, { asc }) => [asc(p.id)],
+    // Newest bags first: what Nouhad just finished is what visitors see first.
+    orderBy: (p, { desc }) => [desc(p.createdAt), desc(p.id)],
   });
 
   return rows.map((row) => ({
@@ -77,14 +76,14 @@ export async function getActiveProducts(
     imageUrl: row.images[0]?.url ?? null,
     categoryNameFr: row.category.nameFr,
     reference: row.reference,
-    isUnique: row.isUnique,
     isSoldOut: row.isSoldOut,
   }));
 }
 
 /**
  * Re-reads products by id so the cart always renders what the database
- * currently says — never prices cached in the browser.
+ * currently says — never prices cached in the browser. Hidden products are
+ * left out, so they drop out of the cart instead of failing at checkout.
  */
 export async function getProductsByIds(
   ids: number[],
@@ -92,7 +91,7 @@ export async function getProductsByIds(
   if (ids.length === 0) return [];
 
   const rows = await db.query.products.findMany({
-    where: (product, { inArray }) => inArray(product.id, ids),
+    where: and(inArray(products.id, ids), eq(products.isActive, true)),
     with: {
       images: { orderBy: (img, { asc }) => [asc(img.position)] },
       category: true,
@@ -107,7 +106,6 @@ export async function getProductsByIds(
     imageUrl: row.images[0]?.url ?? null,
     categoryNameFr: row.category.nameFr,
     reference: row.reference,
-    isUnique: row.isUnique,
     isSoldOut: row.isSoldOut,
   }));
 }
@@ -145,7 +143,6 @@ export async function getProductBySlug(
       position: image.position,
     })),
     reference: row.reference,
-    isUnique: row.isUnique,
     isSoldOut: row.isSoldOut,
   };
 }

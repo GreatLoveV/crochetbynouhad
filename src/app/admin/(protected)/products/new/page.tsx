@@ -6,11 +6,14 @@ import {
   type ProductFormDefaults,
 } from "@/components/admin/product-form";
 import { getAdminCategories } from "@/lib/data/admin-products";
+import { requireAdmin } from "@/lib/auth/admin";
 import { strings } from "@/lib/constants/strings";
 
 export const metadata = { title: "Nouvelle pièce — Administration" };
 
 export default async function NewProductPage() {
+  await requireAdmin();
+
   const categories = await getAdminCategories();
 
   const defaults: ProductFormDefaults = {
@@ -23,8 +26,6 @@ export default async function NewProductPage() {
     slug: "",
     reference: "",
     isActive: true,
-    isUnique: true,
-    isSoldOut: false,
   };
 
   return (

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { MAX_QUTY_PER_LINE } from "@/lib/constants/cart";
+import { MAX_CART_ITEMS } from "@/lib/constants/cart";
 
 /**
  * Everything the checkout form sends, validated on the server.
@@ -8,18 +8,17 @@ import { MAX_QUTY_PER_LINE } from "@/lib/constants/cart";
  * between a request and the `orders` table.
  */
 
-/** The same per-line cap the browser cart enforces. */
-const MAX_QUANTITY = MAX_QUTY_PER_LINE;
-
-/** One line of the cart: a product id and how many. Never a price. */
+/**
+ * One line of the cart: which bag. Never a price, never a quantity — every bag
+ * is one of a kind. (An older browser cart may still send `quantity`; unknown
+ * keys are dropped.)
+ */
 export const cartLineSchema = z.object({
   productId: z.number().int().positive(),
-  quantity: z.number().int().min(1).max(MAX_QUANTITY),
 });
 
 /**
- * Parses the `cart` hidden field. Two copies of the same product are merged so
- * one product can never end up on two separate lines of the order.
+ * Parses the `cart` hidden field. A bag listed twice is kept once.
  */
 export const cartFieldSchema = z
   .string()
@@ -33,18 +32,14 @@ export const cartFieldSchema = z
       return z.NEVER;
     }
 
-    const result = z.array(cartLineSchema).max(50).safeParse(parsed);
+    const result = z.array(cartLineSchema).max(MAX_CART_ITEMS).safeParse(parsed);
     if (!result.success) {
       ctx.addIssue({ code: "custom", message: "Panier invalide." });
       return z.NEVER;
     }
 
-    const merged = new Map<number, number>();
-    for (const line of result.data) {
-      const wanted = (merged.get(line.productId) ?? 0) + line.quantity;
-      merged.set(line.productId, Math.min(wanted, MAX_QUANTITY));
-    }
-    return Array.from(merged, ([productId, quantity]) => ({ productId, quantity }));
+    const ids = new Set(result.data.map((line) => line.productId));
+    return Array.from(ids, (productId) => ({ productId }));
   })
   .refine((lines) => lines.length > 0, "Votre panier est vide.");
 
@@ -93,9 +88,19 @@ export type CheckoutLine = z.infer<typeof cartLineSchema>;
  */
 export { formatOrderNumber as orderReference } from "@/lib/format/money";
 
-/** Keeps only the digits, e.g. `+212 6 12 34 56 78` becomes `212612345678`. */
+/**
+ * One stored form for every writing of a Moroccan mobile:
+ * `06 12 34 56 78`, `+212 6 12 34 56 78` and `00212612345678` all become
+ * `212612345678`. Orders are counted per phone for spam protection, so the
+ * same number must always look the same.
+ */
 export function normalizePhone(value: string): string {
-  return value.replace(/\D/g, "");
+  let digits = value.replace(/\D/g, "");
+  if (digits.startsWith("00")) digits = digits.slice(2);
+  else if (digits.startsWith("0") && digits.length === 10) {
+    digits = `212${digits.slice(1)}`;
+  }
+  return digits;
 }
 
 /**
@@ -105,10 +110,5 @@ export function normalizePhone(value: string): string {
  * bundle pulls in the WhatsApp env var just to validate a phone number.
  */
 export function isValidMoroccanPhone(value: string): boolean {
-  let digits = value.replace(/\D/g, "");
-  if (digits.startsWith("00")) digits = digits.slice(2);
-  else if (digits.startsWith("0") && digits.length === 10) {
-    digits = `212${digits.slice(1)}`;
-  }
-  return /^212[67]\d{8}$/.test(digits);
+  return /^212[67]\d{8}$/.test(normalizePhone(value));
 }

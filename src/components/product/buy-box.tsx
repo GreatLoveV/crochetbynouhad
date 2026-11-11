@@ -1,11 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { toast } from "sonner";
-import { MessageCircleIcon, MinusIcon, PlusIcon, ShoppingBagIcon } from "lucide-react";
+import { MessageCircleIcon, ShoppingBagIcon } from "lucide-react";
 
 import { useCart } from "@/components/cart/cart-provider";
-import { MAX_QUTY_PER_LINE } from "@/components/cart/cart-storage";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -14,14 +12,14 @@ import { strings } from "@/lib/constants/strings";
 import { whatsappUrl } from "@/lib/integrations/whatsapp";
 
 /**
- * Price, quantity selector, "add to cart" and the WhatsApp question button.
+ * Price, "add to cart" and the WhatsApp question button.
  *
- * Client component: it holds the chosen quantity and writes to the cart, which
- * lives in the browser. The price it displays comes from the database via the
- * server component parent, and is recomputed again on the server at checkout.
+ * Client component: it writes to the cart, which lives in the browser. The
+ * price it displays comes from the database via the server component parent,
+ * and is recomputed again on the server at checkout.
  *
- * A unique piece is fixed at 1 and can only ever be in the cart once; a sold
- * out one keeps its place in the shop but cannot be ordered.
+ * Every bag is one of a kind: no quantity, it can be in the cart once, and a
+ * sold one keeps its page but cannot be ordered.
  */
 export function ProductBuyBox({
   productId,
@@ -29,7 +27,6 @@ export function ProductBuyBox({
   price,
   productUrl,
   reference,
-  isUnique,
   isSoldOut,
 }: {
   productId: number;
@@ -39,31 +36,18 @@ export function ProductBuyBox({
   /** Absolute URL, so the message can be pasted anywhere and still work. */
   productUrl: string;
   reference: string | null;
-  isUnique: boolean;
   isSoldOut: boolean;
 }) {
   const { addItem, items } = useCart();
-  const [quantity, setQuantity] = useState(1);
-
-  const alreadyInCart = isUnique && items.some((item) => item.productId === productId);
-
-  const decrement = () => setQuantity((q) => Math.max(q - 1, 1));
-  const increment = () =>
-    setQuantity((q) => Math.min(q + 1, MAX_QUTY_PER_LINE));
+  const alreadyInCart = items.some((item) => item.productId === productId);
 
   function handleAddToCart() {
-    // A unique piece is one line, at most once.
     if (alreadyInCart) {
       toast.info(`${name} est déjà dans votre panier`);
       return;
     }
-    addItem(productId, isUnique ? 1 : quantity);
-    toast.success(`${name} ajouté au panier`, {
-      description:
-        !isUnique && quantity > 1
-          ? `${quantity} articles · ${formatPrice(price * quantity)}`
-          : formatPrice(price),
-    });
+    addItem(productId);
+    toast.success(`${name} ajouté au panier`, { description: formatPrice(price) });
   }
 
   // Sent straight to WhatsApp: no account needed, which is how most customers
@@ -84,53 +68,15 @@ export function ProductBuyBox({
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-3">
-          <p className="text-3xl font-medium tabular-nums">{formatPrice(price)}</p>
-          {isUnique ? (
-            <Badge variant="secondary">{strings.product.unique}</Badge>
-          ) : null}
+          <p className="font-heading text-4xl font-semibold text-primary tabular-nums">
+            {formatPrice(price)}
+          </p>
+          <Badge variant="secondary">{strings.product.unique}</Badge>
         </div>
         <p className="text-sm text-muted-foreground">
           {isSoldOut ? strings.product.soldOutHint : strings.cart.checkoutHint}
         </p>
       </div>
-
-      {/* A unique piece has no quantity to choose: it is one of one. */}
-      {!isUnique && !isSoldOut ? (
-        <div className="flex flex-col gap-3">
-          <span className="text-sm font-medium">{strings.product.quantity}</span>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1 rounded-full border border-border p-1">
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                onClick={decrement}
-                disabled={quantity <= 1}
-                aria-label="Diminuer la quantité"
-              >
-                <MinusIcon />
-              </Button>
-              <span className="w-10 text-center font-medium tabular-nums">
-                {quantity}
-              </span>
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                onClick={increment}
-                disabled={quantity >= MAX_QUTY_PER_LINE}
-                aria-label="Augmenter la quantité"
-              >
-                <PlusIcon />
-              </Button>
-            </div>
-
-            {quantity > 1 ? (
-              <span className="text-sm text-muted-foreground tabular-nums">
-                {formatPrice(price * quantity)}
-              </span>
-            ) : null}
-          </div>
-        </div>
-      ) : null}
 
       <div className="flex flex-col gap-3">
         <Button

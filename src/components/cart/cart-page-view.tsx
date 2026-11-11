@@ -7,7 +7,6 @@ import { useCart } from "@/components/cart/cart-provider";
 import {
   CartLineRows,
   cartTotal,
-  lineQuantity,
 } from "@/components/cart/cart-line-rows";
 import { useCartProducts } from "@/components/cart/use-cart-products";
 import { Button } from "@/components/ui/button";
@@ -23,7 +22,7 @@ import { strings } from "@/lib/constants/strings";
  * server fetch, so the two can never disagree.
  */
 export function CartPageView() {
-  const { items, count, isReady, setQuantity, removeItem } = useCart();
+  const { items, count, isReady, removeItem } = useCart();
   const idsKey = items.map((item) => item.productId).join(",");
 
   // Before hydration localStorage is unknown, so neither state is the truth yet.
@@ -55,9 +54,7 @@ export function CartPageView() {
   return (
     <CartPageLines
       idsKey={idsKey}
-      items={items}
       count={count}
-      setQuantity={setQuantity}
       removeItem={removeItem}
     />
   );
@@ -65,15 +62,11 @@ export function CartPageView() {
 
 function CartPageLines({
   idsKey,
-  items,
   count,
-  setQuantity,
   removeItem,
 }: {
   idsKey: string;
-  items: ReturnType<typeof useCart>["items"];
   count: number;
-  setQuantity: (productId: number, quantity: number) => void;
   removeItem: (productId: number) => void;
 }) {
   const products = useCartProducts(idsKey);
@@ -98,19 +91,17 @@ function CartPageLines({
     );
   }
 
-  const total = cartTotal(products, items);
+  const total = cartTotal(products);
 
   return (
     <>
       <div className="grid gap-10 lg:grid-cols-[1fr_20rem] lg:items-start">
         <div>
           <p className="text-sm text-muted-foreground">
-            {count} article{count > 1 ? "s" : ""}
+            {count} pièce{count > 1 ? "s" : ""}
           </p>
           <CartLineRows
             products={products}
-            items={items}
-            onQuantityChange={setQuantity}
             onRemove={removeItem}
           />
           <Button
@@ -129,19 +120,12 @@ function CartPageLines({
           <Separator className="my-4" />
 
           <ul className="flex flex-col gap-2 text-sm">
-            {products.map((product) => {
-              const quantity = lineQuantity(product, items);
-              return (
-                <li key={product.id} className="flex justify-between gap-4">
-                  <span className="text-muted-foreground">
-                    {product.nameFr} × {quantity}
-                  </span>
-                  <span className="tabular-nums">
-                    {formatPrice(product.price * quantity)}
-                  </span>
-                </li>
-              );
-            })}
+            {products.map((product) => (
+              <li key={product.id} className="flex justify-between gap-4">
+                <span className="text-muted-foreground">{product.nameFr}</span>
+                <span className="tabular-nums">{formatPrice(product.price)}</span>
+              </li>
+            ))}
           </ul>
 
           <Separator className="my-4" />

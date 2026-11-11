@@ -4,6 +4,8 @@ import { ArrowLeftIcon } from "lucide-react";
 
 import { ProductImageManager } from "@/components/admin/product-image-manager";
 import { ProductForm } from "@/components/admin/product-form";
+import { ProductSaleStatus } from "@/components/admin/product-sale-status";
+import { requireAdmin } from "@/lib/auth/admin";
 import { getAdminCategories, getAdminProduct } from "@/lib/data/admin-products";
 import { formatPrice } from "@/lib/format/money";
 import { strings } from "@/lib/constants/strings";
@@ -13,6 +15,8 @@ export const metadata = { title: "Modifier la pièce — Administration" };
 export default async function EditProductPage({
   params,
 }: PageProps<"/admin/products/[id]">) {
+  await requireAdmin();
+
   const { id } = await params;
   const productId = Number(id);
   if (!Number.isInteger(productId) || productId < 1) notFound();
@@ -57,12 +61,14 @@ export default async function EditProductPage({
             slug: product.slug,
             reference: product.reference ?? "",
             isActive: product.isActive,
-            isUnique: product.isUnique,
-            isSoldOut: product.isSoldOut,
           }}
         />
 
         <aside className="flex flex-col gap-3">
+          <ProductSaleStatus
+            productId={product.id}
+            isSoldOut={product.isSoldOut}
+          />
           <h2 className="text-sm font-semibold">{strings.admin.images}</h2>
           <ProductImageManager
             productId={product.id}

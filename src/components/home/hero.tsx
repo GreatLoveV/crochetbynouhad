@@ -1,8 +1,8 @@
 import Image from "next/image";
-import { MessageCircleIcon, SparklesIcon } from "lucide-react";
+import { MessageCircleIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { isOptimizableImageUrl } from "@/lib/constants/images";
 import type { ProductSummary } from "@/lib/data/products";
 import { strings } from "@/lib/constants/strings";
 import { whatsappUrl } from "@/lib/integrations/whatsapp";
@@ -14,15 +14,16 @@ import { whatsappUrl } from "@/lib/integrations/whatsapp";
  */
 export function Hero({ showcase }: { showcase: ProductSummary | null }) {
   return (
-    <section className="texture-paper border-b border-border/60">
+    <section className="velvet-sheen border-b border-border">
       <div className="mx-auto grid max-w-6xl gap-10 px-5 pt-12 pb-14 sm:pt-16 sm:pb-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16 lg:px-8">
         <div className="flex flex-col items-start gap-6">
-          <Badge variant="secondary" className="gap-1.5 px-3 py-1">
-            <SparklesIcon className="size-3.5" />
+          {/* Gold rule + small caps: the Velvet "label" style. */}
+          <p className="flex items-center gap-3 text-xs font-semibold tracking-[0.24em] text-primary uppercase">
+            <span aria-hidden className="h-px w-8 bg-primary/70" />
             {strings.hero.eyebrow}
-          </Badge>
+          </p>
 
-          <h1 className="text-balance text-4xl leading-[1.08] font-medium sm:text-5xl lg:text-6xl">
+          <h1 className="text-balance text-5xl leading-[1.02] font-medium sm:text-6xl lg:text-7xl">
             {strings.hero.title}
           </h1>
 
@@ -63,7 +64,7 @@ export function Hero({ showcase }: { showcase: ProductSummary | null }) {
         {showcase ? (
           <ShowcaseImage product={showcase} />
         ) : (
-          <div className="aspect-4/5 w-full rounded-3xl border border-border/60 bg-card shadow-soft" />
+          <div className="aspect-4/5 w-full rounded-3xl border border-border bg-card shadow-soft" />
         )}
       </div>
     </section>
@@ -73,7 +74,7 @@ export function Hero({ showcase }: { showcase: ProductSummary | null }) {
 /** Big, tactile product photo — the anchor of the hero on larger screens. */
 function ShowcaseImage({ product }: { product: ProductSummary }) {
   return (
-    <div className="relative aspect-4/5 w-full overflow-hidden rounded-3xl border border-border/60 bg-card shadow-lift">
+    <div className="relative aspect-4/5 w-full overflow-hidden rounded-3xl border border-border bg-card shadow-lift">
       {product.imageUrl ? (
         <Image
           src={product.imageUrl}
@@ -82,13 +83,16 @@ function ShowcaseImage({ product }: { product: ProductSummary }) {
           priority
           sizes="(min-width: 1024px) 45vw, 100vw"
           className="object-cover"
+          // Like every other product photo: an unknown host is loaded as-is
+          // instead of failing in the optimiser.
+          unoptimized={!isOptimizableImageUrl(product.imageUrl)}
         />
       ) : null}
-      <div className="absolute inset-x-4 bottom-4 rounded-2xl bg-background/85 px-4 py-3 backdrop-blur-sm">
+      <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-border bg-background/80 px-4 py-3 backdrop-blur-sm">
         <p className="text-xs tracking-[0.18em] text-muted-foreground uppercase">
           {product.categoryNameFr}
         </p>
-        <p className="font-heading text-lg leading-tight">{product.nameFr}</p>
+        <p className="font-heading text-xl leading-tight font-semibold">{product.nameFr}</p>
       </div>
     </div>
   );

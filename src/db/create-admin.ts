@@ -23,15 +23,16 @@ async function main() {
   if (!email || !password) {
     console.error(
       "Usage: npm run create-admin -- <email> <mot-de-passe>\n" +
-        "Example: npm run create-admin -- admin@crochetbynouhad.ma 'mon-mot-de-passe'",
+        "Example: npm run create-admin -- admin@crochetbynouhad.ma 'quatre-mots-au-hasard'",
     );
     process.exit(1);
   }
 
   const normalizedEmail = email.trim().toLowerCase();
 
-  if (password.length < 8) {
-    console.error("Le mot de passe doit faire au moins 8 caractères.");
+  // Long beats complex: 12+ characters, e.g. four random words.
+  if (password.length < 12) {
+    console.error("Le mot de passe doit faire au moins 12 caractères.");
     process.exit(1);
   }
 

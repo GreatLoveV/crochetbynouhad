@@ -10,7 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { formatPrice } from "@/lib/format/money";
 import {
   buildOrderWhatsappMessage,
-  getOrderSummary,
+  getOrderSummaryByToken,
   ORDER_STATUS_LABELS,
 } from "@/lib/data/orders";
 import { SITE_URL, strings } from "@/lib/constants/strings";
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-/** Cookie set by `placeOrder`; its value is the id of the order just placed. */
+/** Cookie set by `placeOrder`; its value is the public token of the order just placed. */
 const ORDER_COOKIE = "cbn-order";
 
 /** Next 16: `searchParams` and `cookies()` are promises, so the page is async. */
@@ -29,18 +29,17 @@ export default async function OrderConfirmationPage({
   searchParams,
 }: PageProps<"/order/confirmation">) {
   const params = await searchParams;
-  const raw = Array.isArray(params.order) ? params.order[0] : params.order;
-  const id = Number(raw);
+  const raw = Array.isArray(params.t) ? params.t[0] : params.t;
+  const token = raw ?? "";
 
-  // Anything that is not a real order is simply a 404: no way to guess a page.
-  if (!Number.isInteger(id) || id < 1) notFound();
-
-  // Only the browser that just placed this order gets the name and city; a
-  // stranger who guesses the id gets the recap without any personal detail.
+  // Only the browser that just placed this order gets the name and city, and
+  // only that browser has its cart emptied. Someone opening a forwarded link
+  // sees the recap without personal details, and keeps their own cart.
   const cookieStore = await cookies();
-  const unlocked = cookieStore.get(ORDER_COOKIE)?.value === String(id);
+  const unlocked = token !== "" && cookieStore.get(ORDER_COOKIE)?.value === token;
 
-  const order = await getOrderSummary(id, { includeCustomer: unlocked });
+  // Unknown or malformed token: a plain 404.
+  const order = await getOrderSummaryByToken(token, { includeCustomer: unlocked });
   if (!order) notFound();
 
   const recap = [
@@ -61,7 +60,7 @@ export default async function OrderConfirmationPage({
 
   return (
     <div className="mx-auto w-full max-w-2xl px-5 py-14 sm:px-8 sm:py-20">
-      <ClearCartOnMount />
+      {unlocked ? <ClearCartOnMount /> : null}
 
       <div className="flex flex-col items-center text-center">
         <span className="flex size-16 items-center justify-center rounded-full bg-accent text-accent-foreground">

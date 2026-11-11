@@ -9,16 +9,13 @@
  * render). `useSyncExternalStore` is built for exactly this: the server
  * snapshot is the empty cart, the browser snapshot is the saved cart.
  *
- * Only ids and quantities are stored — never names or prices.
+ * Only product ids are stored — never names or prices. Every bag is unique,
+ * so a bag is either in the cart or not; there is no quantity.
  */
 
-import {
-  CART_STORAGE_KEY,
-  MAX_QUTY_PER_LINE,
-  type CartItem,
-} from "@/lib/constants/cart";
+import { CART_STORAGE_KEY, MAX_CART_ITEMS, type CartItem } from "@/lib/constants/cart";
 
-export { CART_STORAGE_KEY, MAX_QUTY_PER_LINE, type CartItem };
+export { CART_STORAGE_KEY, type CartItem };
 
 /** Stable reference so the "server snapshot" never looks like a new array. */
 const EMPTY_CART: CartItem[] = [];
@@ -32,25 +29,25 @@ let cache: CartItem[] | null = null;
 
 const listeners = new Set<() => void>();
 
-function clamp(quantity: number): number {
-  return Math.min(Math.max(Math.floor(quantity) || 1, 1), MAX_QUTY_PER_LINE);
-}
-
-/** Defensive parse: localStorage can hold anything, or be missing entirely. */
+/**
+ * Defensive parse: localStorage can hold anything, or be missing entirely.
+ * Older carts stored `{ productId, quantity }`; the quantity is simply ignored.
+ */
 function parse(raw: string | null): CartItem[] {
   if (!raw) return [];
   try {
     const parsed: unknown = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
 
+    const seen = new Set<number>();
     return parsed.flatMap((entry) => {
       if (typeof entry !== "object" || entry === null) return [];
-      const { productId, quantity } = entry as Record<string, unknown>;
-      if (typeof productId !== "number" || !Number.isInteger(productId)) {
-        return [];
-      }
-      return [{ productId, quantity: clamp(Number(quantity)) }];
-    });
+      const { productId } = entry as Record<string, unknown>;
+      if (typeof productId !== "number" || !Number.isInteger(productId)) return [];
+      if (seen.has(productId)) return [];
+      seen.add(productId);
+      return [{ productId }];
+    }).slice(0, MAX_CART_ITEMS);
   } catch {
     // Private mode / corrupted value: start from an empty cart.
     return [];
@@ -100,32 +97,12 @@ export const cartStore = {
 
 /* ---------------------------------------------------------------- mutations */
 
-export function addToCart(productId: number, quantity = 1) {
+/** Adds a bag. Adding one that is already there changes nothing. */
+export function addToCart(productId: number) {
   const current = readBrowserCart();
-  const existing = current.find((item) => item.productId === productId);
-  write(
-    existing
-      ? current.map((item) =>
-          item.productId === productId
-            ? { ...item, quantity: clamp(item.quantity + quantity) }
-            : item,
-        )
-      : [...current, { productId, quantity: clamp(quantity) }],
-  );
-}
-
-export function setCartQuantity(productId: number, quantity: number) {
-  const current = readBrowserCart();
-  // Setting the quantity to 0 or less removes the line.
-  write(
-    quantity <= 0
-      ? current.filter((item) => item.productId !== productId)
-      : current.map((item) =>
-          item.productId === productId
-            ? { ...item, quantity: clamp(quantity) }
-            : item,
-        ),
-  );
+  if (current.some((item) => item.productId === productId)) return;
+  if (current.length >= MAX_CART_ITEMS) return;
+  write([...current, { productId }]);
 }
 
 export function removeFromCart(productId: number) {
