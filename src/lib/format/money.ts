@@ -1,10 +1,15 @@
+import { intlLocale, type Locale } from "@/i18n/config";
+
 /**
  * Prices are stored in the database as an integer number of CENTIMES of MAD
  * (25000 = 250.00 MAD). Always format through `formatPrice` so the /100
  * conversion lives in exactly one place.
+ *
+ * `lang` picks the writing: `1.250,00 MAD` in French, `1.250,00 د.م.‏` in
+ * Arabic (with Western digits). The admin and notifications use French.
  */
-export function formatPrice(centimes: number): string {
-  return new Intl.NumberFormat("fr-MA", {
+export function formatPrice(centimes: number, lang: Locale = "fr"): string {
+  return new Intl.NumberFormat(intlLocale[lang], {
     style: "currency",
     currency: "MAD",
     minimumFractionDigits: 2,

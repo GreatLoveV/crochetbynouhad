@@ -6,6 +6,10 @@ import { MAX_CART_ITEMS } from "@/lib/constants/cart";
  *
  * The browser is free to send anything, so this is the only thing standing
  * between a request and the `orders` table.
+ *
+ * Messages are codes (`nameShort`, `phoneInvalid`…), not sentences: the
+ * action turns them into the visitor's language with the `checkout.errors`
+ * section of the dictionary.
  */
 
 /**
@@ -22,57 +26,54 @@ export const cartLineSchema = z.object({
  */
 export const cartFieldSchema = z
   .string()
-  .min(1, "Votre panier est vide.")
+  .min(1, "cartEmpty")
   .transform((raw, ctx) => {
     let parsed: unknown;
     try {
       parsed = JSON.parse(raw);
     } catch {
-      ctx.addIssue({ code: "custom", message: "Panier illisible." });
+      ctx.addIssue({ code: "custom", message: "cartUnreadable" });
       return z.NEVER;
     }
 
     const result = z.array(cartLineSchema).max(MAX_CART_ITEMS).safeParse(parsed);
     if (!result.success) {
-      ctx.addIssue({ code: "custom", message: "Panier invalide." });
+      ctx.addIssue({ code: "custom", message: "cartInvalid" });
       return z.NEVER;
     }
 
     const ids = new Set(result.data.map((line) => line.productId));
     return Array.from(ids, (productId) => ({ productId }));
   })
-  .refine((lines) => lines.length > 0, "Votre panier est vide.");
+  .refine((lines) => lines.length > 0, "cartEmpty");
 
 export const checkoutSchema = z.object({
   name: z
     .string()
     .trim()
-    .min(2, "Indiquez votre nom.")
-    .max(80, "Nom trop long (80 caractères maximum)."),
+    .min(2, "nameShort")
+    .max(80, "nameLong"),
   // Moroccan mobiles are written many ways (0612345678, +212 6 12 34 56 78,
   // 00212612345678). We accept all of them and check the normalised 212… form.
   phone: z
     .string()
     .trim()
-    .min(1, "Indiquez votre numéro de téléphone.")
-    .refine(
-      (value) => isValidMoroccanPhone(value),
-      "Numéro de téléphone invalide (ex. 06 12 34 56 78).",
-    ),
+    .min(1, "phoneMissing")
+    .refine((value) => isValidMoroccanPhone(value), "phoneInvalid"),
   city: z
     .string()
     .trim()
-    .min(2, "Indiquez votre ville.")
-    .max(60, "Nom de ville trop long."),
+    .min(2, "cityShort")
+    .max(60, "cityLong"),
   address: z
     .string()
     .trim()
-    .min(5, "Indiquez votre adresse de livraison.")
-    .max(300, "Adresse trop longue (300 caractères maximum)."),
+    .min(5, "addressShort")
+    .max(300, "addressLong"),
   notes: z
     .string()
     .trim()
-    .max(500, "Message trop long (500 caractères maximum).")
+    .max(500, "notesLong")
     .optional(),
   cart: cartFieldSchema,
 });

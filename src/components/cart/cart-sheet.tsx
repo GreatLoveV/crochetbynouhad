@@ -21,8 +21,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
+import { useI18n } from "@/i18n/client";
+import { plural } from "@/i18n/format";
 import { formatPrice } from "@/lib/format/money";
-import { strings } from "@/lib/constants/strings";
 import { cn } from "cn";
 
 /**
@@ -33,13 +34,14 @@ import { cn } from "cn";
  * both at once.
  */
 export function CartButton() {
+  const { t, dir } = useI18n();
   const { count, isReady } = useCart();
   const [open, setOpen] = useState(false);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
-        aria-label={strings.nav.cart}
+        aria-label={t.nav.cart}
         className={cn(
           buttonVariants({ variant: "ghost", size: "icon" }),
           "relative text-foreground/80 hover:text-accent-foreground",
@@ -49,13 +51,19 @@ export function CartButton() {
         {/* The badge is only rendered after hydration, so the server HTML and
             the first client render match. */}
         {isReady && count > 0 ? (
-          <span className="absolute -top-0.5 -right-0.5 flex size-5 items-center justify-center rounded-full bg-primary text-[0.7rem] font-semibold text-primary-foreground tabular-nums">
+          <span className="absolute -top-0.5 -inset-e-0.5 flex size-5 items-center justify-center rounded-full bg-primary text-[0.7rem] font-semibold text-primary-foreground tabular-nums">
             {count > 99 ? "99+" : count}
           </span>
         ) : null}
       </SheetTrigger>
 
-      <SheetContent side="right" className="w-full sm:max-w-md">
+      {/* Slides in from the end of the line: the right in French, the left
+          in Arabic, matching where the cart button sits. */}
+      <SheetContent
+        side={dir === "rtl" ? "left" : "right"}
+        closeLabel={t.common.close}
+        className="w-full sm:max-w-md"
+      >
         <CartDrawerBody onClose={() => setOpen(false)} />
       </SheetContent>
     </Sheet>
@@ -63,17 +71,18 @@ export function CartButton() {
 }
 
 function CartDrawerBody({ onClose }: { onClose: () => void }) {
+  const { lang, t } = useI18n();
   const { items, count, isReady, removeItem } = useCart();
   const idsKey = items.map((item) => item.productId).join(",");
 
   return (
     <>
       <SheetHeader>
-        <SheetTitle>{strings.cart.title}</SheetTitle>
+        <SheetTitle>{t.cart.title}</SheetTitle>
         <SheetDescription>
           {isReady && count > 0
-            ? `${count} pièce${count > 1 ? "s" : ""}`
-            : strings.cart.emptyHint}
+            ? plural(lang, t.cart.pieces, count)
+            : t.cart.emptyHint}
         </SheetDescription>
       </SheetHeader>
 
@@ -91,20 +100,21 @@ function CartDrawerBody({ onClose }: { onClose: () => void }) {
 }
 
 function EmptyCart({ onClose }: { onClose: () => void }) {
+  const { t } = useI18n();
   return (
     <>
       <div className="flex flex-1 flex-col items-center gap-4 py-16 text-center">
         <span className="flex size-16 items-center justify-center rounded-full bg-accent text-accent-foreground">
           <ShoppingBagIcon className="size-7" />
         </span>
-        <p className="text-muted-foreground">{strings.cart.empty}</p>
+        <p className="text-muted-foreground">{t.cart.empty}</p>
         <p className="max-w-56 text-sm text-muted-foreground/80">
-          {strings.cart.emptyHint}
+          {t.cart.emptyHint}
         </p>
       </div>
       <SheetFooter>
         <Button className="w-full" size="lg" onClick={onClose}>
-          {strings.cart.continueShopping}
+          {t.cart.continueShopping}
         </Button>
       </SheetFooter>
     </>
@@ -120,12 +130,13 @@ function DrawerLines({
   onClose: () => void;
   onRemove: (productId: number) => void;
 }) {
+  const { lang, t, href } = useI18n();
   const products = useCartProducts(idsKey);
 
   if (products === null) {
     return (
       <p className="flex-1 py-8 text-center text-sm text-muted-foreground">
-        {strings.common.loading}
+        {t.common.loading}
       </p>
     );
   }
@@ -146,33 +157,33 @@ function DrawerLines({
         <Separator className="mb-2" />
         <div className="flex items-baseline justify-between">
           <span className="text-sm text-muted-foreground">
-            {strings.cart.total}
+            {t.cart.total}
           </span>
           <span className="font-heading text-xl tabular-nums">
-            {formatPrice(total)}
+            <bdi>{formatPrice(total, lang)}</bdi>
           </span>
         </div>
 
         <Button
           className="w-full"
           size="lg"
-          render={<Link href="/checkout" onClick={onClose} />}
+          render={<Link href={href("/checkout")} onClick={onClose} />}
         >
-          {strings.checkout.title}
+          {t.checkout.title}
         </Button>
 
         <div className="flex items-center justify-center gap-4">
           <Link
-            href="/cart"
+            href={href("/cart")}
             onClick={onClose}
             className="text-sm text-muted-foreground underline underline-offset-4 transition-colors duration-300 ease-soft hover:text-primary"
           >
-            {strings.cart.viewPage}
+            {t.cart.viewPage}
           </Link>
         </div>
 
         <p className="text-center text-xs text-muted-foreground">
-          {strings.cart.checkoutHint}
+          {t.cart.checkoutHint}
         </p>
       </SheetFooter>
     </>

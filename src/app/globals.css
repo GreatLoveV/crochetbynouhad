@@ -126,6 +126,23 @@
     background-color: var(--primary);
     color: var(--primary-foreground);
   }
+
+  /*
+    Arabic. Letter-spacing breaks the joins between Arabic letters and there
+    are no capitals, so both are switched off for any Arabic text, whatever a
+    component's classes ask for. Arabic also needs taller lines: its marks sit
+    above and below the letters. Sizes are tuned in the design-system phase.
+  */
+  :lang(ar) {
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+  }
+  html:lang(ar) body {
+    line-height: 1.8;
+  }
+  html:lang(ar) :is(h1, h2, h3, h4) {
+    line-height: 1.35;
+  }
 }
 
 /*

@@ -11,8 +11,9 @@ import {
 import { useCartProducts } from "@/components/cart/use-cart-products";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useI18n } from "@/i18n/client";
+import { plural } from "@/i18n/format";
 import { formatPrice } from "@/lib/format/money";
-import { strings } from "@/lib/constants/strings";
 
 /**
  * The /cart page body.
@@ -22,6 +23,7 @@ import { strings } from "@/lib/constants/strings";
  * server fetch, so the two can never disagree.
  */
 export function CartPageView() {
+  const { t, href } = useI18n();
   const { items, count, isReady, removeItem } = useCart();
   const idsKey = items.map((item) => item.productId).join(",");
 
@@ -29,7 +31,7 @@ export function CartPageView() {
   if (!isReady) {
     return (
       <p className="py-16 text-center text-sm text-muted-foreground">
-        {strings.common.loading}
+        {t.common.loading}
       </p>
     );
   }
@@ -40,12 +42,12 @@ export function CartPageView() {
         <span className="flex size-20 items-center justify-center rounded-full bg-accent text-accent-foreground">
           <ShoppingBagIcon className="size-8" />
         </span>
-        <p className="font-heading text-2xl">{strings.cart.empty}</p>
+        <p className="font-heading text-2xl">{t.cart.empty}</p>
         <p className="max-w-sm text-muted-foreground">
-          {strings.cart.emptyHint}
+          {t.cart.emptyHint}
         </p>
-        <Button size="lg" render={<Link href="/#boutique" />}>
-          {strings.cart.continueShopping}
+        <Button size="lg" render={<Link href={href("/#boutique")} />}>
+          {t.cart.continueShopping}
         </Button>
       </div>
     );
@@ -69,12 +71,13 @@ function CartPageLines({
   count: number;
   removeItem: (productId: number) => void;
 }) {
+  const { lang, t, href } = useI18n();
   const products = useCartProducts(idsKey);
 
   if (products === null) {
     return (
       <p className="py-16 text-center text-sm text-muted-foreground">
-        {strings.common.loading}
+        {t.common.loading}
       </p>
     );
   }
@@ -83,9 +86,9 @@ function CartPageLines({
   if (products.length === 0) {
     return (
       <div className="flex flex-col items-center gap-5 py-20 text-center">
-        <p className="font-heading text-2xl">{strings.checkout.unavailable}</p>
-        <Button size="lg" render={<Link href="/#boutique" />}>
-          {strings.cart.continueShopping}
+        <p className="font-heading text-2xl">{t.checkout.unavailable}</p>
+        <Button size="lg" render={<Link href={href("/#boutique")} />}>
+          {t.cart.continueShopping}
         </Button>
       </div>
     );
@@ -98,7 +101,7 @@ function CartPageLines({
       <div className="grid gap-10 lg:grid-cols-[1fr_20rem] lg:items-start">
         <div>
           <p className="text-sm text-muted-foreground">
-            {count} pièce{count > 1 ? "s" : ""}
+            {plural(lang, t.cart.pieces, count)}
           </p>
           <CartLineRows
             products={products}
@@ -107,23 +110,27 @@ function CartPageLines({
           <Button
             variant="ghost"
             className="mt-2"
-            render={<Link href="/#boutique" />}
+            render={<Link href={href("/#boutique")} />}
           >
-            {strings.cart.continueShopping}
+            {t.cart.continueShopping}
           </Button>
         </div>
 
         {/* Sticky on desktop so the total stays visible while scrolling. */}
         <div className="rounded-3xl bg-card p-6 shadow-soft lg:sticky lg:top-24">
-          <h2 className="font-heading text-xl">{strings.checkout.summaryTitle}</h2>
+          <h2 className="font-heading text-xl">{t.checkout.summaryTitle}</h2>
 
           <Separator className="my-4" />
 
           <ul className="flex flex-col gap-2 text-sm">
             {products.map((product) => (
               <li key={product.id} className="flex justify-between gap-4">
-                <span className="text-muted-foreground">{product.nameFr}</span>
-                <span className="tabular-nums">{formatPrice(product.price)}</span>
+                <span lang={product.nameLang} className="text-muted-foreground">
+                  {product.name}
+                </span>
+                <span className="tabular-nums">
+                  <bdi>{formatPrice(product.price, lang)}</bdi>
+                </span>
               </li>
             ))}
           </ul>
@@ -132,19 +139,19 @@ function CartPageLines({
 
           <div className="flex items-baseline justify-between">
             <span className="text-sm text-muted-foreground">
-              {strings.checkout.totalLabel}
+              {t.checkout.totalLabel}
             </span>
             <span className="font-heading text-2xl tabular-nums">
-              {formatPrice(total)}
+              <bdi>{formatPrice(total, lang)}</bdi>
             </span>
           </div>
 
-          <Button className="mt-5 w-full" size="lg" render={<Link href="/checkout" />}>
-            {strings.checkout.title}
+          <Button className="mt-5 w-full" size="lg" render={<Link href={href("/checkout")} />}>
+            {t.checkout.title}
           </Button>
 
           <p className="mt-3 text-center text-xs text-muted-foreground">
-            {strings.checkout.paymentNote}
+            {t.checkout.paymentNote}
           </p>
         </div>
       </div>

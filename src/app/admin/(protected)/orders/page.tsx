@@ -74,7 +74,7 @@ export default async function AdminOrdersPage() {
                 <span className="text-sm text-muted-foreground">
                   {formatDate(order.createdAt)}
                 </span>
-                <span className="ml-auto font-semibold tabular-nums">
+                <span className="ms-auto font-semibold tabular-nums">
                   {formatPrice(order.total)}
                 </span>
                 <span className="rounded-full bg-muted px-2.5 py-1 text-xs">

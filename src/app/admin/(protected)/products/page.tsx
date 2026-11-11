@@ -55,11 +55,11 @@ export default async function AdminProductsPage() {
                 <TableHead className="hidden sm:table-cell">
                   {strings.admin.productCategory}
                 </TableHead>
-                <TableHead className="text-right">
+                <TableHead className="text-end">
                   {strings.admin.productPrice}
                 </TableHead>
-                <TableHead className="w-28 text-right">Visibilité</TableHead>
-                <TableHead className="w-24 text-right">Actions</TableHead>
+                <TableHead className="w-28 text-end">Visibilité</TableHead>
+                <TableHead className="w-24 text-end">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -95,10 +95,10 @@ export default async function AdminProductsPage() {
                   <TableCell className="hidden text-muted-foreground sm:table-cell">
                     {product.categoryNameFr}
                   </TableCell>
-                  <TableCell className="text-right font-medium tabular-nums">
+                  <TableCell className="text-end font-medium tabular-nums">
                     {formatPrice(product.price)}
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-end">
                     <div className="flex flex-wrap justify-end gap-1">
                       <Badge
                         variant={product.isActive ? "default" : "secondary"}
@@ -106,11 +106,11 @@ export default async function AdminProductsPage() {
                         {product.isActive ? "En ligne" : "Retirée"}
                       </Badge>
                       {product.isSoldOut ? (
-                        <Badge variant="secondary">{strings.product.soldOut}</Badge>
+                        <Badge variant="secondary">{strings.admin.soldOut}</Badge>
                       ) : null}
                     </div>
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-end">
                     <div className="flex justify-end gap-1">
                       <Button
                         size="sm"

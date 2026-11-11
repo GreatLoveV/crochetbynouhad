@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useState } from "react";
 
+import { fill } from "@/i18n/config";
+import { useI18n } from "@/i18n/client";
 import { isOptimizableImageUrl } from "@/lib/constants/images";
 
 /**
@@ -19,12 +21,13 @@ export function ImageGallery({
   images: { url: string; position: number }[];
   alt: string;
 }) {
+  const { t } = useI18n();
   const [activeIndex, setActiveIndex] = useState(0);
 
   if (images.length === 0) {
     return (
       <div className="flex aspect-4/5 w-full items-center justify-center rounded-3xl border border-border/60 bg-muted text-sm text-muted-foreground">
-        Photo à venir
+        {t.product.photoSoon}
       </div>
     );
   }
@@ -55,7 +58,7 @@ export function ImageGallery({
                 type="button"
                 onClick={() => setActiveIndex(index)}
                 aria-current={index === activeIndex}
-                aria-label={`Voir la photo ${index + 1}`}
+                aria-label={fill(t.product.viewPhoto, { n: index + 1 })}
                 className={
                   index === activeIndex
                     ? "relative block size-20 overflow-hidden rounded-2xl ring-2 ring-primary ring-offset-2 ring-offset-background transition-all duration-300 ease-soft"

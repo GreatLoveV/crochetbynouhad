@@ -3,8 +3,9 @@ import "server-only";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { orders } from "@/db/schema";
+import { fill, localePath, type Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionaries/fr";
 import { formatPrice, formatOrderNumber, formatProductReference } from "@/lib/format/money";
-import { strings } from "@/lib/constants/strings";
 
 /**
  * Read-only view of a placed order, for the confirmation page.
@@ -21,8 +22,11 @@ export type OrderSummary = {
   total: number;
   status: "new" | "confirmed" | "shipped" | "delivered" | "cancelled";
   lines: {
-    /** Snapshot taken at checkout: a rename never rewrites a sent receipt. */
-    nameFr: string;
+    /**
+     * Snapshot taken at checkout, in French: a rename never rewrites a sent
+     * receipt. `null` only on very old rows; the page shows a fallback.
+     */
+    name: string | null;
     reference: string;
     /** Current product page, when the piece still exists. */
     slug: string | null;
@@ -76,7 +80,7 @@ export async function getOrderSummaryByToken(
     lines: order.items.map((item) => ({
       // `productName` is nullable so the backfill migration could run against a
       // full table; after it every line has one, but the type still says `null`.
-      nameFr: item.productName ?? strings.order.itemFallback,
+      name: item.productName,
       reference: item.productReference ?? formatProductReference(item.productId),
       slug: item.product?.slug ?? null,
       quantity: item.quantity,
@@ -94,37 +98,33 @@ export async function getOrderSummaryByToken(
 
 /**
  * The message behind "Envoyer ma commande sur WhatsApp" on the confirmation
- * page. Built from the SAVED order, so it always matches what Nouhad will see.
+ * page, in the language the customer ordered in. Built from the SAVED order,
+ * so it always matches what Nouhad will see.
  */
 export function buildOrderWhatsappMessage(
   order: OrderSummary,
   siteUrl: string,
+  lang: Locale,
+  t: Dictionary,
 ): string {
   const lines = order.lines.flatMap((line) => {
-    const head = `- ${line.reference} ${line.nameFr} x${line.quantity}, ${formatPrice(
-      line.unitPrice * line.quantity,
-    )}`;
-    return line.slug ? [head, `  ${siteUrl}/products/${line.slug}`] : [head];
+    const name = line.name ?? t.order.itemFallback;
+    const price = formatPrice(line.unitPrice * line.quantity, lang);
+    const head = `- ${line.reference} ${name} x${line.quantity}, ${price}`;
+    return line.slug
+      ? [head, `  ${siteUrl}${localePath(lang, `/products/${line.slug}`)}`]
+      : [head];
   });
 
   const parts = [
-    `Bonjour, voici ma commande ${order.reference} :`,
+    fill(t.whatsapp.orderIntro, { reference: order.reference }),
     ...lines,
-    `Total : ${formatPrice(order.total)} (paiement à la livraison)`,
+    fill(t.whatsapp.orderTotal, { total: formatPrice(order.total, lang) }),
   ];
 
   if (order.customerName && order.city) {
-    parts.push(`Nom : ${order.customerName}, Ville : ${order.city}`);
+    parts.push(fill(t.whatsapp.orderCustomer, { name: order.customerName, city: order.city }));
   }
 
   return parts.join("\n");
 }
-
-/** French labels for the admin statuses, for display next to a reference. */
-export const ORDER_STATUS_LABELS: Record<OrderSummary["status"], string> = {
-  new: "Reçue",
-  confirmed: "Confirmée",
-  shipped: "Expédiée",
-  delivered: "Livrée",
-  cancelled: "Annulée",
-};

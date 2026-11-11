@@ -7,19 +7,17 @@ import { CheckCircle2Icon, MessageCircleIcon } from "lucide-react";
 import { ClearCartOnMount } from "@/components/cart/clear-cart-on-mount";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { fill, localePath } from "@/i18n/config";
+import { getDictionary, getLang } from "@/i18n/server";
 import { formatPrice } from "@/lib/format/money";
-import {
-  buildOrderWhatsappMessage,
-  getOrderSummaryByToken,
-  ORDER_STATUS_LABELS,
-} from "@/lib/data/orders";
-import { SITE_URL, strings } from "@/lib/constants/strings";
+import { buildOrderWhatsappMessage, getOrderSummaryByToken } from "@/lib/data/orders";
+import { SITE_URL } from "@/lib/constants/strings";
 import { whatsappUrl } from "@/lib/integrations/whatsapp";
 
-export const metadata: Metadata = {
-  title: `${strings.order.title} | ${strings.siteName}`,
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getDictionary();
+  return { title: t.order.title, robots: { index: false, follow: false } };
+}
 
 /** Cookie set by `placeOrder`; its value is the public token of the order just placed. */
 const ORDER_COOKIE = "cbn-order";
@@ -27,7 +25,9 @@ const ORDER_COOKIE = "cbn-order";
 /** Next 16: `searchParams` and `cookies()` are promises, so the page is async. */
 export default async function OrderConfirmationPage({
   searchParams,
-}: PageProps<"/order/confirmation">) {
+}: PageProps<"/[lang]/order/confirmation">) {
+  const lang = await getLang();
+  const t = await getDictionary();
   const params = await searchParams;
   const raw = Array.isArray(params.t) ? params.t[0] : params.t;
   const token = raw ?? "";
@@ -43,19 +43,19 @@ export default async function OrderConfirmationPage({
   if (!order) notFound();
 
   const recap = [
-    `${strings.siteName} — ${strings.order.reference} ${order.reference}`,
+    `${t.siteName} — ${t.order.reference} ${order.reference}`,
     "",
     ...order.lines.map(
       (line) =>
-        `• ${line.nameFr} x${line.quantity} — ${formatPrice(line.unitPrice * line.quantity)}`,
+        `• ${line.name ?? t.order.itemFallback} x${line.quantity} — ${formatPrice(line.unitPrice * line.quantity, lang)}`,
     ),
     "",
-    `${strings.cart.total} : ${formatPrice(order.total)}`,
+    fill(t.whatsapp.orderRecapTotal, { total: formatPrice(order.total, lang) }),
   ].join("\n");
 
   // Full message only for the customer; the fallback keeps the raw recap.
   const whatsappHref = whatsappUrl(
-    unlocked ? buildOrderWhatsappMessage(order, SITE_URL) : recap,
+    unlocked ? buildOrderWhatsappMessage(order, SITE_URL, lang, t) : recap,
   );
 
   return (
@@ -68,20 +68,20 @@ export default async function OrderConfirmationPage({
         </span>
 
         <h1 className="mt-6 font-heading text-3xl sm:text-4xl">
-          {strings.order.title}
+          {t.order.title}
         </h1>
         <p className="mt-3 max-w-md text-muted-foreground">
-          {strings.order.body}
+          {t.order.body}
         </p>
 
         <div className="mt-7 rounded-2xl bg-card px-6 py-4 shadow-soft">
           <p className="text-[0.7rem] tracking-[0.18em] text-muted-foreground uppercase">
-            {strings.order.reference}
+            {t.order.reference}
           </p>
-          <p className="font-heading text-2xl tabular-nums">{order.reference}</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {ORDER_STATUS_LABELS[order.status]}
+          <p className="font-heading text-2xl tabular-nums">
+            <bdi>{order.reference}</bdi>
           </p>
+          <p className="mt-1 text-xs text-muted-foreground">{t.orderStatus[order.status]}</p>
         </div>
       </div>
 
@@ -89,13 +89,15 @@ export default async function OrderConfirmationPage({
         {order.lines.map((line, index) => (
           <li key={index} className="flex justify-between gap-4 py-4 text-sm">
             <span className="text-muted-foreground">
-              {line.nameFr} × {line.quantity}
+              {/* The name is the French snapshot saved with the order. */}
+              <span lang={line.name ? "fr" : undefined}>{line.name ?? t.order.itemFallback}</span>{" "}
+              × {line.quantity}
               <span className="mt-0.5 block text-xs tracking-[0.14em] uppercase">
-                {line.reference}
+                <bdi>{line.reference}</bdi>
               </span>
             </span>
             <span className="tabular-nums">
-              {formatPrice(line.unitPrice * line.quantity)}
+              <bdi>{formatPrice(line.unitPrice * line.quantity, lang)}</bdi>
             </span>
           </li>
         ))}
@@ -103,10 +105,10 @@ export default async function OrderConfirmationPage({
 
       <div className="mt-4 flex items-baseline justify-between rounded-2xl bg-card px-6 py-4 shadow-soft">
         <span className="text-sm text-muted-foreground">
-          {strings.cart.total}
+          {t.cart.total}
         </span>
         <span className="font-heading text-xl tabular-nums">
-          {formatPrice(order.total)}
+          <bdi>{formatPrice(order.total, lang)}</bdi>
         </span>
       </div>
 
@@ -126,14 +128,14 @@ export default async function OrderConfirmationPage({
           }
         >
           <MessageCircleIcon />
-          {strings.order.whatsapp}
+          {t.order.whatsapp}
         </Button>
         <p className="text-xs text-muted-foreground">
-          {strings.order.whatsappOptional}
+          {t.order.whatsappOptional}
         </p>
 
-        <Button variant="ghost" render={<Link href="/#boutique" />}>
-          {strings.order.keepShopping}
+        <Button variant="ghost" render={<Link href={localePath(lang, "/#boutique")} />}>
+          {t.order.keepShopping}
         </Button>
       </div>
     </div>

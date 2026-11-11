@@ -1,36 +1,27 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Manrope } from "next/font/google";
 
+import { fontClasses } from "@/app/fonts";
 import { CartProvider } from "@/components/cart/cart-provider";
+import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { Toaster } from "@/components/ui/sonner";
-import { SITE_URL, strings } from "@/lib/constants/strings";
+import { dirOf, locales, ogLocale } from "@/i18n/config";
+import { I18nProvider } from "@/i18n/client";
+import { alternatesFor } from "@/i18n/metadata";
+import { getDictionary, getLang } from "@/i18n/server";
+import { SITE_URL } from "@/lib/constants/strings";
 
-import "./globals.css";
-
-/**
- * Variable fonts, self-hosted by next/font at build time.
- * The CSS variable names must match the ones referenced in globals.css:
- * `--font-sans` (body) and `--font-heading` (all headings).
- */
-/** Body: Manrope, a clean geometric sans that stays legible at small sizes. */
-const manrope = Manrope({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
+import "../globals.css";
 
 /**
- * Headings: Cormorant Garamond, the "Velvet" display serif. Not a variable
- * font, so the weights are listed; italic is kept for the occasional accent.
- * `latin` covers every French accent.
+ * Root layout of the public shop, once per language: `/fr/...` and `/ar/...`.
+ *
+ * `<html lang dir>` comes from the URL, so an Arabic page is right-to-left
+ * from the very first byte. The admin has its own root layout
+ * (`app/admin/layout.tsx`), which is why there is no `app/layout.tsx`.
  */
-const cormorant = Cormorant_Garamond({
-  variable: "--font-heading",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
-});
+export async function generateStaticParams() {
+  return locales.map((lang) => ({ lang }));
+}
 
 /** Colours the phone's browser bar to match the aubergine ground. */
 export const viewport: Viewport = {
@@ -38,34 +29,45 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: `${strings.siteName} — ${strings.tagline}`,
-    template: `%s | ${strings.siteName}`,
-  },
-  description: strings.hero.body,
-  alternates: { canonical: "/" },
-  openGraph: {
-    type: "website",
-    locale: "fr_MA",
-    siteName: strings.siteName,
-    url: "/",
-    title: `${strings.siteName} — ${strings.tagline}`,
-    description: strings.hero.body,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await getLang();
+  const t = await getDictionary();
+  const title = `${t.siteName} — ${t.tagline}`;
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: { default: title, template: `%s | ${t.siteName}` },
+    description: t.meta.description,
+    alternates: alternatesFor(lang, "/"),
+    openGraph: {
+      type: "website",
+      locale: ogLocale[lang],
+      alternateLocale: locales.filter((l) => l !== lang).map((l) => ogLocale[l]),
+      siteName: t.siteName,
+      url: `/${lang}`,
+      title,
+      description: t.meta.description,
+    },
+  };
+}
+
+export default async function LocaleLayout({ children }: LayoutProps<"/[lang]">) {
+  const lang = await getLang();
+  const dictionary = await getDictionary();
+  const dir = dirOf(lang);
+
   return (
-    <html
-      lang="fr"
-      className={`${manrope.variable} ${cormorant.variable} dark h-full`}
-    >
+    <html lang={lang} dir={dir} className={`${fontClasses[lang]} dark h-full`}>
       <body className="flex min-h-full flex-col">
-        {/* Cart lives in the browser: wrap the whole app once, here. */}
-        <CartProvider>{children}</CartProvider>
-        <Toaster position="top-center" />
+        <I18nProvider lang={lang} dictionary={dictionary}>
+          {/* Cart lives in the browser: wrap the whole shop once, here. */}
+          <CartProvider>
+            <SiteHeader />
+            <main className="flex-1">{children}</main>
+            <SiteFooter />
+          </CartProvider>
+          <Toaster position="top-center" dir={dir} />
+        </I18nProvider>
       </body>
     </html>
   );

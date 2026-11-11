@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 
+import { locales } from "@/i18n/config";
 import { SITE_URL } from "@/lib/constants/strings";
 
 /**
@@ -16,7 +17,16 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin", "/api/", "/cart", "/checkout", "/order/"],
+        disallow: [
+          "/admin",
+          "/api/",
+          // Per-visitor pages, in both languages.
+          ...locales.flatMap((lang) => [
+            `/${lang}/cart`,
+            `/${lang}/checkout`,
+            `/${lang}/order/`,
+          ]),
+        ],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

@@ -5,6 +5,11 @@ const nextConfig: NextConfig = {
   // driver and its WebSocket dependency (`ws`) rely on Node built-ins that the
   // bundler would otherwise trip over.
   serverExternalPackages: ["@neondatabase/serverless", "ws"],
+  experimental: {
+    // The shop and the admin are two separate root layouts (`app/[lang]` and
+    // `app/admin`), so a URL outside both needs `app/global-not-found.tsx`.
+    globalNotFound: true,
+  },
   images: {
     // Product photos are added in the admin as plain links, so they can come from
     // any host. Only this one gets Next's image optimisation; anything else is

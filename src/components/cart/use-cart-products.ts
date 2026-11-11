@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { fetchCartProducts } from "@/app/actions/cart";
+import { useI18n } from "@/i18n/client";
 import type { ProductSummary } from "@/lib/data/products";
 
 /**
@@ -16,6 +17,7 @@ import type { ProductSummary } from "@/lib/data/products";
  * on every render and would restart the request forever.
  */
 export function useCartProducts(idsKey: string): ProductSummary[] | null {
+  const { lang } = useI18n();
   const [loaded, setLoaded] = useState<{
     key: string;
     rows: ProductSummary[];
@@ -25,7 +27,7 @@ export function useCartProducts(idsKey: string): ProductSummary[] | null {
     const ids = idsKey ? idsKey.split(",").map(Number) : [];
     let cancelled = false;
 
-    fetchCartProducts(ids).then(
+    fetchCartProducts(ids, lang).then(
       (rows) => {
         if (!cancelled) setLoaded({ key: idsKey, rows });
       },
@@ -38,7 +40,7 @@ export function useCartProducts(idsKey: string): ProductSummary[] | null {
       // The cart changed or the component unmounted before the answer landed.
       cancelled = true;
     };
-  }, [idsKey]);
+  }, [idsKey, lang]);
 
   // `null` whenever the visible answer belongs to a previous set of ids.
   return loaded?.key === idsKey ? loaded.rows : null;

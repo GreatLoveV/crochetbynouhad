@@ -1,17 +1,21 @@
 "use server";
 
+import { defaultLocale, hasLocale } from "@/i18n/config";
 import { MAX_CART_ITEMS } from "@/lib/constants/cart";
 import { getProductsByIds, type ProductSummary } from "@/lib/data/products";
 
 /**
  * Server Action used by the cart drawer.
  *
- * The browser only ever sends product ids; the names, images and prices come
+ * The browser only ever sends product ids (and the page's language); the names, images and prices come
  * back from PostgreSQL, so what the customer sees is always the real price.
  * The same re-check is repeated inside the checkout action before writing the
  * order — this one is only for display.
  */
-export async function fetchCartProducts(ids: number[]): Promise<ProductSummary[]> {
+export async function fetchCartProducts(
+  ids: number[],
+  lang: string,
+): Promise<ProductSummary[]> {
   // A public endpoint: never trust the size or content of what it is sent.
   if (!Array.isArray(ids)) return [];
   const wanted = Array.from(new Set(ids))
@@ -19,7 +23,7 @@ export async function fetchCartProducts(ids: number[]): Promise<ProductSummary[]
     .slice(0, MAX_CART_ITEMS);
   if (wanted.length === 0) return [];
 
-  const products = await getProductsByIds(wanted);
+  const products = await getProductsByIds(hasLocale(lang) ? lang : defaultLocale, wanted);
   // Keep the order the customer added them in.
   const byId = new Map(products.map((product) => [product.id, product]));
   return wanted.flatMap((id) => {

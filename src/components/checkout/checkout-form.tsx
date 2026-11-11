@@ -13,24 +13,44 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { useI18n } from "@/i18n/client";
+import type { Locale } from "@/i18n/config";
+import { plural } from "@/i18n/format";
 import { formatPrice } from "@/lib/format/money";
 import { emptyOrderFormState } from "@/lib/validation/order-form";
-import { strings } from "@/lib/constants/strings";
 
-/** Suggestions for the city field; the customer can still type anything. */
-const MOROCCAN_CITIES = [
-  "Casablanca",
-  "Rabat",
-  "Salé",
-  "Marrakech",
-  "Tanger",
-  "Fès",
-  "Agadir",
-  "Meknès",
-  "Oujda",
-  "Kénitra",
-  "Tétouan",
-];
+/**
+ * Suggestions for the city field, written the way each language writes them;
+ * the customer can still type anything.
+ */
+const MOROCCAN_CITIES: Record<Locale, string[]> = {
+  fr: [
+    "Casablanca",
+    "Rabat",
+    "Salé",
+    "Marrakech",
+    "Tanger",
+    "Fès",
+    "Agadir",
+    "Meknès",
+    "Oujda",
+    "Kénitra",
+    "Tétouan",
+  ],
+  ar: [
+    "الدار البيضاء",
+    "الرباط",
+    "سلا",
+    "مراكش",
+    "طنجة",
+    "فاس",
+    "أكادير",
+    "مكناس",
+    "وجدة",
+    "القنيطرة",
+    "تطوان",
+  ],
+};
 
 /**
  * Guest checkout: a short form plus the order summary.
@@ -41,6 +61,7 @@ const MOROCCAN_CITIES = [
  * saving anything.
  */
 export function CheckoutForm() {
+  const { lang, t, href } = useI18n();
   const { items, count, isReady } = useCart();
   const idsKey = items.map((item) => item.productId).join(",");
   const products = useCartProducts(idsKey);
@@ -52,7 +73,7 @@ export function CheckoutForm() {
   if (!isReady) {
     return (
       <p className="py-16 text-center text-sm text-muted-foreground">
-        {strings.common.loading}
+        {t.common.loading}
       </p>
     );
   }
@@ -64,7 +85,7 @@ export function CheckoutForm() {
   if (products === null) {
     return (
       <p className="py-16 text-center text-sm text-muted-foreground">
-        {strings.common.loading}
+        {t.common.loading}
       </p>
     );
   }
@@ -74,10 +95,10 @@ export function CheckoutForm() {
     return (
       <div className="flex flex-col items-center gap-5 py-20 text-center">
         <p className="max-w-md text-muted-foreground">
-          {strings.checkout.unavailable}
+          {t.checkout.unavailable}
         </p>
-        <Button size="lg" render={<Link href="/#boutique" />}>
-          {strings.cart.continueShopping}
+        <Button size="lg" render={<Link href={href("/#boutique")} />}>
+          {t.cart.continueShopping}
         </Button>
       </div>
     );
@@ -95,10 +116,12 @@ export function CheckoutForm() {
         Prices are deliberately absent — the server looks them up itself.
       */}
       <input type="hidden" name="cart" value={JSON.stringify(items)} />
+      {/* So the server answers, and redirects, in the language of the page. */}
+      <input type="hidden" name="lang" value={lang} />
 
       {/* Honeypot: invisible to people and screen readers, filled by bots.
           The server rejects any submit where it is not empty. */}
-      <div aria-hidden className="absolute -left-[9999px] h-px w-px overflow-hidden">
+      <div aria-hidden className="absolute -inset-s-[9999px] h-px w-px overflow-hidden">
         <label>
           Website
           <input type="text" name="website" tabIndex={-1} autoComplete="off" defaultValue="" />
@@ -106,9 +129,9 @@ export function CheckoutForm() {
       </div>
 
       <div>
-        <h2 className="font-heading text-xl">{strings.checkout.summaryTitle}</h2>
+        <h2 className="font-heading text-xl">{t.checkout.summaryTitle}</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          {count} pièce{count > 1 ? "s" : ""}
+          {plural(lang, t.cart.pieces, count)}
         </p>
 
         <Separator className="my-5" />
@@ -125,7 +148,7 @@ export function CheckoutForm() {
         <div className="flex flex-col gap-5">
           <Field
             id="name"
-            label={strings.checkout.name}
+            label={t.checkout.name}
             error={errors.name}
             render={(props) => (
               <Input
@@ -133,32 +156,36 @@ export function CheckoutForm() {
                 name="name"
                 autoComplete="name"
                 defaultValue={kept?.name ?? ""}
-                placeholder={strings.checkout.namePlaceholder}
+                placeholder={t.checkout.namePlaceholder}
               />
             )}
           />
 
           <Field
             id="phone"
-            label={strings.checkout.phone}
+            label={t.checkout.phone}
             error={errors.phone}
-            hint={strings.checkout.phoneHint}
+            hint={t.checkout.phoneHint}
             render={(props) => (
               <Input
                 {...props}
                 name="phone"
                 type="tel"
                 inputMode="tel"
+                // Phone digits read left to right even on an Arabic page; the
+                // text still sits at the start (right) edge there.
+                dir="ltr"
+                className="rtl:text-end"
                 autoComplete="tel"
                 defaultValue={kept?.phone ?? ""}
-                placeholder={strings.checkout.phonePlaceholder}
+                placeholder={t.checkout.phonePlaceholder}
               />
             )}
           />
 
           <Field
             id="city"
-            label={strings.checkout.city}
+            label={t.checkout.city}
             error={errors.city}
             render={(props) => (
               <>
@@ -168,11 +195,11 @@ export function CheckoutForm() {
                   list="moroccan-cities"
                   autoComplete="address-level2"
                   defaultValue={kept?.city ?? ""}
-                  placeholder={strings.checkout.cityPlaceholder}
+                  placeholder={t.checkout.cityPlaceholder}
                 />
                 {/* Suggestions only: any city can still be typed. */}
                 <datalist id="moroccan-cities">
-                  {MOROCCAN_CITIES.map((city) => (
+                  {MOROCCAN_CITIES[lang].map((city) => (
                     <option key={city} value={city} />
                   ))}
                 </datalist>
@@ -182,7 +209,7 @@ export function CheckoutForm() {
 
           <Field
             id="address"
-            label={strings.checkout.address}
+            label={t.checkout.address}
             error={errors.address}
             render={(props) => (
               <Textarea
@@ -190,21 +217,21 @@ export function CheckoutForm() {
                 name="address"
                 autoComplete="street-address"
                 defaultValue={kept?.address ?? ""}
-                placeholder={strings.checkout.addressPlaceholder}
+                placeholder={t.checkout.addressPlaceholder}
               />
             )}
           />
 
           <Field
             id="notes"
-            label={strings.checkout.notes}
+            label={t.checkout.notes}
             error={errors.notes}
             render={(props) => (
               <Textarea
                 {...props}
                 name="notes"
                 defaultValue={kept?.notes ?? ""}
-                placeholder={strings.checkout.notesPlaceholder}
+                placeholder={t.checkout.notesPlaceholder}
               />
             )}
           />
@@ -230,16 +257,16 @@ export function CheckoutForm() {
               {pending ? (
                 <>
                   <Loader2Icon className="animate-spin" />
-                  {strings.checkout.submitting}
+                  {t.checkout.submitting}
                 </>
               ) : (
-                strings.checkout.submit
+                t.checkout.submit
               )}
             </Button>
 
             <p className="mt-2 flex items-center justify-center gap-1.5 text-xs text-muted-foreground lg:justify-start">
               <LockIcon className="size-3.5" />
-              {strings.checkout.paymentNote}
+              {t.checkout.paymentNote}
             </p>
           </div>
         </div>
@@ -247,22 +274,22 @@ export function CheckoutForm() {
 
       {/* The summary is a preview only: the server recalculates everything. */}
       <aside className="rounded-3xl bg-card p-6 shadow-soft lg:sticky lg:top-24">
-        <h2 className="font-heading text-xl">{strings.checkout.itemsTitle}</h2>
+        <h2 className="font-heading text-xl">{t.checkout.itemsTitle}</h2>
 
         <ul className="mt-4 flex flex-col gap-3 text-sm">
           {products.map((product) => {
             return (
               <li key={product.id} className="flex justify-between gap-4">
                 <span className="text-muted-foreground">
-                  {product.nameFr}
+                  <span lang={product.nameLang}>{product.name}</span>
                   {product.reference ? (
                     <span className="mt-0.5 block text-xs tracking-[0.14em] uppercase">
-                      {product.reference}
+                      <bdi>{product.reference}</bdi>
                     </span>
                   ) : null}
                 </span>
                 <span className="tabular-nums">
-                  {formatPrice(product.price)}
+                  <bdi>{formatPrice(product.price, lang)}</bdi>
                 </span>
               </li>
             );
@@ -273,15 +300,15 @@ export function CheckoutForm() {
 
         <div className="flex items-baseline justify-between">
           <span className="text-sm text-muted-foreground">
-            {strings.checkout.totalLabel}
+            {t.checkout.totalLabel}
           </span>
           <span className="font-heading text-2xl tabular-nums">
-            {formatPrice(total)}
+            <bdi>{formatPrice(total, lang)}</bdi>
           </span>
         </div>
 
         <p className="mt-3 text-xs text-muted-foreground">
-          {strings.checkout.paymentNote}
+          {t.checkout.paymentNote}
         </p>
       </aside>
     </form>
@@ -337,17 +364,18 @@ function Field({
 }
 
 function EmptyCart() {
+  const { t, href } = useI18n();
   return (
     <div className="flex flex-col items-center gap-5 py-20 text-center">
       <span className="flex size-20 items-center justify-center rounded-full bg-accent text-accent-foreground">
         <ShoppingBagIcon className="size-8" />
       </span>
-      <p className="font-heading text-2xl">{strings.checkout.empty}</p>
+      <p className="font-heading text-2xl">{t.checkout.empty}</p>
       <p className="max-w-sm text-muted-foreground">
-        {strings.checkout.emptyHint}
+        {t.checkout.emptyHint}
       </p>
-      <Button size="lg" render={<Link href="/#boutique" />}>
-        {strings.cart.continueShopping}
+      <Button size="lg" render={<Link href={href("/#boutique")} />}>
+        {t.cart.continueShopping}
       </Button>
     </div>
   );

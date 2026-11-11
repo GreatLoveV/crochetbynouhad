@@ -1,6 +1,9 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import {
+  revalidateShopHome,
+  revalidateAllProductPages,
+} from "@/lib/cache/revalidate-shop";
 import { cookies, headers } from "next/headers";
 import { after } from "next/server";
 import { redirect } from "next/navigation";
@@ -23,7 +26,9 @@ import {
 } from "@/lib/security/rate-limit";
 import { notifyNewOrder } from "@/lib/integrations/notify";
 import { type OrderFormState } from "@/lib/validation/order-form";
-import { strings } from "@/lib/constants/strings";
+import { defaultLocale, hasLocale, localePath } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionaries/fr";
+import { getDictionaryFor } from "@/i18n/dictionaries";
 
 /**
  * Spam limits. Every order instantly takes its bags off the shop, so without
@@ -44,6 +49,12 @@ export async function placeOrder(
   _previous: OrderFormState,
   formData: FormData,
 ): Promise<OrderFormState> {
+  // The form says which language it was shown in, so every message comes
+  // back in that language. Anything unexpected falls back to French.
+  const rawLang = formData.get("lang");
+  const lang = hasLocale(rawLang) ? rawLang : defaultLocale;
+  const t = await getDictionaryFor(lang);
+
   // Read once so both the validation and the echoed values use the same data.
   const values = {
     name: String(formData.get("name") ?? ""),
@@ -56,7 +67,7 @@ export async function placeOrder(
   // Honeypot: a field hidden from people. Only a bot fills it in. Answer with
   // the generic error so the bot learns nothing.
   if (String(formData.get("website") ?? "") !== "") {
-    return { status: "error", message: strings.checkout.submitError, values };
+    return { status: "error", message: t.checkout.submitError, values };
   }
 
   const parsed = checkoutSchema.safeParse({
@@ -67,8 +78,8 @@ export async function placeOrder(
   if (!parsed.success) {
     return {
       status: "invalid",
-      fieldErrors: toFieldErrors(parsed.error),
-      message: strings.checkout.fixErrors,
+      fieldErrors: toFieldErrors(parsed.error, t),
+      message: t.checkout.fixErrors,
       values,
     };
   }
@@ -81,7 +92,7 @@ export async function placeOrder(
     (await countRecentOrdersForPhone(phone)) >= MAX_ORDERS_PER_PHONE_PER_HOUR ||
     (await isRateLimited(ipKey, MAX_ORDERS_PER_IP_PER_HOUR, HOUR))
   ) {
-    return { status: "error", message: strings.checkout.tooMany, values };
+    return { status: "error", message: t.checkout.tooMany, values };
   }
 
   let order: { id: number; publicToken: string };
@@ -89,20 +100,20 @@ export async function placeOrder(
     order = await createOrder({ name, phone, city, address, notes, cart });
   } catch (error) {
     if (error instanceof ProductReservedError) {
-      return { status: "error", message: strings.checkout.reserved, values };
+      return { status: "error", message: t.checkout.reserved, values };
     }
     if (error instanceof ProductUnavailableError) {
-      return { status: "error", message: strings.checkout.unavailable, values };
+      return { status: "error", message: t.checkout.unavailable, values };
     }
     console.error("[placeOrder] could not save the order", error);
-    return { status: "error", message: strings.checkout.submitError, values };
+    return { status: "error", message: t.checkout.submitError, values };
   }
 
   await recordAttempt(ipKey);
 
   // The bags just ordered are now sold: refresh the pages that show them.
-  revalidatePath("/");
-  revalidatePath("/products/[slug]", "page");
+  revalidateShopHome();
+  revalidateAllProductPages();
 
   // Sent after the response, so the customer is not kept waiting on the
   // email. Best-effort: a broken notification never affects a saved order.
@@ -123,7 +134,7 @@ export async function placeOrder(
   // Outside the try/catch on purpose: redirect() works by throwing, and we do
   // not want to catch it and show an error instead of moving on.
   // The link carries the random token, never the sequential id.
-  redirect(`${strings.order.confirmationPath}?t=${order.publicToken}`);
+  redirect(`${localePath(lang, "/order/confirmation")}?t=${order.publicToken}`);
 }
 
 /** Orders placed from this phone (in its stored, normalised form) in the last hour. */
@@ -140,12 +151,16 @@ async function countRecentOrdersForPhone(phone: string): Promise<number> {
   return row?.total ?? 0;
 }
 
-/** Keeps the first message per field so the form shows one error at a time. */
-function toFieldErrors(error: z.ZodError): Record<string, string> {
+/**
+ * Keeps the first message per field so the form shows one error at a time,
+ * translated from the schema's code into the visitor's language.
+ */
+function toFieldErrors(error: z.ZodError, t: Dictionary): Record<string, string> {
+  const messages: Record<string, string> = t.checkout.errors;
   const fieldErrors: Record<string, string> = {};
   for (const issue of error.issues) {
     const field = String(issue.path[0] ?? "cart");
-    fieldErrors[field] ??= issue.message;
+    fieldErrors[field] ??= messages[issue.message] ?? t.checkout.fixErrors;
   }
   return fieldErrors;
 }

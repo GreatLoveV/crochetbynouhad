@@ -7,8 +7,9 @@ import { useCart } from "@/components/cart/cart-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { fill } from "@/i18n/config";
+import { useI18n } from "@/i18n/client";
 import { formatPrice } from "@/lib/format/money";
-import { strings } from "@/lib/constants/strings";
 import { whatsappUrl } from "@/lib/integrations/whatsapp";
 
 /**
@@ -38,43 +39,46 @@ export function ProductBuyBox({
   reference: string | null;
   isSoldOut: boolean;
 }) {
+  const { lang, t } = useI18n();
   const { addItem, items } = useCart();
   const alreadyInCart = items.some((item) => item.productId === productId);
 
   function handleAddToCart() {
     if (alreadyInCart) {
-      toast.info(`${name} est déjà dans votre panier`);
+      toast.info(fill(t.product.alreadyInCartToast, { name }));
       return;
     }
     addItem(productId);
-    toast.success(`${name} ajouté au panier`, { description: formatPrice(price) });
+    toast.success(fill(t.product.addedToast, { name }), {
+      description: formatPrice(price, lang),
+    });
   }
 
   // Sent straight to WhatsApp: no account needed, which is how most customers
   // will actually order. The cart + checkout come as the other path.
   const referenceLine = reference ? ` (${reference})` : "";
   const message = [
-    `Bonjour ${strings.siteName}, j'ai une question à propos de « ${name} »${referenceLine} :`,
+    fill(t.whatsapp.product, { shop: t.siteName, name, reference: referenceLine }),
     productUrl,
   ].join("\n");
 
   const buttonLabel = isSoldOut
-    ? strings.product.soldOut
+    ? t.product.soldOut
     : alreadyInCart
-      ? strings.product.alreadyInCart
-      : strings.product.addToCart;
+      ? t.product.alreadyInCart
+      : t.product.addToCart;
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-3">
           <p className="font-heading text-4xl font-semibold text-primary tabular-nums">
-            {formatPrice(price)}
+            <bdi>{formatPrice(price, lang)}</bdi>
           </p>
-          <Badge variant="secondary">{strings.product.unique}</Badge>
+          <Badge variant="secondary">{t.product.unique}</Badge>
         </div>
         <p className="text-sm text-muted-foreground">
-          {isSoldOut ? strings.product.soldOutHint : strings.cart.checkoutHint}
+          {isSoldOut ? t.product.soldOutHint : t.cart.checkoutHint}
         </p>
       </div>
 
@@ -102,14 +106,14 @@ export function ProductBuyBox({
           }
         >
           <MessageCircleIcon data-icon="inline-start" />
-          {strings.product.askWhatsapp}
+          {t.product.askWhatsapp}
         </Button>
       </div>
 
       <Separator />
 
       <p className="text-sm leading-relaxed text-muted-foreground">
-        {strings.hero.note}
+        {t.hero.note}
       </p>
     </div>
   );

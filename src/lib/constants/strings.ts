@@ -1,136 +1,15 @@
 /**
- * Every user-facing string lives here, in French.
+ * Strings of the admin, in French, plus the site-wide constants below.
  *
- * The site is French-only for now (no i18n, no [locale] routes). Keeping the
- * copy in one file means switching to next-intl later is a mechanical change
- * instead of a hunt through the JSX.
+ * The public shop is in French and Arabic: its text lives in the dictionaries
+ * under `src/i18n/dictionaries/`, not here. The admin is for Nouhad only and
+ * stays in French.
  */
 export const strings = {
   siteName: "Crochet by Nouhad",
-  tagline: "Créations au crochet, faites main",
-
-  nav: {
-    shop: "La boutique",
-    contact: "Contact",
-    cart: "Panier",
-    cartPage: "Panier",
-  },
-
-  hero: {
-    eyebrow: "Fait main au crochet",
-    title: "Des pièces uniques, crochées une à une",
-    body: "Sacs, écharpes et accessoires réalisés à la main par Nouhad. Chaque pièce est unique, faite avec du temps et beaucoup de fil.",
-    ctaShop: "Voir la collection",
-    ctaWhatsapp: "Commander sur WhatsApp",
-    note: "Paiement à la livraison · Livraison partout au Maroc",
-  },
-
-  shop: {
-    title: "La collection",
-    all: "Tout",
-    empty: "Aucune pièce pour le moment. Revenez bientôt !",
-    comingSoonBadge: "Bientôt",
-    comingSoonTitle: "Bientôt disponible.",
-    comingSoonBody:
-      "Suivez-nous sur Instagram pour être prévenu.",
-    comingSoonInstagram: "Suivre sur Instagram",
-    comingSoonWhatsapp: "Être prévenu sur WhatsApp",
-    comingSoonBack: "Voir les pièces disponibles",
-  },
-
-  notFound: {
-    title: "Cette page n'existe pas",
-    body: "La pièce que vous cherchez n'est plus disponible ou le lien est incorrect.",
-    home: "Retour à l'accueil",
-  },
-
-  cart: {
-    title: "Votre panier",
-    empty: "Votre panier est vide.",
-    emptyHint: "Parcourez la collection pour ajouter vos premières pièces.",
-    continueShopping: "Continuer mes achats",
-    viewPage: "Voir le panier",
-    total: "Total",
-    checkoutHint: "Le paiement se fait à la livraison.",
-  },
-
-  product: {
-    addToCart: "Ajouter au panier",
-    askWhatsapp: "Une question ? WhatsApp",
-    backToShop: "Retour à la boutique",
-    reference: "Référence",
-    unique: "Pièce unique",
-    soldOut: "Vendu",
-    soldOutHint: "Cette pièce a déjà trouvé sa propriétaire.",
-    alreadyInCart: "Déjà dans votre panier",
-  },
-
-  checkout: {
-    title: "Commander",
-    subtitle: "Paiement à la livraison, partout au Maroc.",
-    summaryTitle: "Votre commande",
-    itemsTitle: "Récapitulatif",
-    totalLabel: "Total à payer à la livraison",
-    paymentNote: "Frais de livraison confirmés par WhatsApp.",
-    name: "Nom complet",
-    namePlaceholder: "Salma El Amrani",
-    phone: "Téléphone",
-    phonePlaceholder: "06 12 34 56 78",
-    phoneHint: "Pour confirmer la commande avec vous.",
-    city: "Ville",
-    cityPlaceholder: "Casablanca",
-    address: "Adresse de livraison",
-    addressPlaceholder: "Quartier, rue, numéro, étage…",
-    notes: "Message (facultatif)",
-    notesPlaceholder: "Précisions sur la livraison, heure de passage…",
-    submit: "Confirmer ma commande",
-    submitting: "Envoi en cours…",
-    empty: "Votre panier est vide.",
-    emptyHint: "Ajoutez une pièce à la boutique avant de commander.",
-    fixErrors: "Vérifiez les informations saisies.",
-    unavailable:
-      "Une pièce de votre panier n'est plus disponible. Merci de revoir votre panier.",
-    reserved: "Cette pièce vient d'être réservée.",
-    submitError:
-      "La commande n'a pas pu être enregistrée. Réessayez, ou commandez via WhatsApp.",
-    tooMany:
-      "Vous avez déjà passé plusieurs commandes récemment. Écrivez-nous sur WhatsApp pour en ajouter une autre.",
-  },
-
-  order: {
-    confirmationPath: "/order/confirmation",
-    title: "Commande reçue",
-    body: "Nouhad vous contactera sur WhatsApp pour confirmer votre commande.",
-    reference: "Numéro de commande",
-    itemFallback: "Pièce",
-    keepShopping: "Retourner à la boutique",
-    whatsapp: "Accélérer : envoyer ma commande sur WhatsApp",
-    whatsappOptional:
-      "Facultatif — Nouhad vous contactera de toute façon.",
-    notFound: "Cette commande est introuvable.",
-  },
-
-  footer: {
-    blurb: "Créations artisanales au crochet, depuis le Maroc.",
-    contactTitle: "Contact",
-    infoTitle: "Informations",
-    terms: "Conditions générales",
-    privacy: "Politique de confidentialité",
-    instagram: "Instagram",
-    copyright: "Tous droits réservés.",
-  },
-
-  legal: {
-    termsTitle: "Conditions générales de vente",
-    privacyTitle: "Politique de confidentialité",
-  },
-
-  common: {
-    loading: "Chargement…",
-  },
-
   admin: {
     title: "Administration",
+    soldOut: "Vendu",
     subtitle: "Gérez vos pièces et vos commandes.",
     products: "Pièces",
     orders: "Commandes",
@@ -155,6 +34,14 @@ export const strings = {
     productDescription: "Description (français)",
     productDescriptionPlaceholder:
       "Décrivez la pièce, la matière, les dimensions… Une ligne vide sépare les paragraphes.",
+    productNameAr: "Nom (arabe)",
+    productNameArPlaceholder: "حقيبة الوردة",
+    productDescriptionAr: "Description (arabe)",
+    arabicOptionalHint:
+      "Facultatif. Tant que ce champ est vide, la boutique en arabe affiche le texte français.",
+    categoryNameAr: "Nom en arabe",
+    categoryNameArSave: "Enregistrer",
+    categoryNameArMissing: "Pas encore traduit : la boutique en arabe affiche le nom français.",
     productCategory: "Catégorie",
     productPrice: "Prix (MAD)",
     productPriceHint: "En dirhams, sans décimales : 250 pour 250,00 MAD.",

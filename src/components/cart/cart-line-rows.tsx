@@ -7,8 +7,9 @@ import { Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { isOptimizableImageUrl } from "@/lib/constants/images";
 import { formatPrice } from "@/lib/format/money";
+import { fill } from "@/i18n/config";
+import { useI18n } from "@/i18n/client";
 import type { ProductSummary } from "@/lib/data/products";
-import { strings } from "@/lib/constants/strings";
 
 /**
  * The list of products in the cart.
@@ -33,6 +34,7 @@ export function CartLineRows({
   /** The drawer uses this to close itself when a product is clicked. */
   onNavigate?: () => void;
 }) {
+  const { lang, t, href } = useI18n();
   return (
     <ul className="flex flex-col divide-y divide-border">
       {products.map((product) => {
@@ -42,7 +44,7 @@ export function CartLineRows({
               {product.imageUrl ? (
                 <Image
                   src={product.imageUrl}
-                  alt={product.nameFr}
+                  alt={product.name}
                   fill
                   sizes="96px"
                   className="object-cover"
@@ -53,35 +55,36 @@ export function CartLineRows({
 
             <div className="flex min-w-0 flex-1 flex-col gap-1">
               <p className="text-[0.7rem] tracking-[0.18em] text-muted-foreground uppercase">
-                {product.categoryNameFr}
+                {product.categoryName}
               </p>
               <Link
-                href={`/products/${product.slug}`}
+                href={href(`/products/${product.slug}`)}
                 onClick={onNavigate}
+                lang={product.nameLang}
                 className="font-heading text-base leading-tight transition-colors duration-300 ease-soft hover:text-primary"
               >
-                {product.nameFr}
+                {product.name}
               </Link>
               <p className="text-sm text-muted-foreground">
-                {formatPrice(product.price)}
+                <bdi>{formatPrice(product.price, lang)}</bdi>
               </p>
               {/* The reference identifies this exact piece in the order. */}
               {product.reference ? (
                 <p className="text-xs tracking-[0.14em] text-muted-foreground uppercase">
-                  {product.reference}
+                  <bdi>{product.reference}</bdi>
                 </p>
               ) : null}
 
               <div className="mt-auto flex items-center gap-2 pt-2">
                 <span className="text-xs tracking-[0.14em] text-muted-foreground uppercase">
-                  {strings.product.unique}
+                  {t.product.unique}
                 </span>
 
                 <Button
                   variant="ghost"
                   size="icon-xs"
-                  aria-label={`Retirer ${product.nameFr} du panier`}
-                  className="ml-auto text-muted-foreground hover:text-destructive"
+                  aria-label={fill(t.cart.remove, { name: product.name })}
+                  className="ms-auto text-muted-foreground hover:text-destructive"
                   onClick={() => onRemove(product.id)}
                 >
                   <Trash2Icon />

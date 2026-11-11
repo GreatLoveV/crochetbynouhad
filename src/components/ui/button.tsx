@@ -32,13 +32,13 @@ const buttonVariants = cva(
         // Minimum height of 44px on default/lg keeps primary CTAs comfortable
         // to tap on a 390px-wide phone.
         default:
-          "h-11 gap-2 px-6 has-data-[icon=inline-end]:pr-5 has-data-[icon=inline-start]:pl-5",
-        xs: "h-7 gap-1 px-3 text-xs has-data-[icon=inline-end]:pr-2.5 has-data-[icon=inline-start]:pl-2.5 [&_svg:not([class*='size-'])]:size-3.5",
-        sm: "h-9 gap-1.5 px-4 text-sm has-data-[icon=inline-end]:pr-3.5 has-data-[icon=inline-start]:pl-3.5 [&_svg:not([class*='size-'])]:size-4",
-        lg: "h-12 gap-2.5 px-8 text-base has-data-[icon=inline-end]:pr-7 has-data-[icon=inline-start]:pl-7",
+          "h-11 gap-2 px-6 has-data-[icon=inline-end]:pe-5 has-data-[icon=inline-start]:ps-5",
+        xs: "h-7 gap-1 px-3 text-xs has-data-[icon=inline-end]:pe-2.5 has-data-[icon=inline-start]:ps-2.5 [&_svg:not([class*='size-'])]:size-3.5",
+        sm: "h-9 gap-1.5 px-4 text-sm has-data-[icon=inline-end]:pe-3.5 has-data-[icon=inline-start]:ps-3.5 [&_svg:not([class*='size-'])]:size-4",
+        lg: "h-12 gap-2.5 px-8 text-base has-data-[icon=inline-end]:pe-7 has-data-[icon=inline-start]:ps-7",
         icon: "size-11",
         "icon-xs":
-          "size-7 has-data-[icon=inline-end]:pr-2.5 has-data-[icon=inline-start]:pl-2.5 [&_svg:not([class*='size-'])]:size-3.5",
+          "size-7 has-data-[icon=inline-end]:pe-2.5 has-data-[icon=inline-start]:ps-2.5 [&_svg:not([class*='size-'])]:size-3.5",
         "icon-sm": "size-9",
         "icon-lg": "size-12",
       },

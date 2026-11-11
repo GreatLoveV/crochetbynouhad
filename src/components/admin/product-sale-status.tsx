@@ -35,7 +35,7 @@ export function ProductSaleStatus({
       <div className="flex items-center gap-2">
         <h2 className="text-sm font-semibold">{strings.admin.saleStatus}</h2>
         <Badge variant={isSoldOut ? "secondary" : "outline"}>
-          {isSoldOut ? strings.product.soldOut : strings.admin.saleStatusAvailable}
+          {isSoldOut ? strings.admin.soldOut : strings.admin.saleStatusAvailable}
         </Badge>
       </div>
 

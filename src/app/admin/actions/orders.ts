@@ -1,6 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+
+import {
+  revalidateShopHome,
+  revalidateAllProductPages,
+} from "@/lib/cache/revalidate-shop";
 import { and, eq, inArray } from "drizzle-orm";
 
 import { getTxDb } from "@/db/tx";
@@ -92,8 +97,8 @@ export async function updateOrderStatus(
   revalidatePath("/admin/orders");
   revalidatePath(`/admin/orders/${id}`);
   revalidatePath("/admin/products");
-  revalidatePath("/");
+  revalidateShopHome();
   // The piece pages are statically generated; a freed piece must reappear there.
-  revalidatePath("/products/[slug]", "page");
+  revalidateAllProductPages();
   return { ok: strings.admin.statusUpdated };
 }

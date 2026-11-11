@@ -30,7 +30,7 @@ export default async function AdminLayout({
             <Button
               variant="ghost"
               size="sm"
-              render={<Link href="/" />}
+              render={<Link href="/fr" />}
             >
               {strings.admin.viewSite}
             </Button>

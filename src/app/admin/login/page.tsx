@@ -44,7 +44,7 @@ export default async function AdminLoginPage({
           <Button
             variant="ghost"
             size="sm"
-            render={<Link href="/" />}
+            render={<Link href="/fr" />}
           >
             {strings.admin.viewSite}
           </Button>

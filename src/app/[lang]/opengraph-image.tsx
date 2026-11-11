@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 
-import { strings } from "@/lib/constants/strings";
+import { defaultLocale, hasLocale } from "@/i18n/config";
+import fr from "@/i18n/dictionaries/fr";
 
 /**
  * The card WhatsApp and social platforms show when someone shares a link.
@@ -11,12 +12,25 @@ import { strings } from "@/lib/constants/strings";
  *
  * Only flexbox with explicit `display` is safe in Satori, and every size is
  * inline: it only knows `px`, not `rem`/`%`.
+ *
+ * One image per language (`/fr/opengraph-image`, `/ar/opengraph-image`). The
+ * Arabic one carries only the Latin brand name: Satori, which draws these
+ * images, does not shape Arabic letters, so Arabic text would come out as
+ * disconnected glyphs. The redesign replaces this card with a real photo.
  */
-export const alt = `${strings.siteName} — ${strings.tagline}`;
+export const alt = `${fr.siteName} — ${fr.tagline}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OpengraphImage() {
+export default async function OpengraphImage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang: raw } = await params;
+  const lang = hasLocale(raw) ? raw : defaultLocale;
+  const isFrench = lang === "fr";
+
   return new ImageResponse(
     (
       <div
@@ -57,7 +71,7 @@ export default function OpengraphImage() {
               backgroundColor: "#dfb35f",
             }}
           />
-          Fait main
+          {isFrench ? fr.og.eyebrow : "Crochet"}
         </div>
 
         <div
@@ -69,12 +83,12 @@ export default function OpengraphImage() {
             lineHeight: 1.1,
           }}
         >
-          {strings.siteName}
+          {fr.siteName}
         </div>
 
-        <div style={{ display: "flex", fontSize: 40, color: "#b1a2af" }}>
-          {strings.tagline}
-        </div>
+        {isFrench ? (
+          <div style={{ display: "flex", fontSize: 40, color: "#b1a2af" }}>{fr.tagline}</div>
+        ) : null}
       </div>
     ),
     size,
