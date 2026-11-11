@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "tsx --conditions=react-server --env-file=.env.local ./src/db/seed.ts",
+    "seed:ar": "tsx --conditions=react-server --env-file=.env.local ./src/db/seed-arabic.ts",
     "create-admin": "tsx --conditions=react-server --env-file=.env.local ./src/db/create-admin.ts"
   },
   "dependencies": {

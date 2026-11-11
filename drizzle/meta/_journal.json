@@ -36,6 +36,13 @@
       "when": 1793991376967,
       "tag": "0004_unique_bags_and_order_tokens",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794431504334,
+      "tag": "0005_add_arabic_text",
+      "breakpoints": true
     }
   ]
 }

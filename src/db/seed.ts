@@ -1,5 +1,6 @@
 import { db } from "./index";
 import { categories, products, productImages } from "./schema";
+import { CATEGORY_NAMES_AR, PRODUCT_TEXT_AR } from "./seed-arabic";
 
 async function seed() {
   console.log("Seeding...");
@@ -7,9 +8,9 @@ async function seed() {
   const insertedCategories = await db
     .insert(categories)
     .values([
-      { slug: "sacs", nameFr: "Sacs", nameEn: "Bags" },
-      { slug: "echarpes", nameFr: "Écharpes", nameEn: "Scarves" },
-      { slug: "accessoires", nameFr: "Accessoires", nameEn: "Accessories" },
+      { slug: "sacs", nameAr: CATEGORY_NAMES_AR["sacs"], nameFr: "Sacs", nameEn: "Bags" },
+      { slug: "echarpes", nameAr: CATEGORY_NAMES_AR["echarpes"], nameFr: "Écharpes", nameEn: "Scarves" },
+      { slug: "accessoires", nameAr: CATEGORY_NAMES_AR["accessoires"], nameFr: "Accessoires", nameEn: "Accessories" },
     ])
     .returning();
 
@@ -24,6 +25,8 @@ async function seed() {
       {
         slug: "sac-fleur-rose",
         categoryId: sacs.id,
+        nameAr: PRODUCT_TEXT_AR["sac-fleur-rose"].name,
+        descriptionAr: PRODUCT_TEXT_AR["sac-fleur-rose"].description,
         nameFr: "Sac Fleur Rose",
         nameEn: "Rose Flower Bag",
         descriptionFr:
@@ -35,6 +38,8 @@ async function seed() {
       {
         slug: "mini-sac-bandouliere",
         categoryId: sacs.id,
+        nameAr: PRODUCT_TEXT_AR["mini-sac-bandouliere"].name,
+        descriptionAr: PRODUCT_TEXT_AR["mini-sac-bandouliere"].description,
         nameFr: "Mini Sac Bandoulière",
         nameEn: "Mini Crossbody Bag",
         descriptionFr:
@@ -45,6 +50,8 @@ async function seed() {
       {
         slug: "pochette-perlee",
         categoryId: accessoires.id,
+        nameAr: PRODUCT_TEXT_AR["pochette-perlee"].name,
+        descriptionAr: PRODUCT_TEXT_AR["pochette-perlee"].description,
         nameFr: "Pochette Perlée",
         nameEn: "Beaded Clutch",
         descriptionFr: "Pochette au crochet ornée de perles, fermeture zip.",
@@ -54,6 +61,8 @@ async function seed() {
       {
         slug: "echarpe-hiver",
         categoryId: echarpes.id,
+        nameAr: PRODUCT_TEXT_AR["echarpe-hiver"].name,
+        descriptionAr: PRODUCT_TEXT_AR["echarpe-hiver"].description,
         nameFr: "Écharpe d'Hiver",
         nameEn: "Winter Scarf",
         descriptionFr: "Écharpe chaude en laine crochetée à la main.",
@@ -63,6 +72,8 @@ async function seed() {
       {
         slug: "sac-plage-raphia",
         categoryId: sacs.id,
+        nameAr: PRODUCT_TEXT_AR["sac-plage-raphia"].name,
+        descriptionAr: PRODUCT_TEXT_AR["sac-plage-raphia"].description,
         nameFr: "Sac de Plage Raphia",
         nameEn: "Raffia Beach Bag",
         descriptionFr:
@@ -73,6 +84,8 @@ async function seed() {
       {
         slug: "beret-laine",
         categoryId: accessoires.id,
+        nameAr: PRODUCT_TEXT_AR["beret-laine"].name,
+        descriptionAr: PRODUCT_TEXT_AR["beret-laine"].description,
         nameFr: "Béret en Laine",
         nameEn: "Wool Beret",
         descriptionFr: "Béret doux en laine, plusieurs coloris disponibles.",

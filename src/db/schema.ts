@@ -32,8 +32,12 @@ export const users = pgTable("users", {
 export const categories = pgTable("categories", {
   id: serial("id").primaryKey(),
   slug: text("slug").notNull().unique(),
+  // Legacy English name. No longer shown or edited (the site is French and
+  // Arabic); kept until its removal is approved.
   nameEn: text("name_en").notNull(),
   nameFr: text("name_fr").notNull(),
+  // Arabic name. Optional: pages fall back to the French name when empty.
+  nameAr: text("name_ar"),
   // A category with no pieces yet: shown with a "Bientôt" badge instead of
   // being hidden, so visitors know it is coming.
   isComingSoon: boolean("is_coming_soon").notNull().default(false),
@@ -46,8 +50,14 @@ export const products = pgTable("products", {
     .notNull()
     .references(() => categories.id),
   nameFr: text("name_fr").notNull(),
-  nameEn: text("name_en").notNull(),
+  // Arabic name and description. Optional: Arabic pages fall back to the
+  // French text when they are empty.
+  nameAr: text("name_ar"),
   descriptionFr: text("description_fr").notNull(),
+  descriptionAr: text("description_ar"),
+  // Legacy English text. No longer shown or edited; kept until its removal is
+  // approved. New products copy the French text here to satisfy NOT NULL.
+  nameEn: text("name_en").notNull(),
   descriptionEn: text("description_en").notNull(),
   price: integer("price").notNull(),
   reference: text("reference").unique(),
