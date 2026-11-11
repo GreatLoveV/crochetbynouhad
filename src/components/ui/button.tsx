@@ -8,37 +8,38 @@ import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
 
+import { ChainLoader } from "@/components/ui/chain"
+
 const buttonVariants = cva(
-  // Tailored, not bubbly: softly squared corners and a little letter-spacing.
-  "group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-[0.95rem] font-semibold tracking-[0.02em] whitespace-nowrap transition-all duration-300 ease-soft outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/40 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5",
+  // « Le fil »: flat, nearly square, no lift. Focus uses the global Thé
+  // outline (globals.css); colour change alone marks hover.
+  "group/button relative inline-flex shrink-0 items-center justify-center rounded-md border border-transparent font-medium whitespace-nowrap transition-colors duration-200 ease-thread select-none focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-the disabled:pointer-events-none disabled:cursor-not-allowed aria-busy:pointer-events-none aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5",
   {
     variants: {
       variant: {
-        // Gold, the one strong colour on the page: reserved for the main action.
+        // Thé, the one accent: the main action of a screen, once.
         default:
-          "bg-primary text-primary-foreground shadow-soft hover:-translate-y-0.5 hover:bg-[color-mix(in_oklch,var(--primary),white_12%)] hover:shadow-lift",
-        // Gold hairline on the dark ground: the quiet, secondary action.
+          "bg-primary text-primary-foreground hover:bg-the-fonce active:bg-the-fonce disabled:bg-lin disabled:text-fil",
+        // Ink outline: the second action beside the main one.
         outline:
-          "border-primary/45 bg-transparent text-foreground hover:-translate-y-0.5 hover:border-primary hover:bg-primary/10 hover:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground",
+          "border-encre bg-transparent text-foreground hover:bg-lin active:bg-lin aria-expanded:bg-lin disabled:border-border disabled:text-fil",
         secondary:
-          "bg-secondary text-secondary-foreground hover:-translate-y-0.5 hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_8%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
+          "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_srgb,var(--color-lin),var(--color-encre)_7%)] aria-expanded:bg-[color-mix(in_srgb,var(--color-lin),var(--color-encre)_7%)] disabled:text-fil",
         ghost:
-          "text-foreground/80 hover:bg-accent hover:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground",
+          "text-foreground hover:bg-lin aria-expanded:bg-lin disabled:text-fil",
         destructive:
-          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
-        link: "h-auto rounded-none p-0 text-primary underline-offset-4 hover:underline",
+          "border-grenade bg-transparent text-grenade hover:bg-grenade-pale disabled:border-border disabled:text-fil",
+        link: "h-auto rounded-none p-0 text-the underline decoration-1 underline-offset-4 hover:decoration-2 disabled:text-fil",
       },
       size: {
-        // Minimum height of 44px on default/lg keeps primary CTAs comfortable
-        // to tap on a 390px-wide phone.
+        // 44–48px tall: comfortable to tap on a 375px phone.
         default:
-          "h-11 gap-2 px-6 has-data-[icon=inline-end]:pe-5 has-data-[icon=inline-start]:ps-5",
-        xs: "h-7 gap-1 px-3 text-xs has-data-[icon=inline-end]:pe-2.5 has-data-[icon=inline-start]:ps-2.5 [&_svg:not([class*='size-'])]:size-3.5",
-        sm: "h-9 gap-1.5 px-4 text-sm has-data-[icon=inline-end]:pe-3.5 has-data-[icon=inline-start]:ps-3.5 [&_svg:not([class*='size-'])]:size-4",
-        lg: "h-12 gap-2.5 px-8 text-base has-data-[icon=inline-end]:pe-7 has-data-[icon=inline-start]:ps-7",
+          "h-12 gap-2.5 px-6 text-base has-data-[icon=inline-end]:pe-5 has-data-[icon=inline-start]:ps-5",
+        xs: "h-7 gap-1 px-2.5 text-xs [&_svg:not([class*='size-'])]:size-3.5",
+        sm: "h-10 gap-2 px-4 text-sm has-data-[icon=inline-end]:pe-3.5 has-data-[icon=inline-start]:ps-3.5 [&_svg:not([class*='size-'])]:size-4",
+        lg: "h-14 gap-3 px-8 text-lg has-data-[icon=inline-end]:pe-7 has-data-[icon=inline-start]:ps-7",
         icon: "size-11",
-        "icon-xs":
-          "size-7 has-data-[icon=inline-end]:pe-2.5 has-data-[icon=inline-start]:ps-2.5 [&_svg:not([class*='size-'])]:size-3.5",
+        "icon-xs": "size-7 [&_svg:not([class*='size-'])]:size-3.5",
         "icon-sm": "size-9",
         "icon-lg": "size-12",
       },
@@ -50,7 +51,14 @@ const buttonVariants = cva(
   }
 )
 
-type ButtonProps = ButtonPrimitive.Props & VariantProps<typeof buttonVariants>
+type ButtonProps = ButtonPrimitive.Props &
+  VariantProps<typeof buttonVariants> & {
+    /**
+     * Shows the chain loader before the label and blocks clicks while an
+     * action runs. Pass the "in progress" wording as children ("Envoi…").
+     */
+    loading?: boolean
+  }
 
 /**
  * A button — or a link that LOOKS like a button.
@@ -67,6 +75,8 @@ function Button({
   variant = "default",
   size = "default",
   render,
+  loading = false,
+  children,
   ...props
 }: ButtonProps) {
   const classes = cn(buttonVariants({ variant, size, className }))
@@ -75,7 +85,7 @@ function Button({
     const element = render as ReactElement<
       { className?: string; children?: ReactNode } & Record<string, unknown>
     >
-    const { children, ...rest } = props
+    const rest = { ...props }
     // Button-only behaviour has no meaning on a link.
     for (const key of ["nativeButton", "disabled", "focusableWhenDisabled"]) {
       delete (rest as Record<string, unknown>)[key]
@@ -95,7 +105,13 @@ function Button({
       className={classes}
       render={render}
       {...props}
-    />
+      disabled={props.disabled || loading}
+      focusableWhenDisabled={loading || props.focusableWhenDisabled}
+      aria-busy={loading || undefined}
+    >
+      {loading && <ChainLoader size="sm" decorative />}
+      {children}
+    </ButtonPrimitive>
   )
 }
 

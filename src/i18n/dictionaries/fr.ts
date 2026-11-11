@@ -231,6 +231,9 @@ const fr = {
   common: {
     loading: "Chargement…",
     close: "Fermer",
+    retry: "Réessayer",
+    loadErrorTitle: "La page ne s’est pas chargée",
+    loadErrorBody: "Vérifiez votre connexion, puis réessayez. Vous pouvez aussi écrire à Nouhad sur WhatsApp.",
   },
 };
 

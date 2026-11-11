@@ -23,13 +23,13 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#140b12",
-  colorScheme: "dark",
+  themeColor: "#fbfaf8",
+  colorScheme: "light",
 };
 
 export default function AdminRootLayout({ children }: LayoutProps<"/admin">) {
   return (
-    <html lang="fr" dir="ltr" className={`${fontClasses.fr} dark h-full`}>
+    <html lang="fr" dir="ltr" className={`${fontClasses.fr} h-full`}>
       <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );

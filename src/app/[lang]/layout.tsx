@@ -23,10 +23,10 @@ export async function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
 
-/** Colours the phone's browser bar to match the aubergine ground. */
+/** Colours the phone's browser bar to match the Coton ground. */
 export const viewport: Viewport = {
-  themeColor: "#140b12",
-  colorScheme: "dark",
+  themeColor: "#fbfaf8",
+  colorScheme: "light",
 };
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -57,7 +57,7 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[lang]">)
   const dir = dirOf(lang);
 
   return (
-    <html lang={lang} dir={dir} className={`${fontClasses[lang]} dark h-full`}>
+    <html lang={lang} dir={dir} className={`${fontClasses[lang]} h-full`}>
       <body className="flex min-h-full flex-col">
         <I18nProvider lang={lang} dictionary={dictionary}>
           {/* Cart lives in the browser: wrap the whole shop once, here. */}

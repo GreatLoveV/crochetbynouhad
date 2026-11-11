@@ -51,7 +51,7 @@ function SwitcherLink({ className, search }: { className?: string; search: strin
         document.cookie = `${LOCALE_COOKIE}=${target}; path=/; max-age=31536000; samesite=lax`;
       }}
       className={cn(
-        "inline-flex h-10 min-w-10 items-center justify-center rounded-full px-3 text-sm text-foreground/80 transition-colors duration-300 ease-soft hover:text-primary focus-visible:ring-3 focus-visible:ring-ring/40 focus-visible:outline-none",
+        "inline-flex h-11 min-w-11 items-center justify-center rounded-sm border border-trait px-3 text-sm text-foreground transition-colors duration-200 ease-thread hover:border-encre hover:bg-lin",
         className,
       )}
     >
