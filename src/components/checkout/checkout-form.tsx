@@ -2,21 +2,22 @@
 
 import Link from "next/link";
 import { useActionState } from "react";
-import { Loader2Icon, LockIcon, ShoppingBagIcon } from "lucide-react";
 
 import { placeOrder } from "@/app/actions/orders";
 import { useCart } from "@/components/cart/cart-provider";
 import { cartTotal } from "@/components/cart/cart-line-rows";
 import { useCartProducts } from "@/components/cart/use-cart-products";
 import { Button } from "@/components/ui/button";
+import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
+import { Notice } from "@/components/ui/notice";
+import { Photo } from "@/components/ui/photo";
+import { Price } from "@/components/ui/price";
+import { EmptyState, LoadingState } from "@/components/ui/state";
 import { Textarea } from "@/components/ui/textarea";
 import { useI18n } from "@/i18n/client";
 import type { Locale } from "@/i18n/config";
 import { plural } from "@/i18n/format";
-import { formatPrice } from "@/lib/format/money";
 import { emptyOrderFormState } from "@/lib/validation/order-form";
 
 /**
@@ -65,42 +66,34 @@ export function CheckoutForm() {
   const { items, count, isReady } = useCart();
   const idsKey = items.map((item) => item.productId).join(",");
   const products = useCartProducts(idsKey);
-  const [state, formAction, pending] = useActionState(
-    placeOrder,
-    emptyOrderFormState,
-  );
+  const [state, formAction, pending] = useActionState(placeOrder, emptyOrderFormState);
 
-  if (!isReady) {
-    return (
-      <p className="py-16 text-center text-sm text-muted-foreground">
-        {t.common.loading}
-      </p>
-    );
-  }
+  if (!isReady) return <LoadingState label={t.common.loading} />;
 
   if (items.length === 0) {
-    return <EmptyCart />;
-  }
-
-  if (products === null) {
     return (
-      <p className="py-16 text-center text-sm text-muted-foreground">
-        {t.common.loading}
-      </p>
+      <EmptyState
+        title={t.checkout.empty}
+        body={t.checkout.emptyHint}
+        actions={<Button render={<Link href={href("/#boutique")} />}>{t.cart.continueShopping}</Button>}
+      />
     );
   }
+
+  if (products === null) return <LoadingState label={t.common.loading} />;
 
   // Everything the customer added has been deactivated or deleted.
   if (products.length === 0) {
     return (
-      <div className="flex flex-col items-center gap-5 py-20 text-center">
-        <p className="max-w-md text-muted-foreground">
-          {t.checkout.unavailable}
-        </p>
-        <Button size="lg" render={<Link href={href("/#boutique")} />}>
-          {t.cart.continueShopping}
-        </Button>
-      </div>
+      <Notice
+        tone="error"
+        title={t.checkout.unavailable}
+        action={
+          <Button variant="outline" size="sm" render={<Link href={href("/#boutique")} />}>
+            {t.cart.continueShopping}
+          </Button>
+        }
+      />
     );
   }
 
@@ -110,7 +103,11 @@ export function CheckoutForm() {
   const kept = state.values;
 
   return (
-    <form action={formAction} className="grid gap-10 lg:grid-cols-[1fr_20rem] lg:items-start">
+    <form
+      action={formAction}
+      noValidate
+      className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-16"
+    >
       {/*
         The only cart data the server receives: which bags.
         Prices are deliberately absent — the server looks them up itself.
@@ -128,255 +125,127 @@ export function CheckoutForm() {
         </label>
       </div>
 
-      <div>
-        <h2 className="font-heading text-xl">{t.checkout.summaryTitle}</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {plural(lang, t.cart.pieces, count)}
-        </p>
+      <div className="flex max-w-xl flex-col gap-6">
+        {state.message ? <Notice tone="error" title={state.message} /> : null}
 
-        <Separator className="my-5" />
+        <Field id="name" label={t.checkout.name} error={errors.name}>
+          {(p) => (
+            <Input
+              {...p}
+              name="name"
+              autoComplete="name"
+              defaultValue={kept?.name ?? ""}
+              placeholder={t.checkout.namePlaceholder}
+            />
+          )}
+        </Field>
 
-        {state.message ? (
-          <p
-            role="alert"
-            className="mb-5 rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive"
-          >
-            {state.message}
+        <Field id="phone" label={t.checkout.phone} hint={t.checkout.phoneHint} error={errors.phone}>
+          {(p) => (
+            <Input
+              {...p}
+              name="phone"
+              type="tel"
+              inputMode="tel"
+              // Phone digits read left to right even on an Arabic page; the
+              // text still sits at the start (right) edge there.
+              dir="ltr"
+              className="rtl:text-end"
+              autoComplete="tel"
+              defaultValue={kept?.phone ?? ""}
+              placeholder={t.checkout.phonePlaceholder}
+            />
+          )}
+        </Field>
+
+        <Field id="city" label={t.checkout.city} error={errors.city}>
+          {(p) => (
+            <>
+              <Input
+                {...p}
+                name="city"
+                list="moroccan-cities"
+                autoComplete="address-level2"
+                defaultValue={kept?.city ?? ""}
+                placeholder={t.checkout.cityPlaceholder}
+              />
+              {/* Suggestions only: any city can still be typed. */}
+              <datalist id="moroccan-cities">
+                {MOROCCAN_CITIES[lang].map((city) => (
+                  <option key={city} value={city} />
+                ))}
+              </datalist>
+            </>
+          )}
+        </Field>
+
+        <Field id="address" label={t.checkout.address} error={errors.address}>
+          {(p) => (
+            <Textarea
+              {...p}
+              name="address"
+              autoComplete="street-address"
+              defaultValue={kept?.address ?? ""}
+              placeholder={t.checkout.addressPlaceholder}
+            />
+          )}
+        </Field>
+
+        <Field id="notes" label={t.checkout.notes} error={errors.notes}>
+          {(p) => (
+            <Textarea {...p} name="notes" defaultValue={kept?.notes ?? ""} placeholder={t.checkout.notesPlaceholder} />
+          )}
+        </Field>
+
+        {errors.cart ? <Notice tone="error" title={errors.cart} /> : null}
+
+        {/* Sticky on phones so the confirm button is always within reach;
+            back to a normal inline button from the laptop layout up. */}
+        <div className="sticky bottom-0 z-10 -mx-4 border-t border-border bg-coton px-4 py-3 lg:static lg:mx-0 lg:border-0 lg:bg-transparent lg:p-0">
+          {/* On a phone the summary is below the form: the amount rides along
+              with the button so it is seen before confirming. */}
+          <p className="mb-2 flex items-baseline justify-between gap-4 lg:hidden">
+            <span className="text-sm">{t.checkout.totalLabel}</span>
+            <Price centimes={total} lang={lang} className="font-medium" />
           </p>
-        ) : null}
-
-        <div className="flex flex-col gap-5">
-          <Field
-            id="name"
-            label={t.checkout.name}
-            error={errors.name}
-            render={(props) => (
-              <Input
-                {...props}
-                name="name"
-                autoComplete="name"
-                defaultValue={kept?.name ?? ""}
-                placeholder={t.checkout.namePlaceholder}
-              />
-            )}
-          />
-
-          <Field
-            id="phone"
-            label={t.checkout.phone}
-            error={errors.phone}
-            hint={t.checkout.phoneHint}
-            render={(props) => (
-              <Input
-                {...props}
-                name="phone"
-                type="tel"
-                inputMode="tel"
-                // Phone digits read left to right even on an Arabic page; the
-                // text still sits at the start (right) edge there.
-                dir="ltr"
-                className="rtl:text-end"
-                autoComplete="tel"
-                defaultValue={kept?.phone ?? ""}
-                placeholder={t.checkout.phonePlaceholder}
-              />
-            )}
-          />
-
-          <Field
-            id="city"
-            label={t.checkout.city}
-            error={errors.city}
-            render={(props) => (
-              <>
-                <Input
-                  {...props}
-                  name="city"
-                  list="moroccan-cities"
-                  autoComplete="address-level2"
-                  defaultValue={kept?.city ?? ""}
-                  placeholder={t.checkout.cityPlaceholder}
-                />
-                {/* Suggestions only: any city can still be typed. */}
-                <datalist id="moroccan-cities">
-                  {MOROCCAN_CITIES[lang].map((city) => (
-                    <option key={city} value={city} />
-                  ))}
-                </datalist>
-              </>
-            )}
-          />
-
-          <Field
-            id="address"
-            label={t.checkout.address}
-            error={errors.address}
-            render={(props) => (
-              <Textarea
-                {...props}
-                name="address"
-                autoComplete="street-address"
-                defaultValue={kept?.address ?? ""}
-                placeholder={t.checkout.addressPlaceholder}
-              />
-            )}
-          />
-
-          <Field
-            id="notes"
-            label={t.checkout.notes}
-            error={errors.notes}
-            render={(props) => (
-              <Textarea
-                {...props}
-                name="notes"
-                defaultValue={kept?.notes ?? ""}
-                placeholder={t.checkout.notesPlaceholder}
-              />
-            )}
-          />
-
-          {errors.cart ? (
-            <p
-              role="alert"
-              className="rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive"
-            >
-              {errors.cart}
-            </p>
-          ) : null}
-
-          {/* Sticky on phones so the confirm button is always within reach;
-              back to a normal inline button from the laptop layout up. */}
-          <div className="sticky bottom-0 z-10 -mx-5 mt-2 border-t border-border bg-background/95 px-5 py-3 backdrop-blur-sm lg:static lg:mx-0 lg:border-0 lg:bg-transparent lg:px-0 lg:py-0 lg:backdrop-blur-none">
-            <Button
-              type="submit"
-              size="lg"
-              className="h-13 w-full lg:w-auto lg:px-10"
-              disabled={pending}
-            >
-              {pending ? (
-                <>
-                  <Loader2Icon className="animate-spin" />
-                  {t.checkout.submitting}
-                </>
-              ) : (
-                t.checkout.submit
-              )}
-            </Button>
-
-            <p className="mt-2 flex items-center justify-center gap-1.5 text-xs text-muted-foreground lg:justify-start">
-              <LockIcon className="size-3.5" />
-              {t.checkout.paymentNote}
-            </p>
-          </div>
+          <Button type="submit" className="w-full sm:w-auto sm:px-10" loading={pending}>
+            {pending ? t.checkout.submitting : t.checkout.submit}
+          </Button>
+          <p className="mt-2 text-sm text-fil">{t.checkout.paymentNote}</p>
         </div>
       </div>
 
       {/* The summary is a preview only: the server recalculates everything. */}
-      <aside className="rounded-3xl bg-card p-6 shadow-soft lg:sticky lg:top-24">
-        <h2 className="font-heading text-xl">{t.checkout.itemsTitle}</h2>
+      <aside aria-labelledby="checkout-summary" className="bg-lin p-6 lg:sticky lg:top-28">
+        <h2 id="checkout-summary" className="text-2xl">
+          {t.checkout.itemsTitle}
+        </h2>
+        <p className="mt-1 text-sm text-fil">{plural(lang, t.cart.pieces, count)}</p>
 
-        <ul className="mt-4 flex flex-col gap-3 text-sm">
-          {products.map((product) => {
-            return (
-              <li key={product.id} className="flex justify-between gap-4">
-                <span className="text-muted-foreground">
-                  <span lang={product.nameLang}>{product.name}</span>
-                  {product.reference ? (
-                    <span className="mt-0.5 block text-xs tracking-[0.14em] uppercase">
-                      <bdi>{product.reference}</bdi>
-                    </span>
-                  ) : null}
+        <ul className="mt-5 flex flex-col gap-4">
+          {products.map((product) => (
+            <li key={product.id} className="flex items-start gap-3">
+              <div className="w-14 shrink-0">
+                <Photo src={product.imageUrl} alt="" sizes="56px" />
+              </div>
+              <div className="flex min-w-0 flex-1 flex-col">
+                <span lang={product.nameLang} className="font-heading text-lg leading-snug">
+                  {product.name}
                 </span>
-                <span className="tabular-nums">
-                  <bdi>{formatPrice(product.price, lang)}</bdi>
-                </span>
-              </li>
-            );
-          })}
+                {product.reference ? (
+                  <bdi className="text-xs text-fil">{product.reference}</bdi>
+                ) : null}
+              </div>
+              <Price centimes={product.price} lang={lang} className="text-sm" />
+            </li>
+          ))}
         </ul>
 
-        <Separator className="my-4" />
-
-        <div className="flex items-baseline justify-between">
-          <span className="text-sm text-muted-foreground">
-            {t.checkout.totalLabel}
-          </span>
-          <span className="font-heading text-2xl tabular-nums">
-            <bdi>{formatPrice(total, lang)}</bdi>
-          </span>
+        <div className="mt-5 flex items-baseline justify-between gap-4 border-t border-trait pt-4">
+          <span>{t.checkout.totalLabel}</span>
+          <Price centimes={total} lang={lang} className="text-xl font-medium" />
         </div>
-
-        <p className="mt-3 text-xs text-muted-foreground">
-          {t.checkout.paymentNote}
-        </p>
       </aside>
     </form>
-  );
-}
-
-/**
- * One labelled field with its error message wired up for screen readers.
- * `render` keeps the input markup next to the label it belongs to.
- */
-function Field({
-  id,
-  label,
-  error,
-  hint,
-  render,
-}: {
-  id: string;
-  label: string;
-  error?: string;
-  hint?: string;
-  render: (props: {
-    id: string;
-    "aria-invalid": boolean;
-    "aria-describedby": string | undefined;
-  }) => React.ReactNode;
-}) {
-  const hintId = `${id}-hint`;
-  const errorId = `${id}-error`;
-  const describedBy =
-    [error ? errorId : null, hint ? hintId : null].filter(Boolean).join(" ") ||
-    undefined;
-
-  return (
-    <div className="flex flex-col gap-2">
-      <Label htmlFor={id}>{label}</Label>
-      {render({
-        id,
-        "aria-invalid": Boolean(error),
-        "aria-describedby": describedBy,
-      })}
-      {error ? (
-        <p id={errorId} className="text-sm text-destructive">
-          {error}
-        </p>
-      ) : hint ? (
-        <p id={hintId} className="text-xs text-muted-foreground">
-          {hint}
-        </p>
-      ) : null}
-    </div>
-  );
-}
-
-function EmptyCart() {
-  const { t, href } = useI18n();
-  return (
-    <div className="flex flex-col items-center gap-5 py-20 text-center">
-      <span className="flex size-20 items-center justify-center rounded-full bg-accent text-accent-foreground">
-        <ShoppingBagIcon className="size-8" />
-      </span>
-      <p className="font-heading text-2xl">{t.checkout.empty}</p>
-      <p className="max-w-sm text-muted-foreground">
-        {t.checkout.emptyHint}
-      </p>
-      <Button size="lg" render={<Link href={href("/#boutique")} />}>
-        {t.cart.continueShopping}
-      </Button>
-    </div>
   );
 }

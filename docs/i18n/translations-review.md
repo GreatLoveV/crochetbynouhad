@@ -223,3 +223,25 @@ Category names are edited under **Catégories → Nom en arabe**.
 | ☐ | `src/app/global-not-found.tsx` — last-resort 404 | هذه الصفحة غير موجودة · الصفحة الرئيسية |
 | ☐ | `src/i18n/config.ts` — language switcher label | العربية |
 | ☐ | `src/lib/constants/strings.ts` — admin placeholder for the Arabic name | حقيبة الوردة |
+
+## Added in phases 5 and 6
+
+New interface strings, same rules as above. The French is first-draft copy too: the
+atelier lines only restate facts already on the site, and the steps describe the real
+ordering flow (form, WhatsApp confirmation, cash on delivery).
+
+| ✓ | Key | French | Arabic |
+|---|---|---|---|
+| ☐ | `nav.atelier` | L’atelier | الورشة |
+| ☐ | `hero.note` (reworded, no more "·") | Paiement à la livraison, partout au Maroc. | الدفع عند الاستلام، في جميع أنحاء المغرب. |
+| ☐ | `home.atelierTitle` | L’atelier | الورشة |
+| ☐ | `home.atelierBody` | Chaque pièce est crochetée à la main par Nouhad, chez elle, au Maroc. Aucune n’existe en double : quand une pièce est vendue, elle reste ici, marquée « Vendu », pour montrer ce que ses mains savent faire. | تحيك نهاد كل قطعة بيديها، في بيتها بالمغرب. لا توجد قطعتان متشابهتان: عندما تُباع قطعة تبقى هنا، مع إشارة «بيعت»، لتُظهر ما تصنعه يداها. |
+| ☐ | `home.atelierQuestion` | Une question sur une pièce ? | سؤال عن قطعة؟ |
+| ☐ | `home.atelierCta` | Écrire à Nouhad | مراسلة نهاد |
+| ☐ | `home.stepsTitle` | Comment commander | كيف تطلبون |
+| ☐ | `home.steps[0]` | Choisissez une pièce et confirmez votre commande ici, en quelques champs. | اختاروا قطعة وأكّدوا طلبكم هنا، في بضعة حقول. |
+| ☐ | `home.steps[1]` | Nouhad vous écrit sur WhatsApp pour confirmer la livraison et ses frais. | تراسلكم نهاد على واتساب لتأكيد التوصيل ومصاريفه. |
+| ☐ | `home.steps[2]` | Vous payez en espèces à la livraison, partout au Maroc. | تدفعون نقدًا عند الاستلام، في جميع أنحاء المغرب. |
+| ☐ | `common.retry` | Réessayer | إعادة المحاولة |
+| ☐ | `common.loadErrorTitle` | La page ne s’est pas chargée | لم تُحمَّل الصفحة |
+| ☐ | `common.loadErrorBody` | Vérifiez votre connexion, puis réessayez. Vous pouvez aussi écrire à Nouhad sur WhatsApp. | تحقّقوا من الاتصال، ثم أعيدوا المحاولة. يمكنكم أيضًا مراسلة نهاد على واتساب. |

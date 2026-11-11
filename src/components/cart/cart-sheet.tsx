@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ShoppingBagIcon } from "lucide-react";
 
 import { useCart } from "@/components/cart/cart-provider";
@@ -20,10 +20,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Separator } from "@/components/ui/separator";
+import { Price } from "@/components/ui/price";
+import { EmptyState, LoadingState } from "@/components/ui/state";
 import { useI18n } from "@/i18n/client";
 import { plural } from "@/i18n/format";
-import { formatPrice } from "@/lib/format/money";
 import { cn } from "cn";
 
 /**
@@ -37,6 +37,15 @@ export function CartButton() {
   const { t, dir } = useI18n();
   const { count, isReady } = useCart();
   const [open, setOpen] = useState(false);
+  // The badge makes one small loop when a piece is added (not on page load,
+  // not on removal). Keying the badge by this counter replays the animation.
+  const previous = useRef<number | null>(null);
+  const [added, setAdded] = useState(0);
+  useEffect(() => {
+    if (!isReady) return;
+    if (previous.current !== null && count > previous.current) setAdded((n) => n + 1);
+    previous.current = count;
+  }, [count, isReady]);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -44,14 +53,20 @@ export function CartButton() {
         aria-label={t.nav.cart}
         className={cn(
           buttonVariants({ variant: "ghost", size: "icon" }),
-          "relative text-foreground/80 hover:text-accent-foreground",
+          "relative",
         )}
       >
         <ShoppingBagIcon />
         {/* The badge is only rendered after hydration, so the server HTML and
             the first client render match. */}
         {isReady && count > 0 ? (
-          <span className="absolute -top-0.5 -inset-e-0.5 flex size-5 items-center justify-center rounded-full bg-primary text-[0.7rem] font-semibold text-primary-foreground tabular-nums">
+          <span
+            key={added}
+            className={cn(
+              "absolute top-1 inset-e-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-the px-1 font-sans text-[0.6875rem] leading-none font-medium text-coton tabular-nums",
+              added > 0 && "animate-badge-loop",
+            )}
+          >
             {count > 99 ? "99+" : count}
           </span>
         ) : null}
@@ -103,20 +118,17 @@ function EmptyCart({ onClose }: { onClose: () => void }) {
   const { t } = useI18n();
   return (
     <>
-      <div className="flex flex-1 flex-col items-center gap-4 py-16 text-center">
-        <span className="flex size-16 items-center justify-center rounded-full bg-accent text-accent-foreground">
-          <ShoppingBagIcon className="size-7" />
-        </span>
-        <p className="text-muted-foreground">{t.cart.empty}</p>
-        <p className="max-w-56 text-sm text-muted-foreground/80">
-          {t.cart.emptyHint}
-        </p>
-      </div>
-      <SheetFooter>
-        <Button className="w-full" size="lg" onClick={onClose}>
-          {t.cart.continueShopping}
-        </Button>
-      </SheetFooter>
+      <EmptyState
+        as="h3"
+        title={t.cart.empty}
+        body={t.cart.emptyHint}
+        className="flex-1 justify-center"
+        actions={
+          <Button variant="outline" onClick={onClose}>
+            {t.cart.continueShopping}
+          </Button>
+        }
+      />
     </>
   );
 }
@@ -134,18 +146,14 @@ function DrawerLines({
   const products = useCartProducts(idsKey);
 
   if (products === null) {
-    return (
-      <p className="flex-1 py-8 text-center text-sm text-muted-foreground">
-        {t.common.loading}
-      </p>
-    );
+    return <LoadingState label={t.common.loading} className="flex-1" />;
   }
 
   const total = cartTotal(products);
 
   return (
     <>
-      <div className="flex-1 overflow-y-auto px-6">
+      <div className="flex-1 overflow-y-auto px-5">
         <CartLineRows
           products={products}
           onRemove={onRemove}
@@ -154,19 +162,13 @@ function DrawerLines({
       </div>
 
       <SheetFooter>
-        <Separator className="mb-2" />
-        <div className="flex items-baseline justify-between">
-          <span className="text-sm text-muted-foreground">
-            {t.cart.total}
-          </span>
-          <span className="font-heading text-xl tabular-nums">
-            <bdi>{formatPrice(total, lang)}</bdi>
-          </span>
+        <div className="flex items-baseline justify-between border-t border-border pt-4">
+          <span>{t.cart.total}</span>
+          <Price centimes={total} lang={lang} className="text-lg font-medium" />
         </div>
 
         <Button
           className="w-full"
-          size="lg"
           render={<Link href={href("/checkout")} onClick={onClose} />}
         >
           {t.checkout.title}
@@ -176,13 +178,13 @@ function DrawerLines({
           <Link
             href={href("/cart")}
             onClick={onClose}
-            className="text-sm text-muted-foreground underline underline-offset-4 transition-colors duration-300 ease-soft hover:text-primary"
+            className="inline-flex min-h-11 items-center text-sm text-the underline decoration-1 underline-offset-4 hover:decoration-2"
           >
             {t.cart.viewPage}
           </Link>
         </div>
 
-        <p className="text-center text-xs text-muted-foreground">
+        <p className="text-center text-sm text-fil">
           {t.cart.checkoutHint}
         </p>
       </SheetFooter>

@@ -15,13 +15,10 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function CheckoutPage() {
   const t = await getDictionary();
   return (
-    <div className="mx-auto w-full max-w-6xl px-5 py-10 sm:px-8 sm:py-14">
-      <header className="mb-8">
-        <p className="text-[0.7rem] tracking-[0.18em] text-muted-foreground uppercase">
-          {t.hero.eyebrow}
-        </p>
-        <h1 className="mt-2 font-heading text-3xl sm:text-4xl">{t.checkout.title}</h1>
-        <p className="mt-2 text-muted-foreground">{t.checkout.subtitle}</p>
+    <div className="mx-auto w-full max-w-page px-4 pt-8 sm:px-8 sm:pt-12">
+      <header className="mb-8 flex flex-col gap-2">
+        <h1 className="text-4xl sm:text-5xl">{t.checkout.title}</h1>
+        <p className="text-fil">{t.checkout.subtitle}</p>
       </header>
 
       <CheckoutForm />

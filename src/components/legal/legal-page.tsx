@@ -1,4 +1,4 @@
-import { Separator } from "@/components/ui/separator";
+import { Notice } from "@/components/ui/notice";
 import type { Dictionary } from "@/i18n/dictionaries/fr";
 
 type LegalContent = Dictionary["legal"]["terms"];
@@ -9,19 +9,19 @@ type LegalContent = Dictionary["legal"]["terms"];
  */
 export function LegalPage({ content, t }: { content: LegalContent; t: Dictionary }) {
   return (
-    <article className="mx-auto max-w-2xl px-5 py-16 sm:py-24">
-      <h1 className="text-3xl font-medium sm:text-4xl">{content.title}</h1>
-      <p className="mt-3 text-sm text-muted-foreground">{t.legal.placeholder}</p>
+    <article className="mx-auto max-w-page px-4 pt-10 sm:px-8 sm:pt-16">
+      <div className="max-w-prose">
+        <h1 className="text-4xl sm:text-5xl">{content.title}</h1>
+        <Notice className="mt-6">{t.legal.placeholder}</Notice>
 
-      <Separator className="my-8" />
-
-      <div className="flex flex-col gap-6 text-[0.975rem] leading-relaxed text-muted-foreground">
-        {content.sections.map((section) => (
-          <section key={section.title}>
-            <h2 className="mb-2 text-lg font-medium text-foreground">{section.title}</h2>
-            <p>{section.body ?? t.legal.toComplete}</p>
-          </section>
-        ))}
+        <div className="mt-10 flex flex-col gap-8">
+          {content.sections.map((section) => (
+            <section key={section.title} className="border-t border-border pt-6">
+              <h2 className="mb-2 text-2xl">{section.title}</h2>
+              <p className={section.body ? undefined : "text-fil italic"}>{section.body ?? t.legal.toComplete}</p>
+            </section>
+          ))}
+        </div>
       </div>
     </article>
   );

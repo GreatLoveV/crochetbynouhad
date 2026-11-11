@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/state";
 import { localePath } from "@/i18n/config";
 import { getDictionary, getLang } from "@/i18n/server";
 
@@ -10,20 +11,19 @@ export async function NotFoundContent() {
   const t = await getDictionary();
 
   return (
-    <div className="mx-auto flex max-w-xl flex-col items-center gap-6 px-5 py-24 text-center sm:py-32">
-      <p className="font-heading text-7xl text-primary sm:text-8xl">404</p>
-      <div className="flex flex-col gap-3">
-        <h1 className="text-2xl font-medium sm:text-3xl">{t.notFound.title}</h1>
-        <p className="text-muted-foreground">{t.notFound.body}</p>
-      </div>
-      <div className="flex flex-col gap-3 sm:flex-row">
-        <Button size="lg" render={<Link href={localePath(lang, "/#boutique")} />}>
-          {t.cart.continueShopping}
-        </Button>
-        <Button variant="outline" size="lg" render={<Link href={localePath(lang, "/")} />}>
-          {t.notFound.home}
-        </Button>
-      </div>
-    </div>
+    <EmptyState
+      as="h1"
+      className="py-24 sm:py-32"
+      title={t.notFound.title}
+      body={t.notFound.body}
+      actions={
+        <>
+          <Button render={<Link href={localePath(lang, "/#boutique")} />}>{t.cart.continueShopping}</Button>
+          <Button variant="outline" render={<Link href={localePath(lang, "/")} />}>
+            {t.notFound.home}
+          </Button>
+        </>
+      }
+    />
   );
 }

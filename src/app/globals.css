@@ -304,3 +304,24 @@ html:lang(ar) {
     background-position: right center;
   }
 }
+
+/*
+  The bag counter's one small loop when a piece is added: the badge drops in
+  and turns once, like a stitch pulled through. 450 ms, then still.
+*/
+@theme {
+  --animate-badge-loop: badge-loop 450ms var(--ease-thread);
+  @keyframes badge-loop {
+    0% {
+      transform: scale(0.6) rotate(-180deg);
+      opacity: 0;
+    }
+    60% {
+      transform: scale(1.12) rotate(10deg);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1) rotate(0);
+    }
+  }
+}

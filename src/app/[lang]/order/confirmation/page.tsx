@@ -6,7 +6,8 @@ import { CheckCircle2Icon, MessageCircleIcon } from "lucide-react";
 
 import { ClearCartOnMount } from "@/components/cart/clear-cart-on-mount";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { Price } from "@/components/ui/price";
 import { fill, localePath } from "@/i18n/config";
 import { getDictionary, getLang } from "@/i18n/server";
 import { formatPrice } from "@/lib/format/money";
@@ -59,82 +60,54 @@ export default async function OrderConfirmationPage({
   );
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-5 py-14 sm:px-8 sm:py-20">
+    <div className="mx-auto w-full max-w-2xl px-4 pt-10 sm:px-8 sm:pt-16">
       {unlocked ? <ClearCartOnMount /> : null}
 
-      <div className="flex flex-col items-center text-center">
-        <span className="flex size-16 items-center justify-center rounded-full bg-accent text-accent-foreground">
-          <CheckCircle2Icon className="size-8" />
-        </span>
-
-        <h1 className="mt-6 font-heading text-3xl sm:text-4xl">
-          {t.order.title}
-        </h1>
-        <p className="mt-3 max-w-md text-muted-foreground">
-          {t.order.body}
-        </p>
-
-        <div className="mt-7 rounded-2xl bg-card px-6 py-4 shadow-soft">
-          <p className="text-[0.7rem] tracking-[0.18em] text-muted-foreground uppercase">
-            {t.order.reference}
-          </p>
-          <p className="font-heading text-2xl tabular-nums">
-            <bdi>{order.reference}</bdi>
-          </p>
-          <p className="mt-1 text-xs text-muted-foreground">{t.orderStatus[order.status]}</p>
-        </div>
+      <div className="flex flex-col items-start gap-4">
+        <CheckCircle2Icon aria-hidden="true" className="size-8 text-the" />
+        <h1 className="text-4xl sm:text-5xl">{t.order.title}</h1>
+        <p className="max-w-prose text-lg text-fil">{t.order.body}</p>
+        <Badge variant="outline">{t.orderStatus[order.status]}</Badge>
       </div>
 
-      <ul className="mt-8 flex flex-col divide-y divide-border rounded-2xl bg-card px-6 shadow-soft">
+      <dl className="mt-8 grid grid-cols-2 gap-4 border-y border-border py-5">
+        <div>
+          <dt className="text-sm text-fil">{t.order.reference}</dt>
+          <dd className="font-heading text-2xl">
+            <bdi>{order.reference}</bdi>
+          </dd>
+        </div>
+        <div>
+          <dt className="text-sm text-fil">{t.cart.total}</dt>
+          <dd className="text-xl font-medium">
+            <Price centimes={order.total} lang={lang} />
+          </dd>
+        </div>
+      </dl>
+
+      <ul className="flex flex-col divide-y divide-border">
         {order.lines.map((line, index) => (
-          <li key={index} className="flex justify-between gap-4 py-4 text-sm">
-            <span className="text-muted-foreground">
+          <li key={index} className="flex justify-between gap-4 py-4">
+            <span>
               {/* The name is the French snapshot saved with the order. */}
-              <span lang={line.name ? "fr" : undefined}>{line.name ?? t.order.itemFallback}</span>{" "}
-              × {line.quantity}
-              <span className="mt-0.5 block text-xs tracking-[0.14em] uppercase">
-                <bdi>{line.reference}</bdi>
-              </span>
+              <span lang={line.name ? "fr" : undefined} className="font-heading text-xl">
+                {line.name ?? t.order.itemFallback}
+              </span>{" "}
+              <span className="text-fil">× {line.quantity}</span>
+              <bdi className="block text-xs text-fil">{line.reference}</bdi>
             </span>
-            <span className="tabular-nums">
-              <bdi>{formatPrice(line.unitPrice * line.quantity, lang)}</bdi>
-            </span>
+            <Price centimes={line.unitPrice * line.quantity} lang={lang} />
           </li>
         ))}
       </ul>
 
-      <div className="mt-4 flex items-baseline justify-between rounded-2xl bg-card px-6 py-4 shadow-soft">
-        <span className="text-sm text-muted-foreground">
-          {t.cart.total}
-        </span>
-        <span className="font-heading text-xl tabular-nums">
-          <bdi>{formatPrice(order.total, lang)}</bdi>
-        </span>
-      </div>
-
-      <Separator className="my-8" />
-
-      <div className="flex flex-col items-center gap-3">
-        <Button
-          variant="outline"
-          size="lg"
-          className="w-full sm:w-auto sm:px-8"
-          render={
-            <a
-              href={whatsappHref}
-              target="_blank"
-              rel="noopener noreferrer"
-            />
-          }
-        >
-          <MessageCircleIcon />
+      <div className="mt-8 flex flex-col items-start gap-3 border-t border-border pt-8">
+        <Button render={<a href={whatsappHref} target="_blank" rel="noopener noreferrer" />}>
+          <MessageCircleIcon data-icon="inline-start" aria-hidden="true" />
           {t.order.whatsapp}
         </Button>
-        <p className="text-xs text-muted-foreground">
-          {t.order.whatsappOptional}
-        </p>
-
-        <Button variant="ghost" render={<Link href={localePath(lang, "/#boutique")} />}>
+        <p className="text-sm text-fil">{t.order.whatsappOptional}</p>
+        <Button variant="link" className="mt-4" render={<Link href={localePath(lang, "/#boutique")} />}>
           {t.order.keepShopping}
         </Button>
       </div>

@@ -1,106 +1,72 @@
-import Image from "next/image";
+import Link from "next/link";
 import { MessageCircleIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { isOptimizableImageUrl } from "@/lib/constants/images";
-import { fill } from "@/i18n/config";
+import { Photo } from "@/components/ui/photo";
+import { fill, localePath, type Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries/fr";
 import type { ProductSummary } from "@/lib/data/products";
 import { whatsappUrl } from "@/lib/integrations/whatsapp";
 
 /**
- * Short hero above the catalog. `showcase` is the cover photo of the first
- * active product, so the hero always shows something real (and something the
- * admin has just uploaded) instead of a hard-coded stock image.
+ * The first screen is the work: the newest piece's photo takes about 60 % of
+ * the width (first on a phone), the title and the two ways to order sit
+ * beside it. The photo is whatever the admin uploaded last, never a stock
+ * image; without one it is a Lin block with the piece's name.
  */
 export function Hero({
   showcase,
+  lang,
   t,
 }: {
   showcase: ProductSummary | null;
+  lang: Locale;
   t: Dictionary;
 }) {
   return (
-    <section className="velvet-sheen border-b border-border">
-      <div className="mx-auto grid max-w-6xl gap-10 px-5 pt-12 pb-14 sm:pt-16 sm:pb-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16 lg:px-8">
-        <div className="flex flex-col items-start gap-6">
-          {/* Gold rule + small caps: the Velvet "label" style. */}
-          <p className="flex items-center gap-3 text-xs font-semibold tracking-[0.24em] text-primary uppercase">
-            <span aria-hidden className="h-px w-8 bg-primary/70" />
-            {t.hero.eyebrow}
-          </p>
+    <section className="mx-auto grid max-w-page gap-8 px-4 pt-6 sm:px-8 sm:pt-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-end lg:gap-14">
+      {showcase ? (
+        <Link href={localePath(lang, `/products/${showcase.slug}`)} className="group block">
+          <Photo
+            src={showcase.imageUrl}
+            alt={showcase.name}
+            emptyLabel={showcase.name}
+            emptyLabelLang={showcase.nameLang}
+            sizes="(min-width: 1024px) 58vw, 100vw"
+            priority
+            // On a laptop the 4:5 photo would push the title below the fold:
+            // it keeps its width and is capped in height instead (cropped).
+            className="lg:aspect-auto lg:h-[min(74vh,46rem)]"
+          />
+          <span lang={showcase.nameLang} className="mt-2 block text-sm text-fil group-hover:underline">
+            {showcase.name}
+          </span>
+        </Link>
+      ) : (
+        <Photo alt="" />
+      )}
 
-          <h1 className="text-balance text-5xl leading-[1.02] font-medium sm:text-6xl lg:text-7xl">
-            {t.hero.title}
-          </h1>
-
-          <p className="max-w-md text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
-            {t.hero.body}
-          </p>
-
-          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
-            <Button
-              size="lg"
-              className="w-full sm:w-auto"
-              render={<a href="#boutique" />}
-            >
-              {t.hero.ctaShop}
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="w-full sm:w-auto"
-              render={
-                <a
-                  href={whatsappUrl(fill(t.whatsapp.discover, { shop: t.siteName }))}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                />
-              }
-            >
-              <MessageCircleIcon />
-              {t.hero.ctaWhatsapp}
-            </Button>
-          </div>
-
-          <p className="text-sm text-muted-foreground">{t.hero.note}</p>
+      <div className="flex flex-col items-start gap-5 lg:pb-8">
+        <h1 className="text-5xl">{t.hero.title}</h1>
+        <p className="max-w-[34ch] text-lg text-fil">{t.hero.body}</p>
+        <div className="mt-1 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap">
+          <Button
+            render={
+              <a
+                href={whatsappUrl(fill(t.whatsapp.discover, { shop: t.siteName }))}
+                target="_blank"
+                rel="noopener noreferrer"
+              />
+            }
+          >
+            <MessageCircleIcon data-icon="inline-start" aria-hidden="true" />
+            {t.hero.ctaWhatsapp}
+          </Button>
+          <Button variant="outline" render={<a href="#boutique" />}>
+            {t.hero.ctaShop}
+          </Button>
         </div>
-
-        {showcase ? (
-          <ShowcaseImage product={showcase} />
-        ) : (
-          <div className="aspect-4/5 w-full rounded-3xl border border-border bg-card shadow-soft" />
-        )}
       </div>
     </section>
-  );
-}
-
-/** Big, tactile product photo — the anchor of the hero on larger screens. */
-function ShowcaseImage({ product }: { product: ProductSummary }) {
-  return (
-    <div className="relative aspect-4/5 w-full overflow-hidden rounded-3xl border border-border bg-card shadow-lift">
-      {product.imageUrl ? (
-        <Image
-          src={product.imageUrl}
-          alt={product.name}
-          fill
-          priority
-          sizes="(min-width: 1024px) 45vw, 100vw"
-          className="object-cover"
-          // Like every other product photo: an unknown host is loaded as-is
-          // instead of failing in the optimiser.
-          unoptimized={!isOptimizableImageUrl(product.imageUrl)}
-        />
-      ) : null}
-      <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-border bg-background/80 px-4 py-3 backdrop-blur-sm">
-        <p className="text-xs tracking-[0.18em] text-muted-foreground uppercase">
-          {product.categoryName}
-        </p>
-        <p lang={product.nameLang} className="font-heading text-xl leading-tight font-semibold">
-          {product.name}
-        </p>
-      </div>
-    </div>
   );
 }

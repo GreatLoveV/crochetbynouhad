@@ -2,68 +2,68 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { cn } from "cn";
 
+import { Photo } from "@/components/ui/photo";
 import { fill } from "@/i18n/config";
 import { useI18n } from "@/i18n/client";
 import { isOptimizableImageUrl } from "@/lib/constants/images";
 
 /**
- * Product photo gallery: one large image plus a thumbnail strip.
+ * Product photos: one large photo, and the others as thumbnails. On a large
+ * screen the thumbnails stand in a column on the inline start (left in
+ * French, right in Arabic); on a phone they sit in a row under the photo.
  *
- * Client component because selecting a thumbnail is browser state. The list is
- * already sorted by `position` when it arrives from the database; sorting again
- * here would just hide a bug, so we trust it and keep an index into the array.
+ * Changing photo is a 200 ms crossfade. The list arrives sorted by
+ * `position`, so [0] is the main photo.
  */
 export function ImageGallery({
   images,
   alt,
+  altLang,
 }: {
   images: { url: string; position: number }[];
   alt: string;
+  altLang?: string;
 }) {
   const { t } = useI18n();
   const [activeIndex, setActiveIndex] = useState(0);
 
   if (images.length === 0) {
-    return (
-      <div className="flex aspect-4/5 w-full items-center justify-center rounded-3xl border border-border/60 bg-muted text-sm text-muted-foreground">
-        {t.product.photoSoon}
-      </div>
-    );
+    return <Photo alt={alt} emptyLabel={alt} emptyLabelLang={altLang} priority />;
   }
 
   const active = images[activeIndex];
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="relative aspect-4/5 w-full overflow-hidden rounded-3xl border border-border/60 bg-card shadow-soft">
+    <div className="flex flex-col gap-3 lg:flex-row-reverse lg:items-start lg:gap-4">
+      <div className="relative aspect-4/5 w-full overflow-hidden bg-lin lg:flex-1">
         <Image
-          // key remounts the image on change, which restarts the fade-in.
+          // A new key remounts the image, which replays the fade.
           key={active.url}
           src={active.url}
           alt={alt}
           fill
           priority
-          sizes="(min-width: 1024px) 45vw, 100vw"
-          className="animate-in fade-in-0 object-cover duration-500"
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          className="animate-in fade-in-0 object-cover duration-200 ease-thread"
           unoptimized={!isOptimizableImageUrl(active.url)}
         />
       </div>
 
       {images.length > 1 ? (
-        <ul className="flex gap-3 overflow-x-auto pb-1">
+        <ul className="flex gap-2 overflow-x-auto no-scrollbar lg:w-20 lg:flex-col lg:overflow-visible">
           {images.map((image, index) => (
-            <li key={image.url}>
+            <li key={image.url} className="shrink-0">
               <button
                 type="button"
                 onClick={() => setActiveIndex(index)}
                 aria-current={index === activeIndex}
                 aria-label={fill(t.product.viewPhoto, { n: index + 1 })}
-                className={
-                  index === activeIndex
-                    ? "relative block size-20 overflow-hidden rounded-2xl ring-2 ring-primary ring-offset-2 ring-offset-background transition-all duration-300 ease-soft"
-                    : "relative block size-20 overflow-hidden rounded-2xl opacity-65 ring-1 ring-border transition-all duration-300 ease-soft hover:opacity-100"
-                }
+                className={cn(
+                  "relative block aspect-4/5 w-16 overflow-hidden bg-lin outline-offset-2 lg:w-20",
+                  index === activeIndex ? "outline-1 outline-encre outline-solid" : "hover:outline-1 hover:outline-trait hover:outline-solid",
+                )}
               >
                 <Image
                   src={image.url}

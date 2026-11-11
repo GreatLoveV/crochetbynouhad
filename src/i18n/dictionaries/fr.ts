@@ -24,6 +24,7 @@ const fr = {
   nav: {
     label: "Navigation principale",
     shop: "La boutique",
+    atelier: "L’atelier",
     contact: "Contact",
     cart: "Panier",
     cartPage: "Panier",
@@ -36,7 +37,21 @@ const fr = {
     body: "Sacs, écharpes et accessoires réalisés à la main par Nouhad. Chaque pièce est unique, faite avec du temps et beaucoup de fil.",
     ctaShop: "Voir la collection",
     ctaWhatsapp: "Commander sur WhatsApp",
-    note: "Paiement à la livraison · Livraison partout au Maroc",
+    note: "Paiement à la livraison, partout au Maroc.",
+  },
+
+  home: {
+    atelierTitle: "L’atelier",
+    atelierBody:
+      "Chaque pièce est crochetée à la main par Nouhad, chez elle, au Maroc. Aucune n’existe en double : quand une pièce est vendue, elle reste ici, marquée « Vendu », pour montrer ce que ses mains savent faire.",
+    atelierQuestion: "Une question sur une pièce ?",
+    atelierCta: "Écrire à Nouhad",
+    stepsTitle: "Comment commander",
+    steps: [
+      "Choisissez une pièce et confirmez votre commande ici, en quelques champs.",
+      "Nouhad vous écrit sur WhatsApp pour confirmer la livraison et ses frais.",
+      "Vous payez en espèces à la livraison, partout au Maroc.",
+    ],
   },
 
   shop: {
