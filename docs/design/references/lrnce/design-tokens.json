@@ -1,0 +1,311 @@
+{
+  "color": {
+    "surface": {
+      "$value": "#EEE3D4",
+      "$type": "color",
+      "$description": "page ground",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "text-primary": {
+      "$value": "#000000",
+      "$type": "color",
+      "$description": "headings, nav",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "text-body": {
+      "$value": "#333333",
+      "$type": "color",
+      "$description": "body",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "accent": {
+      "$value": "#945738",
+      "$type": "color",
+      "$description": "the one colour",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "border": {
+      "$value": "#40291F",
+      "$type": "color",
+      "$description": "input outline",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    }
+  },
+  "typography": {
+    "font-family": {
+      "display-serif": {
+        "$value": "Georgia, serif",
+        "$type": "fontFamily",
+        "$description": "editorial intro paragraph",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "nav": {
+        "$value": "Harmonia Sans, sans-serif",
+        "$type": "fontFamily",
+        "$description": "uppercase nav",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "font-size": {
+      "display-serif": {
+        "$value": "42px",
+        "$type": "dimension",
+        "$description": "editorial intro paragraph",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "heading": {
+        "$value": "40px",
+        "$type": "dimension",
+        "$description": "section titles",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "nav": {
+        "$value": "16px",
+        "$type": "dimension",
+        "$description": "uppercase nav",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body": {
+        "$value": "16px",
+        "$type": "dimension",
+        "$description": "everything else",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "font-weight": {
+      "display-serif": {
+        "$value": 400,
+        "$type": "fontWeight",
+        "$description": "editorial intro paragraph",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "heading": {
+        "$value": 500,
+        "$type": "fontWeight",
+        "$description": "section titles",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "nav": {
+        "$value": 500,
+        "$type": "fontWeight",
+        "$description": "uppercase nav",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body": {
+        "$value": 400,
+        "$type": "fontWeight",
+        "$description": "everything else",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "line-height": {
+      "display-serif": {
+        "$value": 1.5,
+        "$type": "number",
+        "$description": "editorial intro paragraph",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "heading": {
+        "$value": 1.2,
+        "$type": "number",
+        "$description": "section titles",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "nav": {
+        "$value": 1.5,
+        "$type": "number",
+        "$description": "uppercase nav",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body": {
+        "$value": 1.5,
+        "$type": "number",
+        "$description": "everything else",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    }
+  },
+  "spacing": {
+    "base": {
+      "$value": "8px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "8": {
+      "$value": "8px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "16": {
+      "$value": "16px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "24": {
+      "$value": "24px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "36": {
+      "$value": "36px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "54": {
+      "$value": "54px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "81": {
+      "$value": "81px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    }
+  },
+  "radius": {
+    "input": {
+      "$value": "3px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "button": {
+      "$value": "4px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "pill": {
+      "$value": "50px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "anydesign": {
+      "source": "https://lrnce.com/",
+      "captured_at": "2026-11-11",
+      "method": "generated from design.md by scripts/build_tokens_json.py",
+      "spec": "W3C Design Tokens Community Group 2025.10"
+    }
+  }
+}

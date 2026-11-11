@@ -1,0 +1,314 @@
+{
+  "color": {
+    "surface": {
+      "$value": "#F6F4EE",
+      "$type": "color",
+      "$description": "ground",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "surface-raised": {
+      "$value": "#FFFFFF",
+      "$type": "color",
+      "$description": "secondary buttons",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "text-primary": {
+      "$value": "#000000",
+      "$type": "color",
+      "$description": "text, primary button",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "text-heading": {
+      "$value": "#1F1E1C",
+      "$type": "color",
+      "$description": "headings (black at 88%)",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "accent": {
+      "$value": "#FA541C",
+      "$type": "color",
+      "$description": "author names, \"more\"",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "nav-active": {
+      "$value": "#EFEDE8",
+      "$type": "color",
+      "$description": "active nav pill",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "border": {
+      "$value": "#D9D9D9",
+      "$type": "color",
+      "$description": "button outlines",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    }
+  },
+  "typography": {
+    "font-family": {
+      "section": {
+        "$value": "IBM Plex Sans Arabic, sans-serif",
+        "$type": "fontFamily",
+        "$description": "section titles with an icon",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "font-size": {
+      "section": {
+        "$value": "24px",
+        "$type": "dimension",
+        "$description": "section titles with an icon",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "headline": {
+        "$value": "20px",
+        "$type": "dimension",
+        "$description": "article titles",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body": {
+        "$value": "16px",
+        "$type": "dimension",
+        "$description": "UI baseline (dek text renders taller)",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "button": {
+        "$value": "14px",
+        "$type": "dimension",
+        "$description": "buttons",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "font-weight": {
+      "section": {
+        "$value": 600,
+        "$type": "fontWeight",
+        "$description": "section titles with an icon",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "headline": {
+        "$value": 600,
+        "$type": "fontWeight",
+        "$description": "article titles",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body": {
+        "$value": 400,
+        "$type": "fontWeight",
+        "$description": "UI baseline (dek text renders taller)",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "button": {
+        "$value": 600,
+        "$type": "fontWeight",
+        "$description": "buttons",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "line-height": {
+      "section": {
+        "$value": 1.24,
+        "$type": "number",
+        "$description": "section titles with an icon",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "headline": {
+        "$value": 1.6,
+        "$type": "number",
+        "$description": "article titles",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body": {
+        "$value": 1.15,
+        "$type": "number",
+        "$description": "UI baseline (dek text renders taller)",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "button": {
+        "$value": 1.43,
+        "$type": "number",
+        "$description": "buttons",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    }
+  },
+  "spacing": {
+    "base": {
+      "$value": "4px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "8": {
+      "$value": "8px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "12": {
+      "$value": "12px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "16": {
+      "$value": "16px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "24": {
+      "$value": "24px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "32": {
+      "$value": "32px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "48": {
+      "$value": "48px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    }
+  },
+  "radius": {
+    "control": {
+      "$value": "8px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "media": {
+      "$value": "16px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "anydesign": {
+      "source": "https://thmanyah.com/",
+      "captured_at": "2026-11-11",
+      "method": "generated from design.md by scripts/build_tokens_json.py",
+      "spec": "W3C Design Tokens Community Group 2025.10"
+    }
+  }
+}

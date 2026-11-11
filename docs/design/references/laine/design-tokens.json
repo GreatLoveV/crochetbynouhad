@@ -1,0 +1,305 @@
+{
+  "color": {
+    "surface": {
+      "$value": "#FFFFFF",
+      "$type": "color",
+      "$description": "ground",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "text-primary": {
+      "$value": "#000000",
+      "$type": "color",
+      "$description": "text",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "ink": {
+      "$value": "#111111",
+      "$type": "color",
+      "$description": "dark bands, button text",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "light": {
+      "$value": "#EBEBEB",
+      "$type": "color",
+      "$description": "quiet surfaces",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "error": {
+      "$value": "#C25151",
+      "$type": "color",
+      "$description": "errors",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    }
+  },
+  "typography": {
+    "font-family": {
+      "display": {
+        "$value": "Scto Grotesk A, sans-serif",
+        "$type": "fontFamily",
+        "$description": "section and hero titles",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "mono-label": {
+        "$value": "Quadrant Text Mono, monospace",
+        "$type": "fontFamily",
+        "$description": "footer group labels",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "font-size": {
+      "display": {
+        "$value": "56px",
+        "$type": "dimension",
+        "$description": "section and hero titles",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "label": {
+        "$value": "12px",
+        "$type": "dimension",
+        "$description": "uppercase bars and buttons",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body": {
+        "$value": "20px",
+        "$type": "dimension",
+        "$description": "body",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "mono-label": {
+        "$value": "12px",
+        "$type": "dimension",
+        "$description": "footer group labels",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "font-weight": {
+      "display": {
+        "$value": 500,
+        "$type": "fontWeight",
+        "$description": "section and hero titles",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "label": {
+        "$value": 700,
+        "$type": "fontWeight",
+        "$description": "uppercase bars and buttons",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body": {
+        "$value": 400,
+        "$type": "fontWeight",
+        "$description": "body",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "mono-label": {
+        "$value": 400,
+        "$type": "fontWeight",
+        "$description": "footer group labels",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "line-height": {
+      "display": {
+        "$value": 1.0,
+        "$type": "number",
+        "$description": "section and hero titles",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body": {
+        "$value": 1.5,
+        "$type": "number",
+        "$description": "body",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "letter-spacing": {
+      "display": {
+        "$value": "-0.02em",
+        "$type": "dimension",
+        "$description": "section and hero titles",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "label": {
+        "$value": "0.14em",
+        "$type": "dimension",
+        "$description": "uppercase bars and buttons",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "mono-label": {
+        "$value": "0.1em",
+        "$type": "dimension",
+        "$description": "footer group labels",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    }
+  },
+  "spacing": {
+    "base": {
+      "$value": "4px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "8": {
+      "$value": "8px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "12": {
+      "$value": "12px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "16": {
+      "$value": "16px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "20": {
+      "$value": "20px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "28": {
+      "$value": "28px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "48": {
+      "$value": "48px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    }
+  },
+  "radius": {
+    "none": {
+      "$value": "0px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "anydesign": {
+      "source": "https://lainepublishing.com/",
+      "captured_at": "2026-11-11",
+      "method": "generated from design.md by scripts/build_tokens_json.py",
+      "spec": "W3C Design Tokens Community Group 2025.10"
+    }
+  }
+}

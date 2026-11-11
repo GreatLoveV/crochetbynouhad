@@ -1,0 +1,205 @@
+{
+  "color": {
+    "surface": {
+      "$value": "#F6F6F6",
+      "$type": "color",
+      "$description": "ground",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "surface-band": {
+      "$value": "#E3E3E3",
+      "$type": "color",
+      "$description": "product ground",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "medium"
+        }
+      }
+    },
+    "text-primary": {
+      "$value": "#181818",
+      "$type": "color",
+      "$description": "text",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "text-muted": {
+      "$value": "#707070",
+      "$type": "color",
+      "$description": "secondary",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "button": {
+      "$value": "#5C5C5C",
+      "$type": "color",
+      "$description": "solid button",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    }
+  },
+  "typography": {
+    "font-family": {
+      "body": {
+        "$value": "Unica77, sans-serif",
+        "$type": "fontFamily",
+        "$description": "everything",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "font-size": {
+      "body": {
+        "$value": "14px",
+        "$type": "dimension",
+        "$description": "everything",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "lead": {
+        "$value": "18px",
+        "$type": "dimension",
+        "$description": "dialog title, section leads",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "font-weight": {
+      "body": {
+        "$value": 300,
+        "$type": "fontWeight",
+        "$description": "everything",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "lead": {
+        "$value": 300,
+        "$type": "fontWeight",
+        "$description": "dialog title, section leads",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "line-height": {
+      "body": {
+        "$value": 1.5,
+        "$type": "number",
+        "$description": "everything",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "lead": {
+        "$value": 1.5,
+        "$type": "number",
+        "$description": "dialog title, section leads",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    }
+  },
+  "spacing": {
+    "base": {
+      "$value": "4px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "8": {
+      "$value": "8px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "16": {
+      "$value": "16px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "24": {
+      "$value": "24px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "40": {
+      "$value": "40px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    }
+  },
+  "radius": {
+    "none": {
+      "$value": "0px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "anydesign": {
+      "source": "https://teklafabrics.com/",
+      "captured_at": "2026-11-11",
+      "method": "generated from design.md by scripts/build_tokens_json.py",
+      "spec": "W3C Design Tokens Community Group 2025.10"
+    }
+  }
+}

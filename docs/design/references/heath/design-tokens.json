@@ -1,0 +1,325 @@
+{
+  "color": {
+    "surface": {
+      "$value": "#F7F0EA",
+      "$type": "color",
+      "$description": "page and product-photo ground",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "surface-dark": {
+      "$value": "#26211B",
+      "$type": "color",
+      "$description": "header and footer band",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "text-primary": {
+      "$value": "#26211B",
+      "$type": "color",
+      "$description": "body text",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "text-dim": {
+      "$value": "#52483D",
+      "$type": "color",
+      "$description": "secondary text, fill button",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "on-dark": {
+      "$value": "#D1CCC6",
+      "$type": "color",
+      "$description": "nav text on dark",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "border": {
+      "$value": "#E3DFD9",
+      "$type": "color",
+      "$description": "hairlines",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    }
+  },
+  "typography": {
+    "font-family": {
+      "editorial": {
+        "$value": "Century Schoolbook, serif",
+        "$type": "fontFamily",
+        "$description": "hero cards, intro sentences",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "nav": {
+        "$value": "Benton Sans Bold, sans-serif",
+        "$type": "fontFamily",
+        "$description": "uppercase nav",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body": {
+        "$value": "Benton Sans Medium, sans-serif",
+        "$type": "fontFamily",
+        "$description": "product names, copy",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "font-size": {
+      "editorial": {
+        "$value": "28px",
+        "$type": "dimension",
+        "$description": "hero cards, intro sentences",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "nav": {
+        "$value": "12px",
+        "$type": "dimension",
+        "$description": "uppercase nav",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body": {
+        "$value": "14px",
+        "$type": "dimension",
+        "$description": "product names, copy",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "caption": {
+        "$value": "11px",
+        "$type": "dimension",
+        "$description": "carousel captions",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "font-weight": {
+      "editorial": {
+        "$value": 400,
+        "$type": "fontWeight",
+        "$description": "hero cards, intro sentences",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "nav": {
+        "$value": 400,
+        "$type": "fontWeight",
+        "$description": "uppercase nav",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body": {
+        "$value": 400,
+        "$type": "fontWeight",
+        "$description": "product names, copy",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "caption": {
+        "$value": 400,
+        "$type": "fontWeight",
+        "$description": "carousel captions",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "line-height": {
+      "editorial": {
+        "$value": 1.3,
+        "$type": "number",
+        "$description": "hero cards, intro sentences",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body": {
+        "$value": 1.4,
+        "$type": "number",
+        "$description": "product names, copy",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "caption": {
+        "$value": 1.3,
+        "$type": "number",
+        "$description": "carousel captions",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "letter-spacing": {
+      "nav": {
+        "$value": "0.45px",
+        "$type": "dimension",
+        "$description": "uppercase nav",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    }
+  },
+  "spacing": {
+    "base": {
+      "$value": "8px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "16": {
+      "$value": "16px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "24": {
+      "$value": "24px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "32": {
+      "$value": "32px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "48": {
+      "$value": "48px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "60": {
+      "$value": "60px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "77": {
+      "$value": "77px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "100": {
+      "$value": "100px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    }
+  },
+  "radius": {
+    "none": {
+      "$value": "0px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "anydesign": {
+      "source": "https://www.heathceramics.com/",
+      "captured_at": "2026-11-11",
+      "method": "generated from design.md by scripts/build_tokens_json.py",
+      "spec": "W3C Design Tokens Community Group 2025.10"
+    }
+  }
+}
