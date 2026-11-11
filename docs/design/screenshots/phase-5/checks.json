@@ -1,0 +1,92 @@
+{
+ "fr-1440": {
+  "overflowX": 0,
+  "fonts": [
+   "\"Readex Pro\", \"Readex Pro Fallback\"",
+   "\"Markazi Text\", \"Markazi Text Fallback\""
+  ],
+  "bodySize": "18px",
+  "loaded": [
+   "Readex Pro 160 700",
+   "Readex Pro 160 700",
+   "Readex Pro 160 700",
+   "Readex Pro Fallback normal",
+   "Markazi Text 400 700",
+   "Markazi Text 400 700",
+   "Readex Pro 160 700",
+   "Readex Pro 160 700"
+  ],
+  "focusOutline": [
+   "Commander sur WhatsApp",
+   "solid",
+   "2px",
+   "oklab(0.428629 -0.0707994 0.014593 / 0.5)",
+   "3px"
+  ]
+ },
+ "ar-1440": {
+  "overflowX": 0,
+  "fonts": [
+   "\"Readex Pro\", \"Readex Pro Fallback\"",
+   "\"Markazi Text\", \"Markazi Text Fallback\""
+  ],
+  "bodySize": "20px",
+  "loaded": [
+   "Readex Pro 160 700",
+   "Readex Pro 160 700",
+   "Readex Pro 160 700",
+   "Readex Pro Fallback normal",
+   "Markazi Text 400 700",
+   "Markazi Text 400 700",
+   "Markazi Text 400 700",
+   "Markazi Text Fallback normal"
+  ],
+  "focusOutline": [
+   "الطلب عبر واتساب",
+   "solid",
+   "2px",
+   "oklab(0.428629 -0.0707994 0.014593 / 0.5)",
+   "3px"
+  ]
+ },
+ "fr-375": {
+  "overflowX": 0,
+  "fonts": [
+   "\"Readex Pro\", \"Readex Pro Fallback\"",
+   "\"Markazi Text\", \"Markazi Text Fallback\""
+  ],
+  "bodySize": "18px",
+  "loaded": [
+   "Readex Pro 160 700",
+   "Readex Pro 160 700",
+   "Readex Pro 160 700",
+   "Readex Pro Fallback normal",
+   "Markazi Text 400 700",
+   "Markazi Text 400 700",
+   "Readex Pro 160 700",
+   "Readex Pro 160 700"
+  ]
+ },
+ "ar-375": {
+  "overflowX": 0,
+  "fonts": [
+   "\"Readex Pro\", \"Readex Pro Fallback\"",
+   "\"Markazi Text\", \"Markazi Text Fallback\""
+  ],
+  "bodySize": "20px",
+  "loaded": [
+   "Readex Pro 160 700",
+   "Readex Pro 160 700",
+   "Readex Pro 160 700",
+   "Readex Pro Fallback normal",
+   "Markazi Text 400 700",
+   "Markazi Text 400 700",
+   "Markazi Text 400 700",
+   "Markazi Text Fallback normal"
+  ]
+ },
+ "reducedMotion": [
+  "0px",
+  "none"
+ ]
+}
