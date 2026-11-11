@@ -17,9 +17,9 @@ type Category = { id: number; nameFr: string };
 export type ProductFormDefaults = {
   id?: number;
   nameFr: string;
-  nameEn: string;
+  nameAr: string;
   descriptionFr: string;
-  descriptionEn: string;
+  descriptionAr: string;
   categoryId: number | "";
   /** Stored in centimes; shown to Nouhad in dirhams. */
   price: number;
@@ -74,17 +74,22 @@ export function ProductForm({
           )}
         </Field>
 
+        {/* Arabic fields are typed right-to-left. Optional: the Arabic shop
+            shows the French text until they are filled in. */}
         <Field
-          id="nameEn"
-          label="Nom (anglais)"
-          hint="Optionnel —repris du nom français si vide."
-          error={errors.nameEn}
+          id="nameAr"
+          label={strings.admin.productNameAr}
+          hint={strings.admin.arabicOptionalHint}
+          error={errors.nameAr}
         >
           {(props) => (
             <Input
               {...props}
-              name="nameEn"
-              defaultValue={value("nameEn", defaults.nameEn)}
+              name="nameAr"
+              lang="ar"
+              dir="rtl"
+              defaultValue={value("nameAr", defaults.nameAr)}
+              placeholder={strings.admin.productNameArPlaceholder}
             />
           )}
         </Field>
@@ -106,17 +111,19 @@ export function ProductForm({
         </Field>
 
         <Field
-          id="descriptionEn"
-          label="Description (anglais)"
-          hint="Optionnel — reprise du français si vide."
-          error={errors.descriptionEn}
+          id="descriptionAr"
+          label={strings.admin.productDescriptionAr}
+          hint={strings.admin.arabicOptionalHint}
+          error={errors.descriptionAr}
         >
           {(props) => (
             <Textarea
               {...props}
-              name="descriptionEn"
-              rows={3}
-              defaultValue={value("descriptionEn", defaults.descriptionEn)}
+              name="descriptionAr"
+              lang="ar"
+              dir="rtl"
+              rows={5}
+              defaultValue={value("descriptionAr", defaults.descriptionAr)}
             />
           )}
         </Field>

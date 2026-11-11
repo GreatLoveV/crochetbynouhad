@@ -104,9 +104,9 @@ export type AdminProductDetail = {
   id: number;
   slug: string;
   nameFr: string;
-  nameEn: string;
+  nameAr: string | null;
   descriptionFr: string;
-  descriptionEn: string;
+  descriptionAr: string | null;
   categoryId: number;
   price: number;
   reference: string | null;
@@ -125,9 +125,9 @@ export async function getAdminProduct(
       id: true,
       slug: true,
       nameFr: true,
-      nameEn: true,
+      nameAr: true,
       descriptionFr: true,
-      descriptionEn: true,
+      descriptionAr: true,
       categoryId: true,
       price: true,
       reference: true,
@@ -151,9 +151,9 @@ export async function getAdminProduct(
     id: row.id,
     slug: row.slug,
     nameFr: row.nameFr,
-    nameEn: row.nameEn,
+    nameAr: row.nameAr,
     descriptionFr: row.descriptionFr,
-    descriptionEn: row.descriptionEn,
+    descriptionAr: row.descriptionAr,
     categoryId: row.categoryId,
     price: row.price,
     reference: row.reference,
@@ -176,6 +176,7 @@ export type AdminCategoryRow = {
   id: number;
   slug: string;
   nameFr: string;
+  nameAr: string | null;
   isComingSoon: boolean;
   productCount: number;
 };
@@ -187,6 +188,7 @@ export async function getAdminCategoryList(): Promise<AdminCategoryRow[]> {
         id: categories.id,
         slug: categories.slug,
         nameFr: categories.nameFr,
+        nameAr: categories.nameAr,
         isComingSoon: categories.isComingSoon,
       })
       .from(categories)
@@ -209,6 +211,11 @@ export async function getAdminCategoryList(): Promise<AdminCategoryRow[]> {
 }
 
 /** Flips a category between live and coming soon. */
+/** Sets (or, with `null`, clears) a category's Arabic name. */
+export async function setCategoryNameAr(id: number, nameAr: string | null): Promise<void> {
+  await db.update(categories).set({ nameAr }).where(eq(categories.id, id));
+}
+
 export async function setCategoryComingSoon(
   id: number,
   isComingSoon: boolean,
@@ -259,9 +266,10 @@ export async function findFreeSlug(base: string): Promise<string> {
 export type ProductInput = {
   slug: string;
   nameFr: string;
-  nameEn: string;
+  /** `null` when left empty: Arabic pages then show the French. */
+  nameAr: string | null;
   descriptionFr: string;
-  descriptionEn: string;
+  descriptionAr: string | null;
   categoryId: number;
   price: number;
   isActive: boolean;
@@ -271,8 +279,8 @@ export type ProductInput = {
 /**
  * Pure: no DB, no Next. Turns validated form values into row values.
  *
- * The English columns are NOT NULL and the site is French-only, so an empty
- * English field copies the French instead of storing an empty string.
+ * An empty Arabic field is stored as `null`, never `""`, so "not translated
+ * yet" has one meaning everywhere.
  */
 export function toProductInput(
   data: ProductFormValues,
@@ -283,9 +291,9 @@ export function toProductInput(
   return {
     slug,
     nameFr: data.nameFr,
-    nameEn: data.nameEn || data.nameFr,
+    nameAr: data.nameAr || null,
     descriptionFr: data.descriptionFr,
-    descriptionEn: data.descriptionEn || data.descriptionFr,
+    descriptionAr: data.descriptionAr || null,
     categoryId: data.categoryId,
     price,
     isActive: data.isActive,
@@ -329,7 +337,14 @@ export async function resolveProductSlug({
 export async function createProduct(input: ProductInput): Promise<number> {
   const created = await db
     .insert(products)
-    .values({ ...input, reference: input.reference || null })
+    .values({
+      ...input,
+      // Legacy English columns are NOT NULL but no longer edited or shown:
+      // a new piece copies its French text there. Existing pieces keep theirs.
+      nameEn: input.nameFr,
+      descriptionEn: input.descriptionFr,
+      reference: input.reference || null,
+    })
     .returning({ id: products.id });
   const id = created[0].id;
 

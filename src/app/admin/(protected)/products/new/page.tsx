@@ -18,9 +18,9 @@ export default async function NewProductPage() {
 
   const defaults: ProductFormDefaults = {
     nameFr: "",
-    nameEn: "",
+    nameAr: "",
     descriptionFr: "",
-    descriptionEn: "",
+    descriptionAr: "",
     categoryId: "",
     price: 0,
     slug: "",

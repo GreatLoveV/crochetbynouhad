@@ -15,15 +15,14 @@ export const productFormSchema = z.object({
     .trim()
     .min(2, "Indiquez le nom de la pièce.")
     .max(120, "Nom trop long."),
-  // The site is French-only, so the English fields are optional: the action
-  // copies the French text when they are left empty (the columns are NOT NULL).
-  nameEn: z.string().trim().max(120, "Nom trop long.").optional(),
+  // Arabic is optional: an Arabic page shows the French text until it is filled.
+  nameAr: z.string().trim().max(120, "Nom trop long.").optional(),
   descriptionFr: z
     .string()
     .trim()
     .min(10, "Décrivez la pièce en quelques mots.")
     .max(4000, "Description trop longue."),
-  descriptionEn: z.string().trim().max(4000, "Description trop longue.").optional(),
+  descriptionAr: z.string().trim().max(4000, "Description trop longue.").optional(),
   categoryId: z.coerce
     .number({ error: "Choisissez une catégorie." })
     .int("Choisissez une catégorie.")

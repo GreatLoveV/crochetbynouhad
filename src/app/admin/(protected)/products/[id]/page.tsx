@@ -53,9 +53,9 @@ export default async function EditProductPage({
           defaults={{
             id: product.id,
             nameFr: product.nameFr,
-            nameEn: product.nameEn,
+            nameAr: product.nameAr ?? "",
             descriptionFr: product.descriptionFr,
-            descriptionEn: product.descriptionEn,
+            descriptionAr: product.descriptionAr ?? "",
             categoryId: product.categoryId,
             price: product.price,
             slug: product.slug,

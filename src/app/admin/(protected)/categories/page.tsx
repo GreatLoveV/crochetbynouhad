@@ -1,6 +1,7 @@
-import { toggleCategoryComingSoon } from "@/app/admin/actions/categories";
+import { saveCategoryNameAr, toggleCategoryComingSoon } from "@/app/admin/actions/categories";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -36,21 +37,40 @@ export default async function AdminCategoriesPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Catégorie</TableHead>
+              <TableHead>{strings.admin.categoryNameAr}</TableHead>
               <TableHead className="hidden sm:table-cell">
                 {strings.admin.products}
               </TableHead>
-              <TableHead className="w-32 text-right">État</TableHead>
-              <TableHead className="w-40 text-right">Actions</TableHead>
+              <TableHead className="w-32 text-end">État</TableHead>
+              <TableHead className="w-40 text-end">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {categories.map((category) => (
               <TableRow key={category.id}>
                 <TableCell className="font-medium">{category.nameFr}</TableCell>
+                <TableCell>
+                  <form action={saveCategoryNameAr} className="flex items-center gap-2">
+                    <input type="hidden" name="id" value={category.id} />
+                    <Input
+                      name="nameAr"
+                      lang="ar"
+                      dir="rtl"
+                      maxLength={60}
+                      defaultValue={category.nameAr ?? ""}
+                      aria-label={`${strings.admin.categoryNameAr} : ${category.nameFr}`}
+                      title={category.nameAr ? undefined : strings.admin.categoryNameArMissing}
+                      className="h-9 w-36"
+                    />
+                    <Button size="sm" variant="outline" type="submit">
+                      {strings.admin.categoryNameArSave}
+                    </Button>
+                  </form>
+                </TableCell>
                 <TableCell className="hidden text-muted-foreground tabular-nums sm:table-cell">
                   {category.productCount}
                 </TableCell>
-                <TableCell className="text-right">
+                <TableCell className="text-end">
                   <Badge
                     variant={category.isComingSoon ? "secondary" : "default"}
                   >
@@ -59,7 +79,7 @@ export default async function AdminCategoriesPage() {
                       : strings.admin.categoryLive}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-right">
+                <TableCell className="text-end">
                   <form action={toggleCategoryComingSoon}>
                     <input type="hidden" name="id" value={category.id} />
                     <Button size="sm" variant="ghost" type="submit">

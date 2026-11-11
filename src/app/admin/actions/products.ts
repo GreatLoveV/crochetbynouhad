@@ -1,6 +1,12 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+
+import {
+  revalidateShopHome,
+  revalidateProductPage,
+  revalidateAllProductPages,
+} from "@/lib/cache/revalidate-shop";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
@@ -40,9 +46,9 @@ function unauthorized(): ProductFormState {
 function formValues(formData: FormData) {
   return {
     nameFr: String(formData.get("nameFr") ?? ""),
-    nameEn: String(formData.get("nameEn") ?? ""),
+    nameAr: String(formData.get("nameAr") ?? ""),
     descriptionFr: String(formData.get("descriptionFr") ?? ""),
-    descriptionEn: String(formData.get("descriptionEn") ?? ""),
+    descriptionAr: String(formData.get("descriptionAr") ?? ""),
     categoryId: String(formData.get("categoryId") ?? ""),
     price: String(formData.get("price") ?? ""),
     slug: String(formData.get("slug") ?? ""),
@@ -104,18 +110,18 @@ export async function saveProduct(
       const previousSlug = await updateProduct(productId, input);
 
       revalidatePath("/admin/products");
-      revalidatePath("/");
-      revalidatePath(`/products/${resolved.slug}`);
+      revalidateShopHome();
+      revalidateProductPage(resolved.slug);
       // A renamed piece leaves its old public URL behind.
       if (previousSlug && previousSlug !== resolved.slug) {
-        revalidatePath(`/products/${previousSlug}`);
+        revalidateProductPage(previousSlug);
       }
       return { status: "idle", values, message: strings.admin.updated };
     }
 
     await createProduct(input);
 
-    revalidatePath("/");
+    revalidateShopHome();
     revalidatePath("/admin/products");
     return { status: "idle", values, message: strings.admin.created };
   } catch (error) {
@@ -145,9 +151,9 @@ export async function toggleProductActive(formData: FormData): Promise<void> {
   const updated = await setProductActive(id, !current.isActive);
   if (!updated) return;
 
-  revalidatePath("/");
+  revalidateShopHome();
   revalidatePath("/admin/products");
-  revalidatePath(`/products/${updated.slug}`);
+  revalidateProductPage(updated.slug);
 }
 
 /**
@@ -185,10 +191,10 @@ export async function setProductSaleStatus(
     slug = result.slug;
   }
 
-  revalidatePath("/");
+  revalidateShopHome();
   revalidatePath("/admin/products");
   revalidatePath(`/admin/products/${id}`);
-  revalidatePath(`/products/${slug}`);
+  revalidateProductPage(slug);
   return { ok: sold ? strings.admin.markedSold : strings.admin.markedAvailable };
 }
 
@@ -232,8 +238,8 @@ export async function moveProductImage(formData: FormData): Promise<void> {
 /** Photos show in the admin, on the home grid and on the bag's own page. */
 function revalidateImagePages() {
   revalidatePath("/admin/products", "layout");
-  revalidatePath("/");
-  revalidatePath("/products/[slug]", "page");
+  revalidateShopHome();
+  revalidateAllProductPages();
 }
 
 function toFieldErrors(error: z.ZodError): Record<string, string> {
