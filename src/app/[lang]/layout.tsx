@@ -62,8 +62,18 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[lang]">)
         <I18nProvider lang={lang} dictionary={dictionary}>
           {/* Cart lives in the browser: wrap the whole shop once, here. */}
           <CartProvider>
+            {/* First stop for the keyboard: past the header, straight to the page. */}
+            <a
+              href="#contenu"
+              className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:top-3 focus-visible:inset-s-3 focus-visible:z-50 focus-visible:bg-encre focus-visible:px-4 focus-visible:py-3 focus-visible:text-coton"
+            >
+              {dictionary.common.skipToContent}
+            </a>
             <SiteHeader />
-            <main className="flex-1">{children}</main>
+            {/* tabIndex lets the skip link move focus here; no ring on a whole page. */}
+            <main id="contenu" tabIndex={-1} className="flex-1 focus:outline-none">
+              {children}
+            </main>
             <SiteFooter />
           </CartProvider>
           <Toaster position="top-center" dir={dir} />

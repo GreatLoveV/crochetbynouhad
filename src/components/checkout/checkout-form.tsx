@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef } from "react";
 
 import { placeOrder } from "@/app/actions/orders";
 import { useCart } from "@/components/cart/cart-provider";
@@ -67,6 +67,14 @@ export function CheckoutForm() {
   const idsKey = items.map((item) => item.productId).join(",");
   const products = useCartProducts(idsKey);
   const [state, formAction, pending] = useActionState(placeOrder, emptyOrderFormState);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // After a refused submit, take the customer to the first field to fix, so
+  // keyboard and screen-reader users land on the error instead of the button.
+  useEffect(() => {
+    if (!state.fieldErrors) return;
+    formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+  }, [state]);
 
   if (!isReady) return <LoadingState label={t.common.loading} />;
 
@@ -104,6 +112,7 @@ export function CheckoutForm() {
 
   return (
     <form
+      ref={formRef}
       action={formAction}
       noValidate
       className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-16"
@@ -212,6 +221,11 @@ export function CheckoutForm() {
             {pending ? t.checkout.submitting : t.checkout.submit}
           </Button>
           <p className="mt-2 text-sm text-fil">{t.checkout.paymentNote}</p>
+          {/* What the customer agrees to, where they agree to it. */}
+          <p className="mt-1 text-sm text-fil">
+            <WithLink text={t.checkout.legalTerms} href={href("/conditions")} label={t.checkout.legalTermsLink} />{" "}
+            <WithLink text={t.checkout.legalPrivacy} href={href("/confidentialite")} label={t.checkout.legalPrivacyLink} />
+          </p>
         </div>
       </div>
 
@@ -247,5 +261,19 @@ export function CheckoutForm() {
         </div>
       </aside>
     </form>
+  );
+}
+
+/** A translated sentence whose `{link}` placeholder becomes a link. */
+function WithLink({ text, href, label }: { text: string; href: string; label: string }) {
+  const [before, after = ""] = text.split("{link}");
+  return (
+    <>
+      {before}
+      <Link href={href} className="text-encre underline underline-offset-2 hover:text-the">
+        {label}
+      </Link>
+      {after}
+    </>
   );
 }

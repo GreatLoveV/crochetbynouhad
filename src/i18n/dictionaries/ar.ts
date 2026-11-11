@@ -118,6 +118,10 @@ const ar: Dictionary = {
     itemsTitle: "ملخص الطلب",
     totalLabel: "المبلغ المستحق عند الاستلام",
     paymentNote: "تُؤكَّد مصاريف التوصيل عبر واتساب.",
+    legalTerms: "بتأكيد الطلب، توافقون على {link}.",
+    legalTermsLink: "الشروط العامة",
+    legalPrivacy: "تُستعمل بياناتكم لتأكيد الطلب وتوصيله ({link}).",
+    legalPrivacyLink: "سياسة الخصوصية",
     name: "الاسم الكامل",
     namePlaceholder: "سلمى العمراني",
     phone: "رقم الهاتف",
@@ -250,6 +254,7 @@ const ar: Dictionary = {
 
   common: {
     loading: "جارٍ التحميل…",
+    skipToContent: "الانتقال إلى المحتوى",
     close: "إغلاق",
     retry: "إعادة المحاولة",
     loadErrorTitle: "لم تُحمَّل الصفحة",

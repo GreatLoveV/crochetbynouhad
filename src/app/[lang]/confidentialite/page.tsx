@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
 
 import { LegalPage } from "@/components/legal/legal-page";
-import { alternatesFor } from "@/i18n/metadata";
+import { alternatesFor, openGraphFor } from "@/i18n/metadata";
 import { getDictionary, getLang } from "@/i18n/server";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getDictionary();
+  const lang = await getLang();
+  const { title, description } = t.legal.privacy;
   return {
-    title: t.legal.privacy.title,
-    description: t.legal.privacy.description,
-    alternates: alternatesFor(await getLang(), "/confidentialite"),
+    title,
+    description,
+    alternates: alternatesFor(lang, "/confidentialite"),
+    openGraph: openGraphFor(lang, "/confidentialite", { siteName: t.siteName, title, description }),
   };
 }
 

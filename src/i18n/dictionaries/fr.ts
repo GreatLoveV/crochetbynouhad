@@ -108,6 +108,11 @@ const fr = {
     itemsTitle: "Récapitulatif",
     totalLabel: "Total à payer à la livraison",
     paymentNote: "Frais de livraison confirmés par WhatsApp.",
+    /** `{link}` becomes a link to the page named by the matching `…Link`. */
+    legalTerms: "En confirmant, vous acceptez les {link}.",
+    legalTermsLink: "conditions générales",
+    legalPrivacy: "Vos coordonnées servent à confirmer et livrer la commande ({link}).",
+    legalPrivacyLink: "confidentialité",
     name: "Nom complet",
     namePlaceholder: "Salma El Amrani",
     phone: "Téléphone",
@@ -245,6 +250,7 @@ const fr = {
 
   common: {
     loading: "Chargement…",
+    skipToContent: "Aller au contenu",
     close: "Fermer",
     retry: "Réessayer",
     loadErrorTitle: "La page ne s’est pas chargée",
