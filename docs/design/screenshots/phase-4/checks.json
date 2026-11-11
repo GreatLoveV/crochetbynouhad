@@ -1,0 +1,82 @@
+{
+ "fr": {
+  "html": [
+   "fr",
+   "ltr"
+  ],
+  "switcher": [
+   "العربية",
+   "/ar/products/sac-plage-raphia"
+  ],
+  "chevronTransform": "none",
+  "h1": [
+   "Sac de Plage Raphia",
+   "fr"
+  ],
+  "price": "CN-0005",
+  "toast": "Sac de Plage Raphia ajouté au panier\n280,00 MAD",
+  "drawerX": [
+   992,
+   1440
+  ],
+  "drawerText": "Votre panier\n\n1 pièce\n\nSACS\n\nSac de Plage Raphia\n\n280,00 MAD\n\nCN-0005\n\nPIÈCE UNIQUE\nTotal\n280,00 MAD\nCommander\nVoir le panier\n\nLe paiement se fait à la livraiso",
+  "switcherWithQuery": "/ar?category=sacs",
+  "overflowX": 0,
+  "afterSwitch": [
+   "http://localhost:3000/ar/products/sac-plage-raphia",
+   "rtl"
+  ],
+  "cookie": [
+   "ar"
+  ],
+  "checkoutErrors": [
+   "Vérifiez les informations saisies.",
+   "Indiquez votre nom.",
+   "Numéro de téléphone invalide (ex. 06 12 34 56 78).",
+   "Indiquez votre ville.",
+   "Indiquez votre adresse de livraison.",
+   ""
+  ],
+  "url": "http://localhost:3000/fr/checkout"
+ },
+ "ar": {
+  "html": [
+   "ar",
+   "rtl"
+  ],
+  "switcher": [
+   "Français",
+   "/fr/products/sac-plage-raphia"
+  ],
+  "chevronTransform": "none",
+  "h1": [
+   "حقيبة شاطئ من الرافيا",
+   "ar"
+  ],
+  "price": "CN-0005",
+  "toast": "أُضيفت حقيبة شاطئ من الرافيا إلى السلة\n‏280,00 د.م.‏",
+  "drawerX": [
+   0,
+   448
+  ],
+  "drawerText": "سلة المشتريات\n\nقطعة واحدة\n\nحقائب\n\nحقيبة شاطئ من الرافيا\n\n‏280,00 د.م.‏\n\nCN-0005\n\nقطعة فريدة\nالمجموع\n‏280,00 د.م.‏\nإتمام الطلب\nعرض السلة\n\nالدفع عند الاستلام.\n\nFe",
+  "switcherWithQuery": "/fr?category=sacs",
+  "overflowX": 0,
+  "afterSwitch": [
+   "http://localhost:3000/fr/products/sac-plage-raphia",
+   "ltr"
+  ],
+  "cookie": [
+   "fr"
+  ],
+  "checkoutErrors": [
+   "يرجى التحقق من المعلومات المُدخلة.",
+   "يرجى إدخال الاسم.",
+   "رقم الهاتف غير صالح (مثال: 06 12 34 56 78).",
+   "يرجى إدخال المدينة.",
+   "يرجى إدخال عنوان التوصيل.",
+   ""
+  ],
+  "url": "http://localhost:3000/ar/checkout"
+ }
+}
