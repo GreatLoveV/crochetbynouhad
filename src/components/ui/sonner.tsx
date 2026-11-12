@@ -18,14 +18,14 @@ const Toaster = ({ ...props }: ToasterProps) => {
       icons={{
         success: <CircleCheckIcon className="size-4 text-fouwwa" />,
         info: <InfoIcon className="size-4 text-fil" />,
-        warning: <TriangleAlertIcon className="size-4 text-nila" />,
+        warning: <TriangleAlertIcon className="size-4 text-barqouq" />,
         error: <CircleAlertIcon className="size-4 text-erreur" />,
         loading: <ChainLoader size="sm" decorative />,
       }}
       style={
         {
           "--normal-bg": "var(--color-laine)",
-          "--normal-text": "var(--color-nila)",
+          "--normal-text": "var(--color-barqouq)",
           "--normal-border": "var(--border)",
           "--border-radius": "var(--radius)",
         } as React.CSSProperties

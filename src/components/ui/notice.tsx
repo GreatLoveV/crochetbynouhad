@@ -36,7 +36,7 @@ export function Notice({ tone = "info", title, children, action, className }: No
   return (
     <div
       role={tone === "error" ? "alert" : "status"}
-      className={cn("flex gap-3 rounded-lg border-s-4 px-4 py-3.5 text-sm text-nila", t.box, className)}
+      className={cn("flex gap-3 rounded-lg border-s-4 px-4 py-3.5 text-sm text-barqouq", t.box, className)}
     >
       <span className="mt-[0.15em] shrink-0">{t.icon}</span>
       <div className="flex min-w-0 flex-1 flex-col gap-1">

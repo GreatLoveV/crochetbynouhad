@@ -74,7 +74,7 @@ export function Photo({
       ) : !loading && emptyLabel ? (
         <div
           lang={emptyLabelLang}
-          className="flex size-full items-center justify-center p-6 text-center font-heading text-xl text-nila"
+          className="flex size-full items-center justify-center p-6 text-center font-heading text-xl text-barqouq"
         >
           {emptyLabel}
         </div>

@@ -57,7 +57,7 @@ export async function SiteFooter() {
   const link = "w-fit py-1 underline-offset-4 decoration-1 hover:underline";
 
   return (
-    <footer className="on-dark mt-section bg-nila">
+    <footer className="on-dark mt-section bg-barqouq">
       <div className="mx-auto grid max-w-page gap-10 px-4 py-14 sm:grid-cols-[1.4fr_1fr_1fr] sm:px-8">
         <div className="flex flex-col gap-3">
           <p lang="fr" dir="ltr" className="w-fit font-heading text-2xl font-semibold">

@@ -116,7 +116,7 @@ const ar: Dictionary = {
   colours: {
     rose: "ورد",
     laine: "صوف",
-    nila: "نيلة",
+    barqouq: "برقوق",
     fouwwa: "فوّة",
     naanaa: "نعناع",
     kurkum: "كركم",

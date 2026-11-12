@@ -15,7 +15,7 @@ export type YarnColour = keyof Dictionary["colours"]
 const swatch: Record<YarnColour, string> = {
   rose: "bg-rose",
   laine: "bg-laine",
-  nila: "bg-nila",
+  barqouq: "bg-barqouq",
   fouwwa: "bg-fouwwa",
   naanaa: "bg-naanaa",
   kurkum: "bg-kurkum",

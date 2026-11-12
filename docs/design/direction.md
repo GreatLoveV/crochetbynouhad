@@ -30,7 +30,7 @@ names will appear in the shop: each piece lists the yarn colours used.
 |---|---|---|---|
 | **Rose** / ورد | `#FBEDEA` | page ground | indigo on rose 12.4:1 |
 | **Laine** / صوف | `#FFFDF9` | cards and frames behind photos (undyed wool) | indigo on wool 14.0:1 |
-| **Nila** / نيلة | `#1E2461` | text, outlines, footer (indigo dye block) | wool on indigo 14.0:1 |
+| ~~**Nila** / نيلة~~ **Barqouq** / برقوق | ~~`#1E2461`~~ `#3A1C33` | text, outlines, footer (plum; replaced indigo after Phase 5) | wool on plum 14.8:1 |
 | **Fouwwa** / فوّة | `#9C1D3B` | main action, prices, active states (madder) | wool on madder 7.8:1, rose on madder 6.9:1 |
 | **Naanaa** / نعناع | `#1C6347` | atelier band, success (mint) | wool on mint 7.1:1 |
 | **Kurkum** / كركم | `#E9A93A` | chain thread, small surfaces (turmeric) | indigo on turmeric 6.9:1. **Never as text on rose (1.8:1).** |

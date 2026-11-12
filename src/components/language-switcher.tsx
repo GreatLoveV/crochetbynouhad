@@ -52,7 +52,7 @@ function SwitcherLink({ className, search }: { className?: string; search: strin
         document.cookie = `${LOCALE_COOKIE}=${target}; path=/; max-age=31536000; samesite=lax`;
       }}
       className={cn(
-        "inline-flex h-11 min-w-11 items-center justify-center rounded-full border border-trait px-3.5 text-sm text-foreground transition-colors duration-200 ease-thread hover:border-nila hover:bg-laine",
+        "inline-flex h-11 min-w-11 items-center justify-center rounded-full border border-trait px-3.5 text-sm text-foreground transition-colors duration-200 ease-thread hover:border-barqouq hover:bg-laine",
         className,
       )}
     >

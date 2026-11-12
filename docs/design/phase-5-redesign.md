@@ -11,12 +11,25 @@ Screenshots:
 The photos are still the site's placeholder images. Every layout below was judged with them, so
 it should be checked again once the real photos arrive.
 
+## Colour change after review
+
+You didn't like the blue. Three replacements were previewed on the home page (walnut brown,
+plum, olive), and you chose the plum: **Barqouq** (برقوق), `#3A1C33`.
+
+- Text, outlines, the focus ring and the footer band all use it now.
+- The two greys moved with it: Fil to `#674A60` and Trait to `#866C82`.
+- Trait was darkened a little more than first planned, so white text on its styleguide swatch
+  passes AA (4.6:1).
+- **Checked again:** contrast on home, product, cart, checkout and the styleguide in both
+  languages (all text passes AA), and the keyboard focus walk.
+- The screenshots in this folder were retaken with the plum.
+
 ## What changed, page by page
 
 | Page | Change |
 |---|---|
 | Header | **Phones:** one row (menu, cart, language pill, brand) instead of two. The section links move into a menu that slides in from the start side (left in French, right in Arabic) in 180 ms. **All widths:** a solid Laine ground replaces the blurred glass, and the language switch shows a short label (FR or عربي) on phones. |
-| Footer | A full Nila band with Laine text. Focus rings turn Laine on dark grounds (`on-dark` utility). |
+| Footer | A full Barqouq (plum) band with Laine text. Focus rings turn Laine on dark grounds (`on-dark` utility). |
 | Home | **Hero:** a larger photo (up to 74 % of the screen height), the piece name under it in the display face, and the cash-on-delivery note in Naanaa. **Chains:** a Fouwwa chain draws once under the hero, and a Naanaa chain leads into the atelier. **Pieces:** six or fewer are shown one per row (photo on the start side, then category, name, price and two actions: "Voir la pièce" and WhatsApp). More than six fall back to the tile grid. **Atelier:** a full-width Naanaa band. **Filters:** the category filter wraps instead of scrolling sideways. |
 | Product | **Gallery:** the main photo has 24 px corners, and the thumbnails are rounded with a Fouwwa outline on the active one. **Details:** the price is in Fouwwa and the description sits in a Laine card. A Kurkum chain sits before the back link. |
 | Cart and checkout | The summary is a Laine card (28 px corners) that stays in view on wide screens. Thumbnails are rounded. |
@@ -47,7 +60,7 @@ button is at `scale 0.97`. With reduced motion, the chain's animation is `none`,
 |---|---|
 | Reflow | No sideways scrolling on any of the 42 screenshots. |
 | Console | No console errors on any of the 42 screenshots. |
-| Contrast and targets | **Pages:** home, product, conditions, 404 and cart, in both languages, at 375 and 1440 px. **Contrast:** no text below AA, including the Nila footer and the Naanaa band. **Targets:** none under 24 px. The skip link is 1 px until it is focused, which is intended. |
+| Contrast and targets | **Pages:** home, product, conditions, 404 and cart, in both languages, at 375 and 1440 px. **Contrast:** no text below AA, including the Barqouq footer and the Naanaa band. **Targets:** none under 24 px. The skip link is 1 px until it is focused, which is intended. |
 | Keyboard | **Home:** 22 to 24 Tab stops, each with a visible focus ring, in both languages and at both widths. **Two flags are false positives:** the skip link and the Laine button on the atelier band have a ring in their own colour, but the ring sits 3 px outside them, over the header and over the Naanaa band. **Phone menu:** focus moves into it, and every link shows a ring. |
 | Code | TypeScript and ESLint pass. |
 
@@ -111,5 +124,6 @@ button is at `scale 0.97`. With reduced motion, the chain's animation is `none`,
 |---|---|---|
 | `nav.menu` | Menu | القائمة |
 | `home.viewPiece` | Voir la pièce | شاهدوا القطعة |
+| `colours.barqouq` (replaces `colours.nila`) | Barqouq | برقوق |
 | Short label for the language switch on phones (in code, `language-switcher.tsx`) | FR | عربي |
 | `og` card, Arabic version | — | shows the Latin "Crochet" only (Satori limitation) |

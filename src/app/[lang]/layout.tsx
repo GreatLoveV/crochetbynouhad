@@ -65,7 +65,7 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[lang]">)
             {/* First stop for the keyboard: past the header, straight to the page. */}
             <a
               href="#contenu"
-              className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:top-3 focus-visible:inset-s-3 focus-visible:z-50 focus-visible:bg-nila focus-visible:px-4 focus-visible:py-3 focus-visible:text-laine"
+              className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:top-3 focus-visible:inset-s-3 focus-visible:z-50 focus-visible:bg-barqouq focus-visible:px-4 focus-visible:py-3 focus-visible:text-laine"
             >
               {dictionary.common.skipToContent}
             </a>

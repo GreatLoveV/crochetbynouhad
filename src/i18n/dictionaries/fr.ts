@@ -107,7 +107,7 @@ const fr = {
   colours: {
     rose: "Rose",
     laine: "Laine",
-    nila: "Nila",
+    barqouq: "Barqouq",
     fouwwa: "Fouwwa",
     naanaa: "Naanaa",
     kurkum: "Kurkum",

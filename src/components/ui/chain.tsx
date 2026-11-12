@@ -37,7 +37,7 @@ const tones = {
   fouwwa: "text-fouwwa",
   kurkum: "text-kurkum",
   naanaa: "text-naanaa",
-  nila: "text-nila",
+  barqouq: "text-barqouq",
 } as const
 
 type ChainProps = {

@@ -18,21 +18,27 @@ fonts and corners. Their layouts are redesigned in Phase 5.
 
 ### Colour
 
+**Changed after Phase 5 (2026-11-12):** the indigo Nila (`#1E2461`) was replaced by the plum
+**Barqouq** (برقوق, `#3A1C33`) at your request, and Fil and Trait were retinted to match. The
+`nila` token was renamed `barqouq` across `src/`. Contrast was rechecked on the home, product,
+checkout, cart and styleguide pages in both languages: all text passes AA.
+
+
 | Token | Hex | Role | On Rose | On Laine |
 |---|---|---|---|---|
 | `rose` | `#FBEDEA` | page ground | — | — |
 | `rose-fonce` | `#F4DCD8` | hover wash, disabled fields and buttons | — | — |
 | `laine` | `#FFFDF9` | photos, cards, fields, header and footer | — | — |
-| `nila` | `#1E2461` | all text, outline button, focus ring, "Vendu" badge | 12.4:1 | 14.0:1 |
-| `fil` | `#4D4F7A` | secondary text, hints, placeholders | 6.8:1 | 7.6:1 |
-| `trait` | `#6F6E96` | field outlines. **Never text** | 4.2:1 (UI ≥ 3:1) | 4.8:1 |
+| `barqouq` | `#3A1C33` | all text, outline button, focus ring, "Vendu" badge, footer | 13.2:1 | 14.8:1 |
+| `fil` | `#674A60` | secondary text, hints, placeholders | 6.8:1 | 7.6:1 |
+| `trait` | `#866C82` | field outlines. **Never text** | 4.1:1 (UI ≥ 3:1) | 4.6:1 |
 | `fouwwa` | `#9C1D3B` | main button, links, prices, errors | 6.9:1 | 7.8:1 |
 | `fouwwa-fonce` | `#7E1530` | main button hover (Laine on it 10.2:1) | — | — |
 | `fouwwa-pale` | `#F6DCE0` | error notice ground (Fouwwa on it 6.1:1) | — | — |
 | `naanaa` | `#1C6347` | atelier band, success | 6.3:1 | 7.1:1 |
 | `naanaa-pale` | `#E3EFE8` | success notice ground (Naanaa on it 6.1:1) | — | — |
-| `kurkum` | `#E9A93A` | chain thread, "Pièce unique" badge (Nila on it 6.9:1). **Never text on Rose (1.8:1)** | — | — |
-| `kurkum-pale` | `#FBEBC8` | text selection (Nila on it 12.0:1) | — | — |
+| `kurkum` | `#E9A93A` | chain thread, "Pièce unique" badge (Barqouq on it 7.3:1). **Never text on Rose (1.8:1)** | — | — |
+| `kurkum-pale` | `#FBEBC8` | text selection (Barqouq on it 12.8:1) | — | — |
 
 - `erreur` and `erreur-pale` are aliases of Fouwwa. An error is always a sentence with an
   icon, never colour alone.
@@ -131,9 +137,9 @@ Run on the styleguide in both languages and on the home, cart and checkout pages
 | Key | French | Arabic |
 |---|---|---|
 | `product.yarnColours` | Couleurs de laine | ألوان الصوف |
-| `colours.*` | Rose, Laine, Nila, Fouwwa, Naanaa, Kurkum | ورد، صوف، نيلة، فوّة، نعناع، كركم |
+| `colours.*` | Rose, Laine, Barqouq, Fouwwa, Naanaa, Kurkum | ورد، صوف، برقوق، فوّة، نعناع، كركم |
 | `checkout.errors.phoneInvalid` (direction mark only) | — | unchanged wording |
 
 The French colour names are Darija dye names written in Latin letters, as approved in the
-direction. A French reader may prefer Garance, Indigo, Menthe and Curcuma: a question for
+direction. A French reader may prefer Garance, Prune, Menthe and Curcuma: a question for
 the native review.

@@ -48,9 +48,9 @@ export default async function OpengraphImage({
           flexDirection: "column",
           justifyContent: "center",
           gap: 36,
-          // « Fouwwa »: rose ground, nila text, madder accent, turmeric thread.
+          // « Fouwwa »: rose ground, barqouq text, madder accent, turmeric thread.
           backgroundColor: "#FBEDEA",
-          color: "#1E2461",
+          color: "#3A1C33",
           fontFamily: "serif",
           padding: 96,
         }}

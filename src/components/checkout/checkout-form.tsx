@@ -274,7 +274,7 @@ function WithLink({ text, href, label }: { text: string; href: string; label: st
   return (
     <>
       {before}
-      <Link href={href} className="text-nila underline underline-offset-2 hover:text-fouwwa">
+      <Link href={href} className="text-barqouq underline underline-offset-2 hover:text-fouwwa">
         {label}
       </Link>
       {after}

@@ -5,18 +5,18 @@
 /*
   « Fouwwa » — design tokens (round 2).
 
-  The colours of dyed wool: madder (fouwwa), indigo (nila), mint and turmeric
+  The colours of dyed wool: madder (fouwwa), plum (barqouq), mint and turmeric
   on a rose ground. Photos sit on undyed wool (laine) so the yarn colours stay
   true. The one ornament is the crochet chain (components/ui/chain.tsx).
   Rationale: docs/design/direction.md and docs/design/design-system.md.
 
   Contrast (WCAG 2.2, checked in docs/design/design-system.md):
-    Nila on Rose 12.4:1, on Laine 14.0:1        body text, AAA
+    Barqouq on Rose 13.2:1, on Laine 14.8:1     body text, AAA
     Fil on Rose 6.8:1, on Laine 7.6:1           secondary text, AA
     Laine on Fouwwa 7.8:1; Fouwwa on Rose 6.9:1 main action, links, prices
     Laine on Naanaa 7.1:1                       atelier band, success
-    Nila on Kurkum 6.9:1                        Kurkum never carries text on Rose (1.8:1)
-    Trait on Rose 4.2:1, on Laine 4.8:1         field outlines only (3:1 UI)
+    Barqouq on Kurkum 7.3:1                     Kurkum never carries text on Rose (1.8:1)
+    Trait on Rose 4.1:1, on Laine 4.6:1         field outlines only (3:1 UI)
 */
 
 @theme {
@@ -24,9 +24,9 @@
   --color-rose: #fbedea;
   --color-rose-fonce: #f4dcd8;
   --color-laine: #fffdf9;
-  --color-nila: #1e2461;
-  --color-fil: #4d4f7a;
-  --color-trait: #6f6e96;
+  --color-barqouq: #3a1c33;
+  --color-fil: #674a60;
+  --color-trait: #866c82;
   --color-fouwwa: #9c1d3b;
   --color-fouwwa-fonce: #7e1530;
   --color-fouwwa-pale: #f6dce0;
@@ -153,38 +153,38 @@
   /* French headings: Fraunces with its metric-matched fallback, then Ruqaa. */
   --heading-stack: var(--font-fraunces), var(--font-ruqaa), ui-serif, serif;
   --background: var(--color-rose);
-  --foreground: var(--color-nila);
+  --foreground: var(--color-barqouq);
   --card: var(--color-laine);
-  --card-foreground: var(--color-nila);
+  --card-foreground: var(--color-barqouq);
   --popover: var(--color-laine);
-  --popover-foreground: var(--color-nila);
+  --popover-foreground: var(--color-barqouq);
   --primary: var(--color-fouwwa);
   --primary-foreground: var(--color-laine);
   --secondary: var(--color-laine);
-  --secondary-foreground: var(--color-nila);
+  --secondary-foreground: var(--color-barqouq);
   --muted: var(--color-rose-fonce);
   --muted-foreground: var(--color-fil);
   --accent: var(--color-laine);
-  --accent-foreground: var(--color-nila);
+  --accent-foreground: var(--color-barqouq);
   --destructive: var(--color-erreur);
   /* Dividers are decorative and stay quiet; field outlines use Trait. */
   --border: #ead2ce;
   --input: var(--color-trait);
-  --ring: var(--color-nila);
+  --ring: var(--color-barqouq);
   --chart-1: var(--color-fouwwa);
-  --chart-2: var(--color-nila);
+  --chart-2: var(--color-barqouq);
   --chart-3: var(--color-naanaa);
   --chart-4: var(--color-kurkum);
   --chart-5: var(--color-fil);
   --radius: 0.875rem;
   --sidebar: var(--color-laine);
-  --sidebar-foreground: var(--color-nila);
+  --sidebar-foreground: var(--color-barqouq);
   --sidebar-primary: var(--color-fouwwa);
   --sidebar-primary-foreground: var(--color-laine);
   --sidebar-accent: var(--color-rose);
-  --sidebar-accent-foreground: var(--color-nila);
+  --sidebar-accent-foreground: var(--color-barqouq);
   --sidebar-border: #ead2ce;
-  --sidebar-ring: var(--color-nila);
+  --sidebar-ring: var(--color-barqouq);
 }
 
 /*
@@ -258,11 +258,11 @@ html:lang(ar) {
   }
   ::selection {
     background-color: var(--color-kurkum-pale);
-    color: var(--color-nila);
+    color: var(--color-barqouq);
   }
-  /* One focus style everywhere: a Nila outline that clears the element. */
+  /* One focus style everywhere: a Barqouq outline that clears the element. */
   :focus-visible {
-    outline: 2px solid var(--color-nila);
+    outline: 2px solid var(--color-barqouq);
     outline-offset: 3px;
   }
   /* Prices, references and phone numbers stay LTR inside Arabic. */
@@ -359,23 +359,23 @@ html:lang(ar) {
 }
 
 /*
-  An empty photo: faint rows of chain stitches on Laine, drawn in Nila at 9 %
+  An empty photo: faint rows of chain stitches on Laine, drawn in Barqouq at 9 %
   so the piece's name on top keeps full contrast. Symmetrical, so nothing to
   mirror in Arabic.
 */
 @utility photo-stitches {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='28'%3E%3Cpath d='M2 14 C10 8 22 8 26 14 C22 20 10 20 18 14' fill='none' stroke='%231E2461' stroke-opacity='.09' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='28'%3E%3Cpath d='M2 14 C10 8 22 8 26 14 C22 20 10 20 18 14' fill='none' stroke='%233A1C33' stroke-opacity='.09' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
   background-size: 32px 28px;
 }
 
 /*
-  A dark band (the atelier in Naanaa, the footer in Nila): Laine text, and a
-  Laine focus ring, since the Nila ring would vanish on Nila (Laine on Nila
-  14.0:1, on Naanaa 7.1:1).
+  A dark band (the atelier in Naanaa, the footer in Barqouq): Laine text, and a
+  Laine focus ring, since the Barqouq ring would vanish on Barqouq (Laine on
+  Barqouq 14.8:1, on Naanaa 7.1:1).
 */
 @utility on-dark {
   color: var(--color-laine);
-  /* !important: buttons and inputs set their own Nila ring as a utility. */
+  /* !important: buttons and inputs set their own Barqouq ring as a utility. */
   & :focus-visible {
     outline-color: var(--color-laine) !important;
   }

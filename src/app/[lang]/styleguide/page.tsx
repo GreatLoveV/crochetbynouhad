@@ -54,7 +54,7 @@ const L = {
     roles: {
       rose: "fond de page",
       laine: "fond des photos, cartes, champs",
-      nila: "tout le texte, contour du focus",
+      barqouq: "tout le texte, contour du focus",
       fil: "texte secondaire",
       fouwwa: "action principale, liens, prix, erreurs (toujours avec une icône)",
       naanaa: "bande de l’atelier, succès",
@@ -102,7 +102,7 @@ const L = {
     roles: {
       rose: "خلفية الصفحة",
       laine: "خلفية الصور والبطاقات والحقول",
-      nila: "كل النصوص، وإطار التركيز",
+      barqouq: "كل النصوص، وإطار التركيز",
       fil: "نص ثانوي",
       fouwwa: "الإجراء الرئيسي والروابط والأسعار والأخطاء (دائمًا مع أيقونة)",
       naanaa: "شريط الورشة، والنجاح",
@@ -135,14 +135,14 @@ const L = {
 } as const
 
 const PALETTE = [
-  { key: "rose", name: "Rose", hex: "#FBEDEA", ratio: null, ink: "text-nila" },
-  { key: "laine", name: "Laine", hex: "#FFFDF9", ratio: null, ink: "text-nila" },
-  { key: "nila", name: "Nila", hex: "#1E2461", ratio: "12,4:1", ink: "text-laine" },
-  { key: "fil", name: "Fil", hex: "#4D4F7A", ratio: "6,8:1", ink: "text-laine" },
+  { key: "rose", name: "Rose", hex: "#FBEDEA", ratio: null, ink: "text-barqouq" },
+  { key: "laine", name: "Laine", hex: "#FFFDF9", ratio: null, ink: "text-barqouq" },
+  { key: "barqouq", name: "Barqouq", hex: "#3A1C33", ratio: "13,2:1", ink: "text-laine" },
+  { key: "fil", name: "Fil", hex: "#674A60", ratio: "6,8:1", ink: "text-laine" },
   { key: "fouwwa", name: "Fouwwa", hex: "#9C1D3B", ratio: "6,9:1", ink: "text-laine" },
   { key: "naanaa", name: "Naanaa", hex: "#1C6347", ratio: "6,3:1", ink: "text-laine" },
-  { key: "kurkum", name: "Kurkum", hex: "#E9A93A", ratio: "1,8:1", ink: "text-nila" },
-  { key: "trait", name: "Trait", hex: "#6F6E96", ratio: "4,2:1", ink: "text-laine" },
+  { key: "kurkum", name: "Kurkum", hex: "#E9A93A", ratio: "1,8:1", ink: "text-barqouq" },
+  { key: "trait", name: "Trait", hex: "#866C82", ratio: "4,1:1", ink: "text-laine" },
 ] as const
 
 function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
@@ -219,7 +219,7 @@ export default async function StyleguidePage() {
           ))}
         </ul>
         <p className="text-sm text-fil">
-          {l.onRose}: Nila 12,4 · Fil 6,8 · Fouwwa 6,9 · Naanaa 6,3 · Trait 4,2 (UI) · Kurkum 1,8 (jamais du texte). Laine sur Fouwwa 7,8 · Nila sur Kurkum 6,9
+          {l.onRose}: Barqouq 13,2 · Fil 6,8 · Fouwwa 6,9 · Naanaa 6,3 · Trait 4,1 (UI) · Kurkum 1,8 (jamais du texte). Laine sur Fouwwa 7,8 · Barqouq sur Kurkum 7,3
         </p>
         <div className="flex flex-col gap-3">
           <h3 className="text-lg font-sans font-medium">{l.radii}</h3>
@@ -280,7 +280,7 @@ export default async function StyleguidePage() {
           <div className="flex w-full flex-col gap-3">
             <Chain tone="kurkum" />
             <Chain tone="naanaa" />
-            <Chain tone="nila" />
+            <Chain tone="barqouq" />
           </div>
         </Specimen>
         <Specimen label={l.nav}>
@@ -290,7 +290,7 @@ export default async function StyleguidePage() {
                 key={item}
                 href="#chain"
                 aria-current={i === 0 ? "page" : undefined}
-                className={`py-2.5 text-base ${i === 0 ? "stitch-underline" : "text-fil hover:text-nila"}`}
+                className={`py-2.5 text-base ${i === 0 ? "stitch-underline" : "text-fil hover:text-barqouq"}`}
               >
                 {item}
               </a>
@@ -326,7 +326,7 @@ export default async function StyleguidePage() {
                 </Button>
               </Specimen>
               <Specimen label={l.states_.focus}>
-                <Button variant={variant} className="outline-solid! outline-2! outline-offset-3! outline-nila!">
+                <Button variant={variant} className="outline-solid! outline-2! outline-offset-3! outline-barqouq!">
                   {label}
                 </Button>
               </Specimen>
@@ -371,7 +371,7 @@ export default async function StyleguidePage() {
               <Input
                 {...p}
                 defaultValue={t.checkout.cityPlaceholder}
-                className="border-fouwwa outline-solid! outline-2! outline-offset-2! outline-nila!"
+                className="border-fouwwa outline-solid! outline-2! outline-offset-2! outline-barqouq!"
               />
             )}
           </Field>
