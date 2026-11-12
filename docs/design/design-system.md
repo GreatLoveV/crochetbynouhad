@@ -7,8 +7,10 @@ page:
 - French, left to right: `http://localhost:3000/fr/styleguide`
 - Arabic, right to left: `http://localhost:3000/ar/styleguide`
 
-The page returns a 404 in production builds, isn't linked anywhere and isn't in the
-sitemap. Screenshots at 375, 768 and 1440 px are in
+In production builds the page shows the shop's 404 page, marked `noindex`. Its HTTP status is
+200 because the page streams (see the note in
+[`../audit/phase-6-audit.md`](../audit/phase-6-audit.md)). It isn't linked anywhere and isn't in
+the sitemap. Screenshots at 375, 768 and 1440 px are in
 [`screenshots/phase-4/`](screenshots/phase-4).
 
 The tokens apply site-wide straight away, so the current pages already wear the new colours,
@@ -61,6 +63,11 @@ checkout, cart and styleguide pages in both languages: all text passes AA.
 - **Self-hosted** through `next/font` (`src/app/fonts.ts`). No new dependency.
   - Readex Pro and Fraunces preload their Latin subset.
   - Aref Ruqaa is not preloaded, so French pages never download it.
+- **Changed in Phase 6** (Lighthouse, see `../audit/phase-6-audit.md`):
+  - **Fraunces** is a committed file, `src/app/fonts/fraunces-soft-wonk-latin.woff2` (SIL OFL,
+    licence alongside). It is pinned to Soft 100 and Wonk 1, weights 300 to 700, without the
+    optical-size axis. That's 35 KB instead of 118 KB.
+  - **Aref Ruqaa** loads the 700 weight only.
 - **Arabic heading stack.** Fraunces' metric fallback is a local Times New Roman, which has
   Arabic letters. In a plain stack it caught Arabic headings before Ruqaa could. So on
   Arabic pages the heading stack is: the bare Fraunces face (exposed as
