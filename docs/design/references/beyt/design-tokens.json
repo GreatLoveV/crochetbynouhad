@@ -1,0 +1,318 @@
+{
+  "color": {
+    "ink": {
+      "$value": "#1C3754",
+      "$type": "color",
+      "$description": "text, primary button, rules",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "paper": {
+      "$value": "#FFFFFF",
+      "$type": "color",
+      "$description": "page",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "rule": {
+      "$value": "rgba(28,55,84,.14)",
+      "$type": "color",
+      "$description": "hairlines",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "safran": {
+      "$value": "#F4C61F",
+      "$type": "color",
+      "$description": "one accent dot",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "grenadine": {
+      "$value": "#751311",
+      "$type": "color",
+      "$description": "small labels, active underline",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    }
+  },
+  "typography": {
+    "font-family": {
+      "display": {
+        "$value": "Didot, 'Bodoni 72', Georgia, serif",
+        "$type": "fontFamily",
+        "$description": "hero line, italic",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body": {
+        "$value": "Georgia, 'Times New Roman', serif",
+        "$type": "fontFamily",
+        "$description": "prose, justified on desktop",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "label": {
+        "$value": "Changa, sans-serif",
+        "$type": "fontFamily",
+        "$description": "nav, eyebrows",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "font-size": {
+      "display": {
+        "$value": "91px",
+        "$type": "dimension",
+        "$description": "hero line, italic",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "heading": {
+        "$value": "49px",
+        "$type": "dimension",
+        "$description": "section titles",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body": {
+        "$value": "17.5px",
+        "$type": "dimension",
+        "$description": "prose, justified on desktop",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "label": {
+        "$value": "11.55px",
+        "$type": "dimension",
+        "$description": "nav, eyebrows",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "font-weight": {
+      "display": {
+        "$value": 400,
+        "$type": "fontWeight",
+        "$description": "hero line, italic",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "heading": {
+        "$value": 400,
+        "$type": "fontWeight",
+        "$description": "section titles",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body": {
+        "$value": 400,
+        "$type": "fontWeight",
+        "$description": "prose, justified on desktop",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "label": {
+        "$value": 400,
+        "$type": "fontWeight",
+        "$description": "nav, eyebrows",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "line-height": {
+      "display": {
+        "$value": 1.0,
+        "$type": "number",
+        "$description": "hero line, italic",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "heading": {
+        "$value": 1.0,
+        "$type": "number",
+        "$description": "section titles",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body": {
+        "$value": "normal",
+        "$type": "number",
+        "$description": "prose, justified on desktop",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "letter-spacing": {
+      "display": {
+        "$value": "-0.015em",
+        "$type": "dimension",
+        "$description": "hero line, italic",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "heading": {
+        "$value": "-0.01em",
+        "$type": "dimension",
+        "$description": "section titles",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "label": {
+        "$value": "0.1em",
+        "$type": "dimension",
+        "$description": "nav, eyebrows",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    }
+  },
+  "spacing": {
+    "base": {
+      "$value": "4px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "8": {
+      "$value": "8px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "13": {
+      "$value": "13px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "26": {
+      "$value": "26px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "52": {
+      "$value": "52px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    }
+  },
+  "radius": {
+    "none": {
+      "$value": "0px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    }
+  },
+  "shadow": {
+    "popover": {
+      "$value": "rgba(0,0,0,0.28) 0px 24px 60px 0px",
+      "$type": "shadow",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "anydesign": {
+      "source": "https://www.beyt.ma/",
+      "captured_at": "2026-11-12",
+      "method": "generated from design.md by scripts/build_tokens_json.py",
+      "spec": "W3C Design Tokens Community Group 2025.10"
+    }
+  }
+}

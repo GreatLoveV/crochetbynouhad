@@ -1,0 +1,315 @@
+{
+  "color": {
+    "dark": {
+      "$value": "#1A1A1A",
+      "$type": "color",
+      "$description": "header, button text",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "background": {
+      "$value": "#2A2827",
+      "$type": "color",
+      "$description": "page",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "border": {
+      "$value": "#3A3835",
+      "$type": "color",
+      "$description": "lines, card borders",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "gold": {
+      "$value": "#C7A77B",
+      "$type": "color",
+      "$description": "display text, primary button",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "ivory": {
+      "$value": "#F8F6F3",
+      "$type": "color",
+      "$description": "text",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    },
+    "muted-foreground": {
+      "$value": "#B8B8B8",
+      "$type": "color",
+      "$description": "secondary text",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter",
+          "confidence": "high"
+        }
+      }
+    }
+  },
+  "typography": {
+    "font-family": {
+      "display-ar": {
+        "$value": "Amiri, serif",
+        "$type": "fontFamily",
+        "$description": "hero name",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "font-size": {
+      "display-ar": {
+        "$value": "72px",
+        "$type": "dimension",
+        "$description": "hero name",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "heading-ar": {
+        "$value": "48px",
+        "$type": "dimension",
+        "$description": "section titles (too tight for Naskh)",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "tagline-ar": {
+        "$value": "30px",
+        "$type": "dimension",
+        "$description": "\"الفخامة في كل خيط\"",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body-ar": {
+        "$value": "18px",
+        "$type": "dimension",
+        "$description": "intro, ivory at 80 % opacity",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "nav-ar": {
+        "$value": "14px",
+        "$type": "dimension",
+        "$description": "navigation (too small for Amiri)",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "font-weight": {
+      "display-ar": {
+        "$value": 700,
+        "$type": "fontWeight",
+        "$description": "hero name",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "heading-ar": {
+        "$value": 700,
+        "$type": "fontWeight",
+        "$description": "section titles (too tight for Naskh)",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "tagline-ar": {
+        "$value": 300,
+        "$type": "fontWeight",
+        "$description": "\"الفخامة في كل خيط\"",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body-ar": {
+        "$value": 400,
+        "$type": "fontWeight",
+        "$description": "intro, ivory at 80 % opacity",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "nav-ar": {
+        "$value": 500,
+        "$type": "fontWeight",
+        "$description": "navigation (too small for Amiri)",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    },
+    "line-height": {
+      "display-ar": {
+        "$value": 1.25,
+        "$type": "number",
+        "$description": "hero name",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "heading-ar": {
+        "$value": 1.0,
+        "$type": "number",
+        "$description": "section titles (too tight for Naskh)",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "tagline-ar": {
+        "$value": 1.2,
+        "$type": "number",
+        "$description": "\"الفخامة في كل خيط\"",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "body-ar": {
+        "$value": 1.625,
+        "$type": "number",
+        "$description": "intro, ivory at 80 % opacity",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      },
+      "nav-ar": {
+        "$value": 1.43,
+        "$type": "number",
+        "$description": "navigation (too small for Amiri)",
+        "$extensions": {
+          "anydesign": {
+            "source": "design.md frontmatter"
+          }
+        }
+      }
+    }
+  },
+  "spacing": {
+    "base": {
+      "$value": "4px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "8": {
+      "$value": "8px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "16": {
+      "$value": "16px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "24": {
+      "$value": "24px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "32": {
+      "$value": "32px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    },
+    "48": {
+      "$value": "48px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    }
+  },
+  "radius": {
+    "md": {
+      "$value": "10.4px",
+      "$type": "dimension",
+      "$extensions": {
+        "anydesign": {
+          "source": "design.md frontmatter"
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "anydesign": {
+      "source": "https://moalasala.com/",
+      "captured_at": "2026-11-12",
+      "method": "generated from design.md by scripts/build_tokens_json.py",
+      "spec": "W3C Design Tokens Community Group 2025.10"
+    }
+  }
+}
