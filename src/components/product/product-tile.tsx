@@ -39,7 +39,8 @@ export function ProductTile({
     >
       <Photo
         src={product.imageUrl}
-        alt={product.name}
+        // The name below is the link's text; read once, not twice.
+        alt=""
         emptyLabel={product.name}
         emptyLabelLang={product.nameLang}
         sizes={sizes ?? (feature ? "(min-width: 640px) 60vw, 100vw" : "(min-width: 1024px) 25vw, 50vw")}

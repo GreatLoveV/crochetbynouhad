@@ -57,7 +57,7 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[lang]">)
   const dir = dirOf(lang);
 
   return (
-    <html lang={lang} dir={dir} className={`${fontClasses[lang]} h-full`}>
+    <html lang={lang} dir={dir} className={`${fontClasses} h-full`}>
       <body className="flex min-h-full flex-col">
         <I18nProvider lang={lang} dictionary={dictionary}>
           {/* Cart lives in the browser: wrap the whole shop once, here. */}

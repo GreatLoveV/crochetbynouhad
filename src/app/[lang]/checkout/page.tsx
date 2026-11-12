@@ -21,7 +21,12 @@ export default async function CheckoutPage() {
         <p className="text-fil">{t.checkout.subtitle}</p>
       </header>
 
-      <CheckoutForm />
+      {/* The bag is read in the browser: a loader, then the form or the empty
+          message. The reserved height keeps the footer below the screen
+          through all three, so nothing jumps (layout shift). */}
+      <div className="min-h-[80dvh]">
+        <CheckoutForm />
+      </div>
     </div>
   );
 }

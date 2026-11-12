@@ -5,9 +5,9 @@
  * work when one is set here. Until then the band is text only: the site never
  * shows a stock picture in its place.
  *
- * To add it: upload the photo (for example with the admin's product photo
- * upload, or any Vercel Blob URL), paste its URL below, and describe it in
- * both languages for screen readers.
+ * To add it: put the photo online (a Vercel Blob link is resized by Next.js;
+ * any https link works), paste its URL below, and describe it in both
+ * languages for screen readers. See README.md, "The workshop photo".
  */
 export const ATELIER_PHOTO: {
   url: string

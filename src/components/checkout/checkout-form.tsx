@@ -142,6 +142,7 @@ export function CheckoutForm() {
             <Input
               {...p}
               name="name"
+              required
               autoComplete="name"
               defaultValue={kept?.name ?? ""}
               placeholder={t.checkout.namePlaceholder}
@@ -154,6 +155,7 @@ export function CheckoutForm() {
             <Input
               {...p}
               name="phone"
+              required
               type="tel"
               inputMode="tel"
               // Phone digits read left to right even on an Arabic page; the
@@ -173,6 +175,7 @@ export function CheckoutForm() {
               <Input
                 {...p}
                 name="city"
+                required
                 list="moroccan-cities"
                 autoComplete="address-level2"
                 defaultValue={kept?.city ?? ""}
@@ -193,6 +196,7 @@ export function CheckoutForm() {
             <Textarea
               {...p}
               name="address"
+              required
               autoComplete="street-address"
               defaultValue={kept?.address ?? ""}
               placeholder={t.checkout.addressPlaceholder}

@@ -29,11 +29,12 @@ export function Hero({
         <Link href={localePath(lang, `/products/${showcase.slug}`)} className="group block">
           <Photo
             src={showcase.imageUrl}
-            alt={showcase.name}
+            // The caption below names the piece; read once, not twice.
+            alt=""
             emptyLabel={showcase.name}
             emptyLabelLang={showcase.nameLang}
             sizes="(min-width: 1024px) 58vw, 100vw"
-            priority
+            preload
             // On a laptop the 4:5 photo would push the title below the fold:
             // it keeps its width and is capped in height instead (cropped).
             className="lg:aspect-auto lg:h-[min(74vh,46rem)]"
@@ -47,7 +48,7 @@ export function Hero({
       )}
 
       <div className="flex flex-col items-start gap-5 lg:pb-8">
-        <h1 className="text-5xl">{t.hero.title}</h1>
+        <h1 className="text-4xl sm:text-5xl">{t.hero.title}</h1>
         <p className="max-w-[34ch] text-lg text-fil">{t.hero.body}</p>
         <div className="mt-1 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap">
           <Button

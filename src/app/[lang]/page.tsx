@@ -35,15 +35,16 @@ export default async function HomePage({ searchParams }: PageProps<"/[lang]">) {
   const rawSlug = params.category;
   const requestedSlug = Array.isArray(rawSlug) ? rawSlug[0] : rawSlug;
 
-  const categories = await getCategories(lang);
+  // Independent reads, so they run side by side: this page streams in after
+  // them, and its first photo is the page's largest element.
+  const [categories, all] = await Promise.all([getCategories(lang), getActiveProducts(lang)]);
   // An unknown slug falls back to showing everything rather than an empty grid.
   const activeCategory = categories.find((c) => c.slug === requestedSlug);
-  const products = await getActiveProducts(lang, activeCategory?.id);
+  const products = activeCategory ? await getActiveProducts(lang, activeCategory.id) : all;
 
   // The hero shows the newest piece still for sale (else the newest piece), so
   // it is always something real the admin has just added. It reads the
   // unfiltered list, so the first screen doesn't change with the filter.
-  const all = activeCategory ? await getActiveProducts(lang) : products;
   const showcase = all.find((p) => !p.isSoldOut) ?? all[0] ?? null;
   // The newest piece gets the large tile when the grid is long enough to
   // carry it; a short or filtered list stays even.
@@ -63,7 +64,7 @@ export default async function HomePage({ searchParams }: PageProps<"/[lang]">) {
         className="mx-auto max-w-page scroll-mt-28 px-4 pt-10 sm:px-8"
       >
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <h2 id="boutique-title" className="text-4xl">
+          <h2 id="boutique-title" className="text-3xl sm:text-4xl">
             {t.shop.title}
           </h2>
           <CategoryFilter lang={lang} t={t} categories={categories} activeSlug={activeCategory?.slug} />
@@ -100,7 +101,7 @@ export default async function HomePage({ searchParams }: PageProps<"/[lang]">) {
       <Atelier lang={lang} t={t} />
 
       <section aria-labelledby="steps-title" className="mx-auto max-w-page px-4 pt-section sm:px-8">
-        <h2 id="steps-title" className="mb-8 text-4xl">
+        <h2 id="steps-title" className="mb-8 text-3xl sm:text-4xl">
           {t.home.stepsTitle}
         </h2>
         <Steps items={[...t.home.steps]} />
@@ -117,7 +118,7 @@ export default async function HomePage({ searchParams }: PageProps<"/[lang]">) {
 function Atelier({ lang, t }: { lang: Locale; t: Dictionary }) {
   const message = fill(t.whatsapp.question, { shop: t.siteName });
   const title = (
-    <h2 id="atelier-title" className="text-4xl">
+    <h2 id="atelier-title" className="text-3xl sm:text-4xl">
       {t.home.atelierTitle}
     </h2>
   );

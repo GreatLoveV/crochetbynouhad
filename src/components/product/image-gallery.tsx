@@ -30,7 +30,7 @@ export function ImageGallery({
   const [activeIndex, setActiveIndex] = useState(0);
 
   if (images.length === 0) {
-    return <Photo alt={alt} emptyLabel={alt} emptyLabelLang={altLang} priority />;
+    return <Photo alt={alt} emptyLabel={alt} emptyLabelLang={altLang} preload />;
   }
 
   const active = images[activeIndex];
@@ -44,7 +44,7 @@ export function ImageGallery({
           src={active.url}
           alt={alt}
           fill
-          priority
+          preload
           sizes="(min-width: 1024px) 50vw, 100vw"
           className="animate-in fade-in-0 object-cover duration-200 ease-thread"
           unoptimized={!isOptimizableImageUrl(active.url)}
@@ -61,7 +61,7 @@ export function ImageGallery({
                 aria-current={index === activeIndex}
                 aria-label={fill(t.product.viewPhoto, { n: index + 1 })}
                 className={cn(
-                  "relative block aspect-4/5 w-16 overflow-hidden bg-lin outline-offset-2 lg:w-20",
+                  "relative block aspect-4/5 w-16 overflow-hidden bg-lin outline-offset-2 focus-visible:outline-2! focus-visible:outline-the! lg:w-20",
                   index === activeIndex ? "outline-1 outline-encre outline-solid" : "hover:outline-1 hover:outline-trait hover:outline-solid",
                 )}
               >

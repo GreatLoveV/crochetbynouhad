@@ -8,41 +8,33 @@ import { Markazi_Text, Readex_Pro } from "next/font/google";
  * - Readex Pro: the interface (body, buttons, prices, forms). `--font-sans`.
  * - Markazi Text: the voice (brand, headings, product names). `--font-heading`.
  *
- * Both are variable fonts, self-hosted by next/font at build time. Each is
- * declared once per language so a page only lists the subsets it reads:
- * French gets `latin` + `latin-ext` (œ, accents, « », ’) and is preloaded;
- * Arabic gets `arabic` + `latin` (brand name, "MAD", digits) and is not, since
- * the shared layout module would otherwise preload Arabic files on French
- * pages. Per-language preloading is tuned in the audit phase.
+ * Both are variable fonts, self-hosted by next/font at build time.
+ *
+ * One declaration per family, for both languages. next/font always writes an
+ * @font-face for every subset of the family (Arabic, Latin, Latin Extended…),
+ * each with its `unicode-range`, so the browser only downloads the files whose
+ * characters a page actually uses. `subsets` only decides what is *preloaded*:
+ *
+ * - `latin` is preloaded everywhere: French text, and on Arabic pages the
+ *   brand, the prices and "MAD", which are all in the header and first screen.
+ * - `arabic` is not preloaded: a preload is per layout, and the shared
+ *   `[lang]` layout would then fetch it on every French page too. Arabic pages
+ *   fetch it as soon as the CSS meets Arabic text, with `swap` meanwhile.
+ *
+ * (Declaring the fonts once per language, as Phase 5 did, gave the same CSS
+ * twice and made Arabic pages preload French files they never used.)
  */
 
-const readexFr = Readex_Pro({
+const readex = Readex_Pro({
   variable: "--font-sans",
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   display: "swap",
 });
 
-const markaziFr = Markazi_Text({
+const markazi = Markazi_Text({
   variable: "--font-heading",
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   display: "swap",
 });
 
-const readexAr = Readex_Pro({
-  variable: "--font-sans",
-  subsets: ["arabic", "latin"],
-  display: "swap",
-  preload: false,
-});
-
-const markaziAr = Markazi_Text({
-  variable: "--font-heading",
-  subsets: ["arabic", "latin"],
-  display: "swap",
-  preload: false,
-});
-
-export const fontClasses = {
-  fr: `${readexFr.variable} ${markaziFr.variable}`,
-  ar: `${readexAr.variable} ${markaziAr.variable}`,
-} as const;
+export const fontClasses = `${readex.variable} ${markazi.variable}`;

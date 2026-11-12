@@ -19,7 +19,12 @@ export default async function CartPage() {
       <header className="mb-8">
         <h1 className="text-4xl sm:text-5xl">{t.cart.title}</h1>
       </header>
-      <CartPageView />
+      {/* The bag is read in the browser: a loader, then the form or the empty
+          message. The reserved height keeps the footer below the screen
+          through all three, so nothing jumps (layout shift). */}
+      <div className="min-h-[80dvh]">
+        <CartPageView />
+      </div>
     </div>
   );
 }

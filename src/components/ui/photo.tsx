@@ -20,6 +20,12 @@ type PhotoProps = {
   emptyLabelLang?: string
   ratio?: "4/5" | "1/1" | "3/2"
   sizes?: string
+  /**
+   * The one photo that is the page's largest element (hero, product page):
+   * Next 16 puts a `<link rel=preload>` in the head for it.
+   */
+  preload?: boolean
+  /** Above the fold but not the main photo: fetched eagerly and early. */
   priority?: boolean
   loading?: boolean
   className?: string
@@ -36,6 +42,7 @@ export function Photo({
   emptyLabelLang,
   ratio = "4/5",
   sizes = "(min-width: 1024px) 30vw, 50vw",
+  preload = false,
   priority = false,
   loading = false,
   className,
@@ -52,7 +59,7 @@ export function Photo({
           alt={alt}
           fill
           sizes={sizes}
-          priority={priority}
+          {...(preload ? { preload: true } : priority ? { loading: "eager", fetchPriority: "high" } : {})}
           className="object-cover"
           unoptimized={!isOptimizableImageUrl(src)}
         />

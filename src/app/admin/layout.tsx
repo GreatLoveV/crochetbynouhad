@@ -29,7 +29,7 @@ export const viewport: Viewport = {
 
 export default function AdminRootLayout({ children }: LayoutProps<"/admin">) {
   return (
-    <html lang="fr" dir="ltr" className={`${fontClasses.fr} h-full`}>
+    <html lang="fr" dir="ltr" className={`${fontClasses} h-full`}>
       <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );
