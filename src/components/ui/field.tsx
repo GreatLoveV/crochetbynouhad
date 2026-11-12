@@ -41,7 +41,7 @@ export function Field({ id, label, optional, hint, error, className, children }:
     <div className={cn("flex flex-col gap-2", className)}>
       <Label htmlFor={id}>
         {label}
-        {optional && <span className="font-normal text-fil">{optional}</span>}
+        {optional && <span className="font-normal text-mauve">{optional}</span>}
       </Label>
       {children({
         id,
@@ -55,7 +55,7 @@ export function Field({ id, label, optional, hint, error, className, children }:
 
 export function FieldHint({ id, children }: { id: string; children: ReactNode }) {
   return (
-    <p id={id} className="text-sm text-fil">
+    <p id={id} className="text-sm text-mauve">
       {children}
     </p>
   )

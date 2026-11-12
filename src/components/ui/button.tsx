@@ -11,25 +11,25 @@ import { cn } from "cn"
 import { ChainLoader } from "@/components/ui/chain"
 
 const buttonVariants = cva(
-  // « Le fil »: flat, nearly square, no lift. Focus uses the global Thé
-  // outline (globals.css); colour change alone marks hover.
-  "group/button relative inline-flex shrink-0 items-center justify-center rounded-md border border-transparent font-medium whitespace-nowrap transition-colors duration-200 ease-thread select-none focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-the disabled:pointer-events-none disabled:cursor-not-allowed aria-busy:pointer-events-none aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5",
+  // « Pelote »: round like a ball of wool, flat, no lift. Focus uses the
+  // global Framboise outline (globals.css); colour change marks hover.
+  "group/button relative inline-flex shrink-0 items-center justify-center rounded-full border border-transparent font-medium whitespace-nowrap transition-colors duration-200 ease-thread select-none focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-framboise disabled:pointer-events-none disabled:cursor-not-allowed aria-busy:pointer-events-none aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5",
   {
     variants: {
       variant: {
-        // Thé, the one accent: the main action of a screen, once.
+        // Prune, the main action of a screen, once; Framboise on hover.
         default:
-          "bg-primary text-primary-foreground hover:bg-the-fonce active:bg-the-fonce disabled:bg-lin disabled:text-fil",
-        // Ink outline: the second action beside the main one.
+          "bg-primary text-primary-foreground hover:bg-framboise-fonce active:bg-framboise-fonce disabled:bg-dragee disabled:text-mauve",
+        // Plum outline: the second action beside the main one.
         outline:
-          "border-encre bg-transparent text-foreground hover:bg-lin active:bg-lin aria-expanded:bg-lin disabled:border-border disabled:text-fil",
+          "border-prune bg-transparent text-foreground hover:bg-dragee active:bg-dragee aria-expanded:bg-dragee disabled:border-border disabled:text-mauve",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_srgb,var(--color-lin),var(--color-encre)_7%)] aria-expanded:bg-[color-mix(in_srgb,var(--color-lin),var(--color-encre)_7%)] disabled:text-fil",
+          "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_srgb,var(--color-dragee),var(--color-prune)_7%)] aria-expanded:bg-[color-mix(in_srgb,var(--color-dragee),var(--color-prune)_7%)] disabled:text-mauve",
         ghost:
-          "text-foreground hover:bg-lin aria-expanded:bg-lin disabled:text-fil",
+          "text-foreground hover:bg-dragee aria-expanded:bg-dragee disabled:text-mauve",
         destructive:
-          "border-grenade bg-transparent text-grenade hover:bg-grenade-pale disabled:border-border disabled:text-fil",
-        link: "h-auto rounded-none p-0 text-the underline decoration-1 underline-offset-4 hover:decoration-2 disabled:text-fil",
+          "border-grenade bg-transparent text-grenade hover:bg-grenade-pale disabled:border-border disabled:text-mauve",
+        link: "h-auto rounded-none p-0 text-framboise underline decoration-1 underline-offset-4 hover:decoration-2 disabled:text-mauve",
       },
       size: {
         // 44–48px tall: comfortable to tap on a 375px phone.

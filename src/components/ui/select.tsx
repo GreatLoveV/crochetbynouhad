@@ -40,7 +40,7 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        "flex w-fit items-center justify-between gap-1.5 rounded-md border border-input bg-background py-2 pe-3 ps-3.5 text-base whitespace-nowrap transition-all duration-300 ease-soft select-none hover:border-encre focus-visible:border-the focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-the disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-grenade aria-invalid:shadow-[inset_0_0_0_1px_var(--color-grenade)] data-placeholder:text-fil data-[size=default]:h-12 data-[size=sm]:h-9 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "flex w-fit items-center justify-between gap-1.5 rounded-md border border-input bg-background py-2 pe-3 ps-3.5 text-base whitespace-nowrap transition-all duration-300 ease-soft select-none hover:border-prune focus-visible:border-framboise focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-framboise disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-grenade aria-invalid:shadow-[inset_0_0_0_1px_var(--color-grenade)] data-placeholder:text-mauve data-[size=default]:h-12 data-[size=sm]:h-9 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       {...props}

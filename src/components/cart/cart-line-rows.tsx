@@ -60,7 +60,7 @@ export function CartLineRows({
               <Price centimes={product.price} lang={lang} />
             </p>
             {/* The reference identifies this exact piece in the order. */}
-            <p className="text-xs text-fil">
+            <p className="text-xs text-mauve">
               {t.product.unique}
               {product.reference ? (
                 <>
@@ -75,7 +75,7 @@ export function CartLineRows({
             variant="ghost"
             size="icon"
             aria-label={fill(t.cart.remove, { name: product.name })}
-            className="-me-2 shrink-0 self-start text-fil hover:text-grenade"
+            className="-me-2 shrink-0 self-start text-mauve hover:text-grenade"
             onClick={() => onRemove(product.id)}
           >
             <Trash2Icon aria-hidden="true" />

@@ -11,8 +11,9 @@ import { whatsappUrl } from "@/lib/integrations/whatsapp";
 /**
  * The first screen is the work: the newest piece's photo takes about 60 % of
  * the width (first on a phone), the title and the two ways to order sit
- * beside it. The photo is whatever the admin uploaded last, never a stock
- * image; without one it is a Lin block with the piece's name.
+ * beside it, inside a dashed raspberry frame like a running stitch. The photo
+ * is whatever the admin uploaded last, never a stock image; without one it is
+ * a pale yarn block with the piece's name.
  */
 export function Hero({
   showcase,
@@ -37,19 +38,20 @@ export function Hero({
             preload
             // On a laptop the 4:5 photo would push the title below the fold:
             // it keeps its width and is capped in height instead (cropped).
-            className="lg:aspect-auto lg:h-[min(74vh,46rem)]"
+            tone="framboise"
+            className="rounded-[1.75rem] outline-2 outline-offset-[6px] outline-framboise outline-dashed lg:aspect-auto lg:h-[min(74vh,46rem)]"
           />
-          <span lang={showcase.nameLang} className="mt-2 block text-sm text-fil group-hover:underline">
+          <span lang={showcase.nameLang} className="mt-4 block text-sm text-mauve group-hover:underline">
             {showcase.name}
           </span>
         </Link>
       ) : (
-        <Photo alt="" />
+        <Photo alt="" tone="framboise" className="rounded-[1.75rem]" />
       )}
 
       <div className="flex flex-col items-start gap-5 lg:pb-8">
         <h1 className="text-4xl sm:text-5xl">{t.hero.title}</h1>
-        <p className="max-w-[34ch] text-lg text-fil">{t.hero.body}</p>
+        <p className="max-w-[34ch] text-lg text-mauve">{t.hero.body}</p>
         <div className="mt-1 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap">
           <Button
             render={

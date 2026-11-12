@@ -1,7 +1,7 @@
 import { Markazi_Text, Readex_Pro } from "next/font/google";
 
 /**
- * « Le fil » uses two families in both languages, each drawn for Latin and
+ * « Pelote » uses two families in both languages, each drawn for Latin and
  * Arabic together, so a French word inside Arabic (or the reverse) never
  * changes style:
  *

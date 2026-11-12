@@ -21,7 +21,7 @@ export default function GlobalNotFound() {
   return (
     <html lang="fr" dir="ltr" className={`${fontClasses} h-full`}>
       <body className="flex min-h-full flex-col items-center justify-center gap-6 px-5 text-center">
-        <p className="font-heading text-7xl text-the">404</p>
+        <p className="font-heading text-7xl text-framboise">404</p>
         <h1 className="text-2xl">Cette page n&apos;existe pas</h1>
         <p lang="ar" dir="rtl" className="text-xl">
           هذه الصفحة غير موجودة

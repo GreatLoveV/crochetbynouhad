@@ -34,7 +34,7 @@ export function EmptyState({ title, body, actions, className, as: H = "h2" }: St
         />
       </svg>
       <H className="text-2xl">{title}</H>
-      {body && <p className="text-fil">{body}</p>}
+      {body && <p className="text-mauve">{body}</p>}
       {actions && <div className="mt-2 flex flex-wrap justify-center gap-3">{actions}</div>}
     </div>
   )
@@ -67,7 +67,7 @@ export function ErrorState({ title, body, actions, className, as: H = "h2" }: St
         />
       </svg>
       <H className="text-2xl">{title}</H>
-      {body && <p className="text-fil">{body}</p>}
+      {body && <p className="text-mauve">{body}</p>}
       {actions && <div className="mt-2 flex flex-wrap justify-center gap-3">{actions}</div>}
     </div>
   )

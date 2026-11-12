@@ -78,7 +78,7 @@ export default async function ProductPage({
 
   return (
     <div className="mx-auto max-w-page px-4 pt-6 pb-4 sm:px-8 sm:pt-8">
-      <nav aria-label={t.product.breadcrumb} className="mb-6 text-sm text-fil">
+      <nav aria-label={t.product.breadcrumb} className="mb-6 text-sm text-mauve">
         <ol className="flex flex-wrap items-center gap-1">
           <li>
             <Link href={localePath(lang, "/")} className="inline-flex min-h-8 items-center underline-offset-4 hover:underline">
@@ -121,7 +121,7 @@ export default async function ProductPage({
             {/* Every piece is one of a kind, so the reference names this exact
                 item in Nouhad's notebook. */}
             {product.reference ? (
-              <p className="text-sm text-fil">
+              <p className="text-sm text-mauve">
                 {t.product.reference} <bdi>{product.reference}</bdi>
               </p>
             ) : null}
@@ -148,7 +148,7 @@ export default async function ProductPage({
 
       <Link
         href={localePath(lang, "/#boutique")}
-        className="mt-12 inline-flex min-h-11 items-center gap-2 text-the underline decoration-1 underline-offset-4 hover:decoration-2"
+        className="mt-12 inline-flex min-h-11 items-center gap-2 text-framboise underline decoration-1 underline-offset-4 hover:decoration-2"
       >
         {/* "Back" points against the reading direction: flips in Arabic. */}
         <ArrowLeftIcon aria-hidden="true" className="size-4 rtl:-scale-x-100" />

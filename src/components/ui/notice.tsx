@@ -9,12 +9,12 @@ import { cn } from "cn"
  */
 const tones = {
   info: {
-    box: "bg-lin border-trait",
-    icon: <InfoIcon aria-hidden="true" className="size-5 text-fil" />,
+    box: "bg-dragee border-trait",
+    icon: <InfoIcon aria-hidden="true" className="size-5 text-mauve" />,
   },
   success: {
-    box: "bg-the-pale border-the",
-    icon: <CircleCheckIcon aria-hidden="true" className="size-5 text-the" />,
+    box: "bg-framboise-pale border-framboise",
+    icon: <CircleCheckIcon aria-hidden="true" className="size-5 text-framboise" />,
   },
   error: {
     box: "bg-grenade-pale border-grenade",
@@ -36,12 +36,12 @@ export function Notice({ tone = "info", title, children, action, className }: No
   return (
     <div
       role={tone === "error" ? "alert" : "status"}
-      className={cn("flex gap-3 border-s-2 px-4 py-3.5 text-sm text-encre", t.box, className)}
+      className={cn("flex gap-3 border-s-2 px-4 py-3.5 text-sm text-prune", t.box, className)}
     >
       <span className="mt-[0.15em] shrink-0">{t.icon}</span>
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         {title && <p className="font-medium">{title}</p>}
-        {children && <div className={cn(title && "text-fil")}>{children}</div>}
+        {children && <div className={cn(title && "text-mauve")}>{children}</div>}
         {action && <div className="mt-2">{action}</div>}
       </div>
     </div>

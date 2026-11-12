@@ -64,21 +64,21 @@ export default async function OrderConfirmationPage({
       {unlocked ? <ClearCartOnMount /> : null}
 
       <div className="flex flex-col items-start gap-4">
-        <CheckCircle2Icon aria-hidden="true" className="size-8 text-the" />
+        <CheckCircle2Icon aria-hidden="true" className="size-8 text-framboise" />
         <h1 className="text-4xl sm:text-5xl">{t.order.title}</h1>
-        <p className="max-w-prose text-lg text-fil">{t.order.body}</p>
+        <p className="max-w-prose text-lg text-mauve">{t.order.body}</p>
         <Badge variant="outline">{t.orderStatus[order.status]}</Badge>
       </div>
 
       <dl className="mt-8 grid grid-cols-2 gap-4 border-y border-border py-5">
         <div>
-          <dt className="text-sm text-fil">{t.order.reference}</dt>
+          <dt className="text-sm text-mauve">{t.order.reference}</dt>
           <dd className="font-heading text-2xl">
             <bdi>{order.reference}</bdi>
           </dd>
         </div>
         <div>
-          <dt className="text-sm text-fil">{t.cart.total}</dt>
+          <dt className="text-sm text-mauve">{t.cart.total}</dt>
           <dd className="text-xl font-medium">
             <Price centimes={order.total} lang={lang} />
           </dd>
@@ -93,8 +93,8 @@ export default async function OrderConfirmationPage({
               <span lang={line.name ? "fr" : undefined} className="font-heading text-xl">
                 {line.name ?? t.order.itemFallback}
               </span>{" "}
-              <span className="text-fil">× {line.quantity}</span>
-              <bdi className="block text-xs text-fil">{line.reference}</bdi>
+              <span className="text-mauve">× {line.quantity}</span>
+              <bdi className="block text-xs text-mauve">{line.reference}</bdi>
             </span>
             <Price centimes={line.unitPrice * line.quantity} lang={lang} />
           </li>
@@ -106,7 +106,7 @@ export default async function OrderConfirmationPage({
           <MessageCircleIcon data-icon="inline-start" aria-hidden="true" />
           {t.order.whatsapp}
         </Button>
-        <p className="text-sm text-fil">{t.order.whatsappOptional}</p>
+        <p className="text-sm text-mauve">{t.order.whatsappOptional}</p>
         <Button variant="link" className="mt-4" render={<Link href={localePath(lang, "/#boutique")} />}>
           {t.order.keepShopping}
         </Button>

@@ -3,32 +3,38 @@
 @import "shadcn/tailwind.css";
 
 /*
-  « Le fil » — design tokens.
+  « Pelote » — design tokens.
 
-  One quiet, near-white page so Nouhad's photos supply all the colour. The only
-  ornament is the crochet chain (components/ui/chain.tsx). Full rationale:
-  docs/design/direction.md and docs/design/design-system.md.
+  A basket of wool: a powder-pink page, plum ink, and three yarn colours
+  (raspberry, mustard, sage) that the crochet chain cycles through. Photos sit
+  on yarn-coloured tiles. Rationale: docs/design/pelote.md.
 
-  Contrast (WCAG 2.2, measured in docs/design/design-system.md):
-    Encre on Coton 15.8:1, on Lin 13.7:1      body text, AAA
-    Fil gris on Coton 6.5:1, on Lin 5.7:1     secondary text, AA
-    Thé on Coton 7.5:1; Coton on Thé 7.5:1    links and the primary button, AAA
-    Grenade on Coton 7.0:1, on its tint 6.3:1 errors, AAA
-    Trait on Coton 3.5:1                      field outlines only, never text (3:1 UI)
+  Contrast (WCAG 2.2, computed for docs/design/pelote.md):
+    Prune on Laine 12.8:1, on Dragée 10.8:1     body text, AAA
+    Mauve on Laine 7.3:1, on Dragée 6.1:1        secondary text, AA (AAA on Laine)
+    Framboise on Laine 5.2:1                     links, accents; NOT on Dragée (4.4)
+    Laine on Prune 12.8:1                        the primary button, the footer
+    Grenade on Laine 6.3:1                       errors, always with an icon
+    Trait on Laine 3.7:1                         field outlines only (3:1 UI)
+    Moutarde 2.0:1, Sauge 3.2:1                  thread and tiles only, never text
 */
 
 @theme {
   /* Palette, by name. Components use the semantic tokens below. */
-  --color-coton: #fbfaf8;
-  --color-lin: #eeeae4;
-  --color-encre: #241c2b;
-  --color-fil: #5f5867;
-  --color-the: #1d5c48;
-  --color-the-fonce: #164a3a;
-  --color-the-pale: #e6efeb;
-  --color-trait: #8a8391;
+  --color-laine: #fbeaec;
+  --color-dragee: #f4d3d9;
+  --color-prune: #3f1a35;
+  --color-mauve: #6e3d5f;
+  --color-framboise: #b0335e;
+  --color-framboise-fonce: #8e2549;
+  --color-framboise-pale: #f7d3de;
+  --color-moutarde: #d9a21b;
+  --color-moutarde-pale: #f3dc9f;
+  --color-sauge: #5e8f6b;
+  --color-sauge-pale: #cfe0d0;
+  --color-trait: #a06a88;
   --color-grenade: #a3262a;
-  --color-grenade-pale: #f8ecea;
+  --color-grenade-pale: #f8e3e3;
 
   /*
     Type scale, French (Readex Pro for the interface, Markazi Text for the
@@ -116,7 +122,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Controls get a hint of a corner; photos and surfaces get none. */
+  /* Soft, round corners: pills for buttons, generous curves for photos. */
   --radius-sm: calc(var(--radius) * 0.5);
   --radius-md: var(--radius);
   --radius-lg: var(--radius);
@@ -126,8 +132,8 @@
   --radius-4xl: calc(var(--radius) * 2);
 
   /* Only floating layers (drawer, menus, toasts) cast a shadow. */
-  --shadow-soft: 0 1px 2px rgb(36 28 43 / 0.06);
-  --shadow-lift: 0 18px 40px -18px rgb(36 28 43 / 0.28), 0 0 0 1px rgb(36 28 43 / 0.06);
+  --shadow-soft: 0 1px 2px rgb(63 26 53 / 0.06);
+  --shadow-lift: 0 18px 40px -18px rgb(63 26 53 / 0.28), 0 0 0 1px rgb(63 26 53 / 0.06);
 }
 
 /*
@@ -136,39 +142,39 @@
 */
 :root {
   color-scheme: light;
-  --background: var(--color-coton);
-  --foreground: var(--color-encre);
-  --card: var(--color-lin);
-  --card-foreground: var(--color-encre);
-  --popover: var(--color-coton);
-  --popover-foreground: var(--color-encre);
-  --primary: var(--color-the);
-  --primary-foreground: var(--color-coton);
-  --secondary: var(--color-lin);
-  --secondary-foreground: var(--color-encre);
-  --muted: var(--color-lin);
-  --muted-foreground: var(--color-fil);
-  --accent: var(--color-lin);
-  --accent-foreground: var(--color-encre);
+  --background: var(--color-laine);
+  --foreground: var(--color-prune);
+  --card: var(--color-dragee);
+  --card-foreground: var(--color-prune);
+  --popover: var(--color-laine);
+  --popover-foreground: var(--color-prune);
+  --primary: var(--color-prune);
+  --primary-foreground: var(--color-laine);
+  --secondary: var(--color-dragee);
+  --secondary-foreground: var(--color-prune);
+  --muted: var(--color-dragee);
+  --muted-foreground: var(--color-mauve);
+  --accent: var(--color-dragee);
+  --accent-foreground: var(--color-prune);
   --destructive: var(--color-grenade);
-  /* Dividers are decorative and stay quiet; field outlines use Trait (3.5:1). */
-  --border: #dcd7d0;
+  /* Dividers are decorative and stay quiet; field outlines use Trait (3.7:1). */
+  --border: #ecc3cb;
   --input: var(--color-trait);
-  --ring: var(--color-the);
-  --chart-1: var(--color-the);
-  --chart-2: var(--color-encre);
-  --chart-3: var(--color-fil);
-  --chart-4: var(--color-trait);
-  --chart-5: var(--color-lin);
-  --radius: 0.125rem;
-  --sidebar: var(--color-coton);
-  --sidebar-foreground: var(--color-encre);
-  --sidebar-primary: var(--color-the);
-  --sidebar-primary-foreground: var(--color-coton);
-  --sidebar-accent: var(--color-lin);
-  --sidebar-accent-foreground: var(--color-encre);
-  --sidebar-border: #dcd7d0;
-  --sidebar-ring: var(--color-the);
+  --ring: var(--color-framboise);
+  --chart-1: var(--color-framboise);
+  --chart-2: var(--color-moutarde);
+  --chart-3: var(--color-sauge);
+  --chart-4: var(--color-mauve);
+  --chart-5: var(--color-dragee);
+  --radius: 0.625rem;
+  --sidebar: var(--color-laine);
+  --sidebar-foreground: var(--color-prune);
+  --sidebar-primary: var(--color-framboise);
+  --sidebar-primary-foreground: var(--color-laine);
+  --sidebar-accent: var(--color-dragee);
+  --sidebar-accent-foreground: var(--color-prune);
+  --sidebar-border: #ecc3cb;
+  --sidebar-ring: var(--color-framboise);
 }
 
 /*
@@ -225,12 +231,12 @@ html:lang(ar) {
     font-weight: 500;
   }
   ::selection {
-    background-color: var(--color-the-pale);
-    color: var(--color-encre);
+    background-color: var(--color-framboise-pale);
+    color: var(--color-prune);
   }
-  /* One focus style everywhere: a Thé outline that clears the element. */
+  /* One focus style everywhere: a Framboise outline that clears the element. */
   :focus-visible {
-    outline: 2px solid var(--color-the);
+    outline: 2px solid var(--color-framboise);
     outline-offset: 3px;
   }
   /* Prices, references and phone numbers stay LTR inside Arabic. */
@@ -263,8 +269,9 @@ html:lang(ar) {
 }
 
 /*
-  The chain divider drawing itself once (Chain draw). pathLength=1 on the
-  path makes the dash maths independent of the screen width.
+  The chain divider drawing itself once (Chain draw). The coloured loops are
+  revealed through a mask whose single path is drawn; pathLength=1 on it makes
+  the dash maths independent of the screen width.
 */
 .chain-draw {
   stroke-dasharray: 1;
@@ -296,7 +303,7 @@ html:lang(ar) {
     inset-inline: 0;
     bottom: 0.125rem;
     height: 0.375rem;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='6'%3E%3Cellipse cx='6' cy='3' rx='5' ry='2.2' fill='none' stroke='%231D5C48' stroke-width='1.3'/%3E%3C/svg%3E")
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='6'%3E%3Cellipse cx='6' cy='3' rx='5' ry='2.2' fill='none' stroke='%23B0335E' stroke-width='1.6'/%3E%3C/svg%3E")
       repeat-x;
     background-position: left center;
   }

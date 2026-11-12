@@ -18,7 +18,7 @@ export default async function CheckoutPage() {
     <div className="mx-auto w-full max-w-page px-4 pt-8 sm:px-8 sm:pt-12">
       <header className="mb-8 flex flex-col gap-2">
         <h1 className="text-4xl sm:text-5xl">{t.checkout.title}</h1>
-        <p className="text-fil">{t.checkout.subtitle}</p>
+        <p className="text-mauve">{t.checkout.subtitle}</p>
       </header>
 
       {/* The bag is read in the browser: a loader, then the form or the empty

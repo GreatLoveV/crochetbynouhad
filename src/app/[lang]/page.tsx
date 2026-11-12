@@ -6,7 +6,7 @@ import { InstagramIcon } from "@/components/icons";
 import { ProductTile } from "@/components/product/product-tile";
 import { Button } from "@/components/ui/button";
 import { Chain } from "@/components/ui/chain";
-import { Photo } from "@/components/ui/photo";
+import { Photo, toneAt } from "@/components/ui/photo";
 import { EmptyState } from "@/components/ui/state";
 import { Steps } from "@/components/ui/steps";
 import { fill, localePath, type Locale } from "@/i18n/config";
@@ -90,7 +90,7 @@ export default async function HomePage({ searchParams }: PageProps<"/[lang]">) {
               const big = i === 0 && feature;
               return (
                 <li key={product.id} className={big ? "col-span-2 sm:row-span-2 sm:flex sm:flex-col" : undefined}>
-                  <ProductTile product={product} lang={lang} t={t} feature={big} priority={i < 2} />
+                  <ProductTile product={product} lang={lang} t={t} feature={big} priority={i < 2} tone={toneAt(i)} />
                 </li>
               );
             })}
@@ -100,7 +100,11 @@ export default async function HomePage({ searchParams }: PageProps<"/[lang]">) {
 
       <Atelier lang={lang} t={t} />
 
-      <section aria-labelledby="steps-title" className="mx-auto max-w-page px-4 pt-section sm:px-8">
+      <div className="mx-auto max-w-page px-4 pt-section sm:px-8">
+        <Chain />
+      </div>
+
+      <section aria-labelledby="steps-title" className="mx-auto max-w-page px-4 pt-12 sm:px-8">
         <h2 id="steps-title" className="mb-8 text-3xl sm:text-4xl">
           {t.home.stepsTitle}
         </h2>
@@ -125,7 +129,7 @@ function Atelier({ lang, t }: { lang: Locale; t: Dictionary }) {
   const text = (
     <div className="flex max-w-prose flex-col items-start gap-5">
       <p className="font-heading text-2xl font-normal">{t.home.atelierBody}</p>
-      <p className="text-fil">{t.home.atelierQuestion}</p>
+      <p className="text-mauve">{t.home.atelierQuestion}</p>
       <Button
         variant="outline"
         render={<a href={whatsappUrl(message)} target="_blank" rel="noopener noreferrer" />}
@@ -143,7 +147,7 @@ function Atelier({ lang, t }: { lang: Locale; t: Dictionary }) {
       className="mx-auto mt-section max-w-page scroll-mt-28 px-4 sm:px-8"
     >
       {ATELIER_PHOTO ? (
-        <div className="grid items-center gap-8 md:grid-cols-2 md:gap-14">
+        <div className="grid items-center gap-8 rounded-[2rem] bg-dragee p-4 sm:p-8 md:grid-cols-2 md:gap-14 md:p-10">
           <Photo
             src={ATELIER_PHOTO.url}
             alt={ATELIER_PHOTO.alt[lang]}
@@ -157,7 +161,7 @@ function Atelier({ lang, t }: { lang: Locale; t: Dictionary }) {
         </div>
       ) : (
         // Without a photo: the title on the inline start, the words beside it.
-        <div className="grid gap-5 border-t border-border pt-section md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] md:gap-14">
+        <div className="grid gap-5 rounded-[2rem] bg-dragee px-6 py-10 sm:px-10 sm:py-14 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] md:gap-14">
           {title}
           {text}
         </div>
@@ -236,7 +240,7 @@ function CategoryFilter({
             >
               {category.name}
               {category.isComingSoon ? (
-                <span className="ms-1.5 text-sm text-fil">({t.shop.comingSoonBadge})</span>
+                <span className="ms-1.5 text-sm text-mauve">({t.shop.comingSoonBadge})</span>
               ) : null}
             </FilterLink>
           </li>
@@ -261,8 +265,8 @@ function FilterLink({
       aria-current={active ? "page" : undefined}
       className={
         active
-          ? "stitch-underline inline-flex min-h-11 items-center whitespace-nowrap text-encre"
-          : "inline-flex min-h-11 items-center whitespace-nowrap text-fil hover:text-encre"
+          ? "stitch-underline inline-flex min-h-11 items-center whitespace-nowrap text-prune"
+          : "inline-flex min-h-11 items-center whitespace-nowrap text-mauve hover:text-prune"
       }
     >
       {children}

@@ -5,11 +5,12 @@ import { cn } from "cn"
 import { isOptimizableImageUrl } from "@/lib/constants/images"
 
 /**
- * A photo of Nouhad's work: square corners, no border, no shadow. The object
- * makes the shape. Light text never sits on top of it; badges are solid.
+ * A photo of Nouhad's work: soft round corners, no border, no shadow. Light
+ * text never sits on top of it; badges are solid.
  *
- * Without a photo it shows a Lin block with the piece's name, never a stock
- * image or an icon. While loading (`loading`), the same block without text.
+ * Without a photo it shows a block in the yarn `tone` with the piece's name,
+ * never a stock image or an icon. While loading (`loading`), the same block
+ * without text.
  */
 type PhotoProps = {
   src?: string | null
@@ -19,6 +20,8 @@ type PhotoProps = {
   /** `lang` of the empty label when it differs from the page (French fallback). */
   emptyLabelLang?: string
   ratio?: "4/5" | "1/1" | "3/2"
+  /** The yarn behind the photo, seen while it loads or when there is none. */
+  tone?: Tone
   sizes?: string
   /**
    * The one photo that is the page's largest element (hero, product page):
@@ -35,12 +38,24 @@ type PhotoProps = {
 
 const ratios = { "4/5": "aspect-4/5", "1/1": "aspect-square", "3/2": "aspect-3/2" } as const
 
+/** The basket's pale yarns, for tiles and empty photos. Prune reads on all. */
+export const tones = {
+  dragee: "bg-dragee",
+  framboise: "bg-framboise-pale",
+  moutarde: "bg-moutarde-pale",
+  sauge: "bg-sauge-pale",
+} as const
+export type Tone = keyof typeof tones
+/** Tiles in a grid take the yarns in turn. */
+export const toneAt = (i: number): Tone => (["moutarde", "sauge", "framboise"] as const)[i % 3]
+
 export function Photo({
   src,
   alt,
   emptyLabel,
   emptyLabelLang,
   ratio = "4/5",
+  tone = "dragee",
   sizes = "(min-width: 1024px) 30vw, 50vw",
   preload = false,
   priority = false,
@@ -50,7 +65,7 @@ export function Photo({
 }: PhotoProps) {
   return (
     <div
-      className={cn("relative w-full overflow-hidden bg-lin", ratios[ratio], className)}
+      className={cn("relative w-full overflow-hidden rounded-2xl", tones[tone], ratios[ratio], className)}
       aria-busy={loading || undefined}
     >
       {src && !loading ? (
@@ -66,7 +81,7 @@ export function Photo({
       ) : !loading && emptyLabel ? (
         <div
           lang={emptyLabelLang}
-          className="flex size-full items-center justify-center p-6 text-center font-heading text-xl text-fil"
+          className="flex size-full items-center justify-center p-6 text-center font-heading text-xl text-prune"
         >
           {emptyLabel}
         </div>

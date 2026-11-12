@@ -18,7 +18,7 @@ export function LegalPage({ content, t }: { content: LegalContent; t: Dictionary
           {content.sections.map((section) => (
             <section key={section.title} className="border-t border-border pt-6">
               <h2 className="mb-2 text-2xl">{section.title}</h2>
-              <p className={section.body ? undefined : "text-fil italic"}>{section.body ?? t.legal.toComplete}</p>
+              <p className={section.body ? undefined : "text-mauve italic"}>{section.body ?? t.legal.toComplete}</p>
             </section>
           ))}
         </div>

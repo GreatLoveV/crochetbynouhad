@@ -74,7 +74,7 @@ function CartPageLines({
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_22rem] lg:items-start lg:gap-16">
       <div>
-        <p className="text-fil">{plural(lang, t.cart.pieces, count)}</p>
+        <p className="text-mauve">{plural(lang, t.cart.pieces, count)}</p>
         <CartLineRows products={products} onRemove={removeItem} />
         <Button variant="link" className="mt-4" render={<Link href={href("/#boutique")} />}>
           {t.cart.continueShopping}
@@ -82,7 +82,7 @@ function CartPageLines({
       </div>
 
       {/* Sticky on desktop so the total stays visible while scrolling. */}
-      <aside aria-labelledby="cart-summary" className="bg-lin p-6 lg:sticky lg:top-28">
+      <aside aria-labelledby="cart-summary" className="bg-dragee p-6 lg:sticky lg:top-28">
         <h2 id="cart-summary" className="text-2xl">
           {t.checkout.summaryTitle}
         </h2>
@@ -96,7 +96,7 @@ function CartPageLines({
           {t.checkout.title}
         </Button>
 
-        <p className="mt-3 text-sm text-fil">{t.checkout.paymentNote}</p>
+        <p className="mt-3 text-sm text-mauve">{t.checkout.paymentNote}</p>
       </aside>
     </div>
   );

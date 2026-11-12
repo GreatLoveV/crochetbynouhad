@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 /** Labels of the guide itself (not shop copy, so not in the dictionaries). */
 const L = {
   fr: {
-    title: "Système « Le fil »",
+    title: "Système « Pelote »",
     intro: "Chaque composant de base, dans chaque état. La même page existe en arabe, de droite à gauche.",
     colours: "Couleurs",
     type: "Typographie",
@@ -51,15 +51,17 @@ const L = {
     toasts: "Notifications",
     states_: { rest: "Repos", hover: "Survol", focus: "Focus clavier", disabled: "Désactivé", loading: "En cours" },
     roles: {
-      coton: "fond de page",
-      lin: "surfaces calmes, photo absente",
-      encre: "tout le texte",
-      fil: "texte secondaire",
-      the: "l’accent unique : action principale, liens",
+      laine: "fond de page",
+      dragee: "surfaces, bandeaux, photo absente",
+      prune: "tout le texte, action principale",
+      mauve: "texte secondaire",
+      framboise: "liens, focus, la première maille",
+      moutarde: "maille et tuiles, jamais du texte",
+      sauge: "maille et tuiles, jamais du texte",
       trait: "contours de champs, jamais du texte",
       grenade: "erreurs de formulaire seulement",
     },
-    onCoton: "sur Coton",
+    onCoton: "sur Laine",
     divider: "Séparateur",
     drawn: "Se dessine une fois (premier écran)",
     nav: "Navigation : la page en cours",
@@ -79,7 +81,7 @@ const L = {
     placeholderNote: "Texte provisoire : les étapes définitives viendront avec la refonte des pages.",
   },
   ar: {
-    title: "نظام «الخيط»",
+    title: "نظام «الكُبّة»",
     intro: "كل مكوّن أساسي في كل حالاته. الصفحة نفسها موجودة بالفرنسية، من اليسار إلى اليمين.",
     colours: "الألوان",
     type: "الخطوط",
@@ -94,15 +96,17 @@ const L = {
     toasts: "الإشعارات",
     states_: { rest: "عادي", hover: "تمرير المؤشر", focus: "تركيز لوحة المفاتيح", disabled: "معطّل", loading: "قيد التنفيذ" },
     roles: {
-      coton: "خلفية الصفحة",
-      lin: "أسطح هادئة، صورة غائبة",
-      encre: "كل النصوص",
-      fil: "نص ثانوي",
-      the: "اللون المميّز الوحيد: الإجراء الرئيسي والروابط",
+      laine: "خلفية الصفحة",
+      dragee: "الأسطح والأشرطة، صورة غائبة",
+      prune: "كل النصوص، الإجراء الرئيسي",
+      mauve: "نص ثانوي",
+      framboise: "الروابط والتركيز، الغرزة الأولى",
+      moutarde: "الغرز والبلاطات، وليس للنص أبدًا",
+      sauge: "الغرز والبلاطات، وليس للنص أبدًا",
       trait: "حدود الحقول، وليس للنص أبدًا",
       grenade: "أخطاء النماذج فقط",
     },
-    onCoton: "على Coton",
+    onCoton: "على Laine",
     divider: "فاصل",
     drawn: "يُرسم مرة واحدة (الشاشة الأولى)",
     nav: "التنقل: الصفحة الحالية",
@@ -124,13 +128,15 @@ const L = {
 } as const
 
 const PALETTE = [
-  { key: "coton", name: "Coton", hex: "#FBFAF8", ratio: null, ink: "text-encre" },
-  { key: "lin", name: "Lin", hex: "#EEEAE4", ratio: null, ink: "text-encre" },
-  { key: "encre", name: "Encre de mûre", hex: "#241C2B", ratio: "15,8:1", ink: "text-coton" },
-  { key: "fil", name: "Fil gris", hex: "#5F5867", ratio: "6,5:1", ink: "text-coton" },
-  { key: "the", name: "Thé", hex: "#1D5C48", ratio: "7,5:1", ink: "text-coton" },
-  { key: "trait", name: "Trait", hex: "#8A8391", ratio: "3,5:1", ink: "text-coton" },
-  { key: "grenade", name: "Grenade", hex: "#A3262A", ratio: "7,0:1", ink: "text-coton" },
+  { key: "laine", name: "Laine", hex: "#FBEAEC", ratio: null, ink: "text-prune" },
+  { key: "dragee", name: "Dragée", hex: "#F4D3D9", ratio: null, ink: "text-prune" },
+  { key: "prune", name: "Prune", hex: "#3F1A35", ratio: "12,8:1", ink: "text-laine" },
+  { key: "mauve", name: "Mauve", hex: "#6E3D5F", ratio: "7,3:1", ink: "text-laine" },
+  { key: "framboise", name: "Framboise", hex: "#B0335E", ratio: "5,2:1", ink: "text-laine" },
+  { key: "moutarde", name: "Moutarde", hex: "#D9A21B", ratio: "2,0:1", ink: "text-prune" },
+  { key: "sauge", name: "Sauge", hex: "#5E8F6B", ratio: "3,2:1", ink: "text-prune" },
+  { key: "trait", name: "Trait", hex: "#A06A88", ratio: "3,7:1", ink: "text-prune" },
+  { key: "grenade", name: "Grenade", hex: "#A3262A", ratio: "6,3:1", ink: "text-laine" },
 ] as const
 
 function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
@@ -147,7 +153,7 @@ function Section({ id, title, children }: { id: string; title: string; children:
 function Specimen({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="flex flex-col items-start gap-2">
-      <span className="text-xs text-fil">{label}</span>
+      <span className="text-xs text-mauve">{label}</span>
       {children}
     </div>
   )
@@ -182,7 +188,7 @@ export default async function StyleguidePage() {
     <div className="mx-auto flex max-w-page flex-col gap-16 px-4 py-12 sm:px-8">
       <header className="flex flex-col gap-3">
         <h1 className="text-5xl">{l.title}</h1>
-        <p className="max-w-prose text-lg text-fil">{l.intro}</p>
+        <p className="max-w-prose text-lg text-mauve">{l.intro}</p>
       </header>
 
       <Section id="colours" title={l.colours}>
@@ -200,14 +206,14 @@ export default async function StyleguidePage() {
                 )}
               </span>
               <span className="text-sm font-medium" lang="fr">
-                {c.name} <bdi className="font-normal text-fil">{c.hex}</bdi>
+                {c.name} <bdi className="font-normal text-mauve">{c.hex}</bdi>
               </span>
-              <span className="text-xs text-fil">{l.roles[c.key]}</span>
+              <span className="text-xs text-mauve">{l.roles[c.key]}</span>
             </li>
           ))}
         </ul>
-        <p className="text-sm text-fil">
-          {l.onCoton}: Encre 15,8 · Fil gris 6,5 · Thé 7,5 · Grenade 7,0 · Trait 3,5 (UI)
+        <p className="text-sm text-mauve">
+          {l.onCoton}: Prune 12,8 · Mauve 7,3 · Framboise 5,2 · Grenade 6,3 · Trait 3,7 (UI)
         </p>
       </Section>
 
@@ -233,10 +239,10 @@ export default async function StyleguidePage() {
             </p>
           </Specimen>
           <Specimen label="sm · Readex Pro 350, Fil gris">
-            <p className="text-sm text-fil">{t.checkout.phoneHint}</p>
+            <p className="text-sm text-mauve">{t.checkout.phoneHint}</p>
           </Specimen>
           <Specimen label="xs · Readex Pro 350, Fil gris">
-            <p className="text-xs text-fil">{t.footer.copyright}</p>
+            <p className="text-xs text-mauve">{t.footer.copyright}</p>
           </Specimen>
         </div>
       </Section>
@@ -255,7 +261,7 @@ export default async function StyleguidePage() {
                 key={item}
                 href="#chain"
                 aria-current={i === 0 ? "page" : undefined}
-                className={`py-2.5 text-base ${i === 0 ? "stitch-underline" : "text-fil hover:text-encre"}`}
+                className={`py-2.5 text-base ${i === 0 ? "stitch-underline" : "text-mauve hover:text-prune"}`}
               >
                 {item}
               </a>
@@ -271,10 +277,10 @@ export default async function StyleguidePage() {
       <Section id="buttons" title={l.buttons}>
         {(["default", "outline", "secondary", "ghost", "destructive", "link"] as const).map((variant) => {
           const forcedHover = {
-            default: "bg-the-fonce",
-            outline: "bg-lin",
-            secondary: "bg-[color-mix(in_srgb,var(--color-lin),var(--color-encre)_7%)]",
-            ghost: "bg-lin",
+            default: "bg-framboise-fonce",
+            outline: "bg-dragee",
+            secondary: "bg-[color-mix(in_srgb,var(--color-dragee),var(--color-prune)_7%)]",
+            ghost: "bg-dragee",
             destructive: "bg-grenade-pale",
             link: "decoration-2",
           }[variant]
@@ -291,7 +297,7 @@ export default async function StyleguidePage() {
                 </Button>
               </Specimen>
               <Specimen label={l.states_.focus}>
-                <Button variant={variant} className="outline-solid! outline-2! outline-offset-3! outline-the!">
+                <Button variant={variant} className="outline-solid! outline-2! outline-offset-3! outline-framboise!">
                   {label}
                 </Button>
               </Specimen>
@@ -336,7 +342,7 @@ export default async function StyleguidePage() {
               <Input
                 {...p}
                 defaultValue={t.checkout.cityPlaceholder}
-                className="border-the outline-solid! outline-2! outline-offset-2! outline-the!"
+                className="border-framboise outline-solid! outline-2! outline-offset-2! outline-framboise!"
               />
             )}
           </Field>
@@ -408,7 +414,7 @@ export default async function StyleguidePage() {
 
       <Section id="states" title={l.states}>
         <div className="grid gap-6 lg:grid-cols-3">
-          <div className="bg-lin/40 outline outline-border">
+          <div className="bg-dragee/40 outline outline-border">
             <EmptyState
               as="h3"
               title={t.cart.empty}
@@ -416,10 +422,10 @@ export default async function StyleguidePage() {
               actions={<Button variant="outline">{t.cart.continueShopping}</Button>}
             />
           </div>
-          <div className="bg-lin/40 outline outline-border">
+          <div className="bg-dragee/40 outline outline-border">
             <LoadingState label={t.common.loading} />
           </div>
-          <div className="bg-lin/40 outline outline-border">
+          <div className="bg-dragee/40 outline outline-border">
             <ErrorState
               as="h3"
               title={t.common.loadErrorTitle}
@@ -437,7 +443,7 @@ export default async function StyleguidePage() {
 
       <Section id="steps" title={l.steps}>
         <Steps items={[...l.steps_]} />
-        <p className="text-xs text-fil">{l.placeholderNote}</p>
+        <p className="text-xs text-mauve">{l.placeholderNote}</p>
       </Section>
 
       <Section id="toasts" title={l.toasts}>

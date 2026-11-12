@@ -214,7 +214,7 @@ export function CheckoutForm() {
 
         {/* Sticky on phones so the confirm button is always within reach;
             back to a normal inline button from the laptop layout up. */}
-        <div className="sticky bottom-0 z-10 -mx-4 border-t border-border bg-coton px-4 py-3 lg:static lg:mx-0 lg:border-0 lg:bg-transparent lg:p-0">
+        <div className="sticky bottom-0 z-10 -mx-4 border-t border-border bg-laine px-4 py-3 lg:static lg:mx-0 lg:border-0 lg:bg-transparent lg:p-0">
           {/* On a phone the summary is below the form: the amount rides along
               with the button so it is seen before confirming. */}
           <p className="mb-2 flex items-baseline justify-between gap-4 lg:hidden">
@@ -224,9 +224,9 @@ export function CheckoutForm() {
           <Button type="submit" className="w-full sm:w-auto sm:px-10" loading={pending}>
             {pending ? t.checkout.submitting : t.checkout.submit}
           </Button>
-          <p className="mt-2 text-sm text-fil">{t.checkout.paymentNote}</p>
+          <p className="mt-2 text-sm text-mauve">{t.checkout.paymentNote}</p>
           {/* What the customer agrees to, where they agree to it. */}
-          <p className="mt-1 text-sm text-fil">
+          <p className="mt-1 text-sm text-mauve">
             <WithLink text={t.checkout.legalTerms} href={href("/conditions")} label={t.checkout.legalTermsLink} />{" "}
             <WithLink text={t.checkout.legalPrivacy} href={href("/confidentialite")} label={t.checkout.legalPrivacyLink} />
           </p>
@@ -234,11 +234,11 @@ export function CheckoutForm() {
       </div>
 
       {/* The summary is a preview only: the server recalculates everything. */}
-      <aside aria-labelledby="checkout-summary" className="bg-lin p-6 lg:sticky lg:top-28">
+      <aside aria-labelledby="checkout-summary" className="bg-dragee p-6 lg:sticky lg:top-28">
         <h2 id="checkout-summary" className="text-2xl">
           {t.checkout.itemsTitle}
         </h2>
-        <p className="mt-1 text-sm text-fil">{plural(lang, t.cart.pieces, count)}</p>
+        <p className="mt-1 text-sm text-mauve">{plural(lang, t.cart.pieces, count)}</p>
 
         <ul className="mt-5 flex flex-col gap-4">
           {products.map((product) => (
@@ -251,7 +251,7 @@ export function CheckoutForm() {
                   {product.name}
                 </span>
                 {product.reference ? (
-                  <bdi className="text-xs text-fil">{product.reference}</bdi>
+                  <bdi className="text-xs text-mauve">{product.reference}</bdi>
                 ) : null}
               </div>
               <Price centimes={product.price} lang={lang} className="text-sm" />
@@ -274,7 +274,7 @@ function WithLink({ text, href, label }: { text: string; href: string; label: st
   return (
     <>
       {before}
-      <Link href={href} className="text-encre underline underline-offset-2 hover:text-the">
+      <Link href={href} className="text-prune underline underline-offset-2 hover:text-framboise">
         {label}
       </Link>
       {after}

@@ -79,7 +79,7 @@ export function ProductBuyBox({
         {isSoldOut ? t.product.soldOut : alreadyInCart ? t.product.alreadyInCart : t.product.addToCart}
       </Button>
 
-      <p className="text-sm text-fil">{isSoldOut ? t.product.soldOutHint : t.hero.note}</p>
+      <p className="text-sm text-mauve">{isSoldOut ? t.product.soldOutHint : t.hero.note}</p>
     </div>
   );
 }

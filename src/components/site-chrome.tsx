@@ -4,6 +4,7 @@ import { CartButton } from "@/components/cart/cart-sheet";
 import { InstagramIcon } from "@/components/icons";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { NavLinks } from "@/components/nav-links";
+import { Chain } from "@/components/ui/chain";
 import { fill, localePath } from "@/i18n/config";
 import { getDictionary, getLang } from "@/i18n/server";
 import { INSTAGRAM_URL } from "@/lib/constants/strings";
@@ -23,7 +24,7 @@ export async function SiteHeader() {
   const contactHref = whatsappUrl(fill(t.whatsapp.info, { shop: t.siteName }));
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-coton/95 backdrop-blur-sm">
+    <header className="sticky top-0 z-40 border-b border-border bg-laine/95 backdrop-blur-sm">
       <div className="mx-auto flex h-16 max-w-page items-center justify-between gap-4 px-4 sm:h-18 sm:px-8">
         {/* The brand is written in Latin letters in both languages. */}
         <Link
@@ -49,58 +50,89 @@ export async function SiteHeader() {
   );
 }
 
-/** Footer: who, how to reach her, the legal pages, and how payment works. */
+/**
+ * Footer: who, how to reach her, the legal pages, and how payment works.
+ * Plum with a rounded top, under one last thread. On plum, focus turns
+ * Moutarde (6.5:1) because Framboise would not clear 3:1.
+ */
 export async function SiteFooter() {
   const lang = await getLang();
   const t = await getDictionary();
 
-  const link = "w-fit underline-offset-4 decoration-1 hover:underline";
+  const link =
+    "w-fit underline-offset-4 decoration-1 hover:underline focus-visible:outline-moutarde";
 
   return (
-    <footer className="mt-section border-t border-border bg-lin">
-      <div className="mx-auto grid max-w-page gap-10 px-4 py-14 sm:grid-cols-[1.4fr_1fr_1fr] sm:px-8">
-        <div className="flex flex-col gap-3">
-          <p lang="fr" dir="ltr" className="w-fit font-heading text-2xl font-semibold">
-            {t.siteName}
-          </p>
-          <p className="max-w-xs text-sm text-fil">{t.footer.blurb}</p>
-          <p className="max-w-xs text-sm text-fil">{t.hero.note}</p>
+    <>
+      <div
+        aria-hidden="true"
+        className="mx-auto mt-section max-w-page px-4 pb-10 sm:px-8"
+      >
+        <Chain />
+      </div>
+      <footer className="rounded-t-[2.5rem] bg-prune text-laine">
+        <div className="mx-auto grid max-w-page gap-10 px-4 py-14 sm:grid-cols-[1.4fr_1fr_1fr] sm:px-8">
+          <div className="flex flex-col gap-3">
+            <p
+              lang="fr"
+              dir="ltr"
+              className="w-fit font-heading text-2xl font-semibold"
+            >
+              {t.siteName}
+            </p>
+            <p className="max-w-xs text-sm text-dragee">{t.footer.blurb}</p>
+            <p className="max-w-xs text-sm text-dragee">{t.hero.note}</p>
+          </div>
+
+          <nav
+            aria-labelledby="footer-contact"
+            className="flex flex-col gap-3 text-sm"
+          >
+            <h2 id="footer-contact" className="font-sans text-sm font-medium">
+              {t.footer.contactTitle}
+            </h2>
+            <a
+              href={whatsappUrl(
+                fill(t.whatsapp.question, { shop: t.siteName }),
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={link}
+            >
+              WhatsApp
+            </a>
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${link} flex items-center gap-2`}
+            >
+              <InstagramIcon className="size-4" aria-hidden="true" />
+              {t.footer.instagram}
+            </a>
+          </nav>
+
+          <nav
+            aria-labelledby="footer-info"
+            className="flex flex-col gap-3 text-sm"
+          >
+            <h2 id="footer-info" className="font-sans text-sm font-medium">
+              {t.footer.infoTitle}
+            </h2>
+            <Link href={localePath(lang, "/conditions")} className={link}>
+              {t.footer.terms}
+            </Link>
+            <Link href={localePath(lang, "/confidentialite")} className={link}>
+              {t.footer.privacy}
+            </Link>
+          </nav>
         </div>
 
-        <nav aria-labelledby="footer-contact" className="flex flex-col gap-3 text-sm">
-          <h2 id="footer-contact" className="font-sans text-sm font-medium">
-            {t.footer.contactTitle}
-          </h2>
-          <a
-            href={whatsappUrl(fill(t.whatsapp.question, { shop: t.siteName }))}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={link}
-          >
-            WhatsApp
-          </a>
-          <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className={`${link} flex items-center gap-2`}>
-            <InstagramIcon className="size-4" aria-hidden="true" />
-            {t.footer.instagram}
-          </a>
-        </nav>
-
-        <nav aria-labelledby="footer-info" className="flex flex-col gap-3 text-sm">
-          <h2 id="footer-info" className="font-sans text-sm font-medium">
-            {t.footer.infoTitle}
-          </h2>
-          <Link href={localePath(lang, "/conditions")} className={link}>
-            {t.footer.terms}
-          </Link>
-          <Link href={localePath(lang, "/confidentialite")} className={link}>
-            {t.footer.privacy}
-          </Link>
-        </nav>
-      </div>
-
-      <div className="mx-auto max-w-page px-4 pb-8 text-xs text-fil sm:px-8">
-        © <bdi>{new Date().getFullYear()}</bdi> <bdi>{t.siteName}</bdi>. {t.footer.copyright}
-      </div>
-    </footer>
+        <div className="mx-auto max-w-page px-4 pb-8 text-xs text-dragee sm:px-8">
+          © <bdi>{new Date().getFullYear()}</bdi> <bdi>{t.siteName}</bdi>.{" "}
+          {t.footer.copyright}
+        </div>
+      </footer>
+    </>
   );
 }
