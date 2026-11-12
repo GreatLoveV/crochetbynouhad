@@ -148,7 +148,7 @@ export default async function ProductPage({
 
       <Link
         href={localePath(lang, "/#boutique")}
-        className="mt-12 inline-flex min-h-11 items-center gap-2 text-the underline decoration-1 underline-offset-4 hover:decoration-2"
+        className="mt-12 inline-flex min-h-11 items-center gap-2 text-fouwwa underline decoration-1 underline-offset-4 hover:decoration-2"
       >
         {/* "Back" points against the reading direction: flips in Arabic. */}
         <ArrowLeftIcon aria-hidden="true" className="size-4 rtl:-scale-x-100" />

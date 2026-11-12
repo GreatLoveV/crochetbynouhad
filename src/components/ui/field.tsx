@@ -63,7 +63,7 @@ export function FieldHint({ id, children }: { id: string; children: ReactNode })
 
 export function FieldError({ id, children }: { id: string; children: ReactNode }) {
   return (
-    <p id={id} role="alert" className="flex items-start gap-1.5 text-sm text-grenade">
+    <p id={id} role="alert" className="flex items-start gap-1.5 text-sm text-erreur">
       <CircleAlertIcon aria-hidden="true" className="mt-[0.2em] size-4 shrink-0" />
       <span>{children}</span>
     </p>

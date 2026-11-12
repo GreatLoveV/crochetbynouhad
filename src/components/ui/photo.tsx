@@ -5,11 +5,13 @@ import { cn } from "cn"
 import { isOptimizableImageUrl } from "@/lib/constants/images"
 
 /**
- * A photo of Nouhad's work: square corners, no border, no shadow. The object
- * makes the shape. Light text never sits on top of it; badges are solid.
+ * A photo of Nouhad's work: 24px corners on an undyed-wool (Laine) ground, so
+ * the rose page never tints the yarn. No border, no shadow. Text never sits
+ * on top of it; badges are solid pills.
  *
- * Without a photo it shows a Lin block with the piece's name, never a stock
- * image or an icon. While loading (`loading`), the same block without text.
+ * Without a photo it shows the Laine block with a faint row of chain stitches
+ * and the piece's name, never a stock image or an icon. While loading
+ * (`loading`), the same block, softly pulsing (still with reduced motion).
  */
 type PhotoProps = {
   src?: string | null
@@ -50,7 +52,13 @@ export function Photo({
 }: PhotoProps) {
   return (
     <div
-      className={cn("relative w-full overflow-hidden bg-lin", ratios[ratio], className)}
+      className={cn(
+        "relative w-full overflow-hidden rounded-photo bg-laine",
+        (!src || loading) && "photo-stitches",
+        loading && "animate-pulse motion-reduce:animate-none",
+        ratios[ratio],
+        className,
+      )}
       aria-busy={loading || undefined}
     >
       {src && !loading ? (
@@ -66,7 +74,7 @@ export function Photo({
       ) : !loading && emptyLabel ? (
         <div
           lang={emptyLabelLang}
-          className="flex size-full items-center justify-center p-6 text-center font-heading text-xl text-fil"
+          className="flex size-full items-center justify-center p-6 text-center font-heading text-xl text-nila"
         >
           {emptyLabel}
         </div>

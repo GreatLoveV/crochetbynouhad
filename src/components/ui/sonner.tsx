@@ -16,16 +16,16 @@ const Toaster = ({ ...props }: ToasterProps) => {
       theme="light"
       className="toaster group"
       icons={{
-        success: <CircleCheckIcon className="size-4 text-the" />,
+        success: <CircleCheckIcon className="size-4 text-fouwwa" />,
         info: <InfoIcon className="size-4 text-fil" />,
-        warning: <TriangleAlertIcon className="size-4 text-encre" />,
-        error: <CircleAlertIcon className="size-4 text-grenade" />,
+        warning: <TriangleAlertIcon className="size-4 text-nila" />,
+        error: <CircleAlertIcon className="size-4 text-erreur" />,
         loading: <ChainLoader size="sm" decorative />,
       }}
       style={
         {
-          "--normal-bg": "var(--color-coton)",
-          "--normal-text": "var(--color-encre)",
+          "--normal-bg": "var(--color-laine)",
+          "--normal-text": "var(--color-nila)",
           "--normal-border": "var(--border)",
           "--border-radius": "var(--radius)",
         } as React.CSSProperties
@@ -33,7 +33,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       toastOptions={{
         classNames: {
           toast: "cn-toast font-sans text-sm! shadow-lift!",
-          error: "border-grenade/40!",
+          error: "border-erreur/40!",
         },
       }}
       {...props}

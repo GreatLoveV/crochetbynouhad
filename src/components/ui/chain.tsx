@@ -1,14 +1,16 @@
 import { cn } from "cn"
 
 /**
- * The crochet chain (« la chaînette »), the site's one ornament.
+ * The crochet chain (« la chaînette »), the site's one ornament and its
+ * signature (docs/design/direction.md).
  *
  * A chain is a row of linked loops worked one after another, so it reads in
  * the direction of the text: left to right in French, right to left in
  * Arabic (mirrored with `rtl:-scale-x-100`, which sets CSS `scale`).
  *
  * It has three jobs and no others:
- * - `Chain`: the divider between the first screen and the pieces.
+ * - `Chain`: the divider between major sections. Its colour (`tone`) is the
+ *   colour of the section it leads into: madder, turmeric or mint.
  * - `ChainLoader`: the only loading indicator.
  * - `.stitch-underline` (globals.css): the current navigation item.
  */
@@ -31,8 +33,17 @@ const DIVIDER_LOOPS = 150
 const DIVIDER_PATH = chainPath(DIVIDER_LOOPS)
 const DIVIDER_WIDTH = 10 + DIVIDER_LOOPS * LOOP
 
+const tones = {
+  fouwwa: "text-fouwwa",
+  kurkum: "text-kurkum",
+  naanaa: "text-naanaa",
+  nila: "text-nila",
+} as const
+
 type ChainProps = {
   className?: string
+  /** Dye colour of the thread. Kurkum is decoration only, never near text. */
+  tone?: keyof typeof tones
   /**
    * Draw the thread once on first paint (about 1.5 s). Reserved for the
    * divider under the home page's first screen. Reduced motion: drawn
@@ -41,21 +52,21 @@ type ChainProps = {
   draw?: boolean
 }
 
-export function Chain({ className, draw = false }: ChainProps) {
+export function Chain({ className, tone = "fouwwa", draw = false }: ChainProps) {
   return (
     <svg
       aria-hidden="true"
       focusable="false"
       viewBox={`0 0 ${DIVIDER_WIDTH} ${HEIGHT}`}
       preserveAspectRatio="xMinYMid slice"
-      className={cn("block h-3.5 w-full text-the rtl:-scale-x-100", className)}
+      className={cn("block h-5 w-full rtl:-scale-x-100", tones[tone], className)}
     >
       <path
         d={DIVIDER_PATH}
         pathLength={1}
         fill="none"
         stroke="currentColor"
-        strokeWidth={1.4}
+        strokeWidth={2.4}
         strokeLinecap="round"
         className={cn(draw && "chain-draw")}
       />
@@ -93,7 +104,7 @@ export function ChainLoader({
       viewBox={`0 0 ${10 + loops * LOOP} ${HEIGHT}`}
       className={cn(
         "shrink-0 rtl:-scale-x-100",
-        size === "sm" ? "h-3 w-auto" : "h-3.5 w-auto",
+        size === "sm" ? "h-3 w-auto" : "h-4 w-auto",
       )}
     >
       {Array.from({ length: loops }, (_, i) => (
@@ -102,7 +113,7 @@ export function ChainLoader({
           d={`M${i * LOOP + 2} 7 C ${i * LOOP + 10} 1, ${i * LOOP + 22} 1, ${i * LOOP + 26} 7 C ${i * LOOP + 22} 13, ${i * LOOP + 10} 13, ${i * LOOP + 18} 7`}
           fill="none"
           stroke="currentColor"
-          strokeWidth={1.6}
+          strokeWidth={2}
           strokeLinecap="round"
           className="animate-loop-in motion-reduce:animate-none"
           style={{ animationDelay: `${i * 0.16}s` }}
@@ -118,7 +129,7 @@ export function ChainLoader({
   return (
     <span
       role="status"
-      className={cn("inline-flex items-center gap-3 text-the", className)}
+      className={cn("inline-flex items-center gap-3 text-fouwwa", className)}
     >
       {svg}
       {label && <span className="sr-only">{label}</span>}

@@ -109,6 +109,15 @@ const ar: Dictionary = {
     addedToast: "أُضيفت {name} إلى السلة",
     photoSoon: "الصورة قريبًا",
     viewPhoto: "عرض الصورة {n}",
+    yarnColours: "ألوان الصوف",
+  },
+  colours: {
+    rose: "ورد",
+    laine: "صوف",
+    nila: "نيلة",
+    fouwwa: "فوّة",
+    naanaa: "نعناع",
+    kurkum: "كركم",
   },
 
   checkout: {
@@ -149,7 +158,9 @@ const ar: Dictionary = {
       nameShort: "يرجى إدخال الاسم.",
       nameLong: "الاسم طويل جدًا (80 حرفًا كحد أقصى).",
       phoneMissing: "يرجى إدخال رقم الهاتف.",
-      phoneInvalid: "رقم الهاتف غير صالح (مثال: 06 12 34 56 78).",
+      // The number is isolated left to right (U+2066 … U+2069): without it, each
+      // group of digits is reordered on its own and reads "78 56 34 12 06".
+      phoneInvalid: "رقم الهاتف غير صالح (مثال: ⁦06 12 34 56 78⁩).",
       cityShort: "يرجى إدخال المدينة.",
       cityLong: "اسم المدينة طويل جدًا.",
       addressShort: "يرجى إدخال عنوان التوصيل.",

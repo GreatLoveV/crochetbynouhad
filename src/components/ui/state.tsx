@@ -57,7 +57,7 @@ export function ErrorState({ title, body, actions, className, as: H = "h2" }: St
       className={cn("mx-auto flex max-w-prose flex-col items-center gap-4 px-4 py-16 text-center", className)}
     >
       {/* The same chain, broken: one loop has come undone. */}
-      <svg aria-hidden="true" viewBox="0 0 74 14" className="h-3.5 w-auto text-grenade rtl:-scale-x-100">
+      <svg aria-hidden="true" viewBox="0 0 74 14" className="h-3.5 w-auto text-erreur rtl:-scale-x-100">
         <path
           d="M2 7 C 10 1, 22 1, 26 7 C 22 13, 10 13, 18 7 C 26 1, 38 1, 42 7 C 38 13, 26 13, 34 7 M 48 9 C 54 13, 60 5, 72 7"
           fill="none"

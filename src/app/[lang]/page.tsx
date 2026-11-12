@@ -261,8 +261,8 @@ function FilterLink({
       aria-current={active ? "page" : undefined}
       className={
         active
-          ? "stitch-underline inline-flex min-h-11 items-center whitespace-nowrap text-encre"
-          : "inline-flex min-h-11 items-center whitespace-nowrap text-fil hover:text-encre"
+          ? "stitch-underline inline-flex min-h-11 items-center whitespace-nowrap text-nila"
+          : "inline-flex min-h-11 items-center whitespace-nowrap text-fil hover:text-nila"
       }
     >
       {children}

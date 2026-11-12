@@ -11,25 +11,25 @@ import { cn } from "cn"
 import { ChainLoader } from "@/components/ui/chain"
 
 const buttonVariants = cva(
-  // « Le fil »: flat, nearly square, no lift. Focus uses the global Thé
-  // outline (globals.css); colour change alone marks hover.
-  "group/button relative inline-flex shrink-0 items-center justify-center rounded-md border border-transparent font-medium whitespace-nowrap transition-colors duration-200 ease-thread select-none focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-the disabled:pointer-events-none disabled:cursor-not-allowed aria-busy:pointer-events-none aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5",
+  // « Fouwwa »: flat pills, no lift. Focus uses the global Nila outline
+  // (globals.css); a darker fill or a Laine wash marks hover.
+  "group/button relative inline-flex shrink-0 items-center justify-center rounded-full border border-transparent font-medium whitespace-nowrap transition-colors duration-200 ease-thread select-none focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-nila disabled:pointer-events-none disabled:cursor-not-allowed aria-busy:pointer-events-none aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5",
   {
     variants: {
       variant: {
-        // Thé, the one accent: the main action of a screen, once.
+        // Fouwwa: the main action of a screen, once.
         default:
-          "bg-primary text-primary-foreground hover:bg-the-fonce active:bg-the-fonce disabled:bg-lin disabled:text-fil",
-        // Ink outline: the second action beside the main one.
+          "bg-primary text-primary-foreground hover:bg-fouwwa-fonce active:bg-fouwwa-fonce disabled:bg-rose-fonce disabled:text-fil",
+        // Nila outline: the second action beside the main one.
         outline:
-          "border-encre bg-transparent text-foreground hover:bg-lin active:bg-lin aria-expanded:bg-lin disabled:border-border disabled:text-fil",
+          "border-nila bg-transparent text-foreground hover:bg-laine active:bg-laine aria-expanded:bg-laine disabled:border-border disabled:text-fil",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_srgb,var(--color-lin),var(--color-encre)_7%)] aria-expanded:bg-[color-mix(in_srgb,var(--color-lin),var(--color-encre)_7%)] disabled:text-fil",
+          "bg-secondary text-secondary-foreground hover:bg-rose-fonce aria-expanded:bg-rose-fonce disabled:text-fil",
         ghost:
-          "text-foreground hover:bg-lin aria-expanded:bg-lin disabled:text-fil",
+          "text-foreground hover:bg-laine aria-expanded:bg-laine disabled:text-fil",
         destructive:
-          "border-grenade bg-transparent text-grenade hover:bg-grenade-pale disabled:border-border disabled:text-fil",
-        link: "h-auto rounded-none p-0 text-the underline decoration-1 underline-offset-4 hover:decoration-2 disabled:text-fil",
+          "border-erreur bg-transparent text-erreur hover:bg-erreur-pale disabled:border-border disabled:text-fil",
+        link: "h-auto rounded-none p-0 text-fouwwa underline decoration-1 underline-offset-4 hover:decoration-2 disabled:text-fil",
       },
       size: {
         // 44–48px tall: comfortable to tap on a 375px phone.

@@ -64,7 +64,7 @@ export default async function OrderConfirmationPage({
       {unlocked ? <ClearCartOnMount /> : null}
 
       <div className="flex flex-col items-start gap-4">
-        <CheckCircle2Icon aria-hidden="true" className="size-8 text-the" />
+        <CheckCircle2Icon aria-hidden="true" className="size-8 text-fouwwa" />
         <h1 className="text-4xl sm:text-5xl">{t.order.title}</h1>
         <p className="max-w-prose text-lg text-fil">{t.order.body}</p>
         <Badge variant="outline">{t.orderStatus[order.status]}</Badge>

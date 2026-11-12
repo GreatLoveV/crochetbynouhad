@@ -63,7 +63,7 @@ export function CartButton() {
           <span
             key={added}
             className={cn(
-              "absolute top-1 inset-e-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-the px-1 font-sans text-[0.6875rem] leading-none font-medium text-coton tabular-nums",
+              "absolute top-1 inset-e-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-fouwwa px-1 font-sans text-[0.6875rem] leading-none font-medium text-laine tabular-nums",
               added > 0 && "animate-badge-loop",
             )}
           >
@@ -178,7 +178,7 @@ function DrawerLines({
           <Link
             href={href("/cart")}
             onClick={onClose}
-            className="inline-flex min-h-11 items-center text-sm text-the underline decoration-1 underline-offset-4 hover:decoration-2"
+            className="inline-flex min-h-11 items-center text-sm text-fouwwa underline decoration-1 underline-offset-4 hover:decoration-2"
           >
             {t.cart.viewPage}
           </Link>

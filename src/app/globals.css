@@ -3,35 +3,43 @@
 @import "shadcn/tailwind.css";
 
 /*
-  « Le fil » — design tokens.
+  « Fouwwa » — design tokens (round 2).
 
-  One quiet, near-white page so Nouhad's photos supply all the colour. The only
-  ornament is the crochet chain (components/ui/chain.tsx). Full rationale:
-  docs/design/round-1/direction.md and docs/design/round-1/design-system.md.
+  The colours of dyed wool: madder (fouwwa), indigo (nila), mint and turmeric
+  on a rose ground. Photos sit on undyed wool (laine) so the yarn colours stay
+  true. The one ornament is the crochet chain (components/ui/chain.tsx).
+  Rationale: docs/design/direction.md and docs/design/design-system.md.
 
-  Contrast (WCAG 2.2, measured in docs/design/round-1/design-system.md):
-    Encre on Coton 15.8:1, on Lin 13.7:1      body text, AAA
-    Fil gris on Coton 6.5:1, on Lin 5.7:1     secondary text, AA
-    Thé on Coton 7.5:1; Coton on Thé 7.5:1    links and the primary button, AAA
-    Grenade on Coton 7.0:1, on its tint 6.3:1 errors, AAA
-    Trait on Coton 3.5:1                      field outlines only, never text (3:1 UI)
+  Contrast (WCAG 2.2, checked in docs/design/design-system.md):
+    Nila on Rose 12.4:1, on Laine 14.0:1        body text, AAA
+    Fil on Rose 6.8:1, on Laine 7.6:1           secondary text, AA
+    Laine on Fouwwa 7.8:1; Fouwwa on Rose 6.9:1 main action, links, prices
+    Laine on Naanaa 7.1:1                       atelier band, success
+    Nila on Kurkum 6.9:1                        Kurkum never carries text on Rose (1.8:1)
+    Trait on Rose 4.2:1, on Laine 4.8:1         field outlines only (3:1 UI)
 */
 
 @theme {
-  /* Palette, by name. Components use the semantic tokens below. */
-  --color-coton: #fbfaf8;
-  --color-lin: #eeeae4;
-  --color-encre: #241c2b;
-  --color-fil: #5f5867;
-  --color-the: #1d5c48;
-  --color-the-fonce: #164a3a;
-  --color-the-pale: #e6efeb;
-  --color-trait: #8a8391;
-  --color-grenade: #a3262a;
-  --color-grenade-pale: #f8ecea;
+  /* Palette, by dye name. Components use the semantic tokens below. */
+  --color-rose: #fbedea;
+  --color-rose-fonce: #f4dcd8;
+  --color-laine: #fffdf9;
+  --color-nila: #1e2461;
+  --color-fil: #4d4f7a;
+  --color-trait: #6f6e96;
+  --color-fouwwa: #9c1d3b;
+  --color-fouwwa-fonce: #7e1530;
+  --color-fouwwa-pale: #f6dce0;
+  --color-naanaa: #1c6347;
+  --color-naanaa-pale: #e3efe8;
+  --color-kurkum: #e9a93a;
+  --color-kurkum-pale: #fbebc8;
+  /* Errors are madder too, always with an icon and a sentence, never colour alone. */
+  --color-erreur: var(--color-fouwwa);
+  --color-erreur-pale: var(--color-fouwwa-pale);
 
   /*
-    Type scale, French (Readex Pro for the interface, Markazi Text for the
+    Type scale, French (Readex Pro for the interface, Fraunces for the
     voice). Steps follow a ~1.25 ratio from a 16px body; Arabic redefines them
     below. Line heights: 1.6 for reading, tighter as type grows.
   */
@@ -80,8 +88,9 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-sans);
-  --font-heading: var(--font-heading);
+  --font-sans: var(--font-readex), ui-sans-serif, system-ui, sans-serif;
+  /* Per language, see --heading-stack on :root and html:lang(ar). */
+  --font-heading: var(--heading-stack);
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --color-background: var(--background);
@@ -116,18 +125,23 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Controls get a hint of a corner; photos and surfaces get none. */
-  --radius-sm: calc(var(--radius) * 0.5);
+  /*
+    Soft geometry, by role (direction.md): inputs 14px, photos 24px, cards
+    and frames 28px, buttons and the language switch a full pill.
+  */
+  --radius-sm: 0.5rem;
   --radius-md: var(--radius);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.5);
-  --radius-2xl: calc(var(--radius) * 2);
-  --radius-3xl: calc(var(--radius) * 2);
-  --radius-4xl: calc(var(--radius) * 2);
+  --radius-lg: 1.125rem;
+  --radius-xl: 1.25rem;
+  --radius-photo: 1.5rem;
+  --radius-card: 1.75rem;
+  --radius-2xl: 1.75rem;
+  --radius-3xl: 2rem;
+  --radius-4xl: 2rem;
 
   /* Only floating layers (drawer, menus, toasts) cast a shadow. */
-  --shadow-soft: 0 1px 2px rgb(36 28 43 / 0.06);
-  --shadow-lift: 0 18px 40px -18px rgb(36 28 43 / 0.28), 0 0 0 1px rgb(36 28 43 / 0.06);
+  --shadow-soft: 0 1px 2px rgb(30 36 97 / 0.06);
+  --shadow-lift: 0 18px 40px -18px rgb(30 36 97 / 0.28), 0 0 0 1px rgb(30 36 97 / 0.06);
 }
 
 /*
@@ -136,48 +150,57 @@
 */
 :root {
   color-scheme: light;
-  --background: var(--color-coton);
-  --foreground: var(--color-encre);
-  --card: var(--color-lin);
-  --card-foreground: var(--color-encre);
-  --popover: var(--color-coton);
-  --popover-foreground: var(--color-encre);
-  --primary: var(--color-the);
-  --primary-foreground: var(--color-coton);
-  --secondary: var(--color-lin);
-  --secondary-foreground: var(--color-encre);
-  --muted: var(--color-lin);
+  /* French headings: Fraunces with its metric-matched fallback, then Ruqaa. */
+  --heading-stack: var(--font-fraunces), var(--font-ruqaa), ui-serif, serif;
+  --background: var(--color-rose);
+  --foreground: var(--color-nila);
+  --card: var(--color-laine);
+  --card-foreground: var(--color-nila);
+  --popover: var(--color-laine);
+  --popover-foreground: var(--color-nila);
+  --primary: var(--color-fouwwa);
+  --primary-foreground: var(--color-laine);
+  --secondary: var(--color-laine);
+  --secondary-foreground: var(--color-nila);
+  --muted: var(--color-rose-fonce);
   --muted-foreground: var(--color-fil);
-  --accent: var(--color-lin);
-  --accent-foreground: var(--color-encre);
-  --destructive: var(--color-grenade);
-  /* Dividers are decorative and stay quiet; field outlines use Trait (3.5:1). */
-  --border: #dcd7d0;
+  --accent: var(--color-laine);
+  --accent-foreground: var(--color-nila);
+  --destructive: var(--color-erreur);
+  /* Dividers are decorative and stay quiet; field outlines use Trait. */
+  --border: #ead2ce;
   --input: var(--color-trait);
-  --ring: var(--color-the);
-  --chart-1: var(--color-the);
-  --chart-2: var(--color-encre);
-  --chart-3: var(--color-fil);
-  --chart-4: var(--color-trait);
-  --chart-5: var(--color-lin);
-  --radius: 0.125rem;
-  --sidebar: var(--color-coton);
-  --sidebar-foreground: var(--color-encre);
-  --sidebar-primary: var(--color-the);
-  --sidebar-primary-foreground: var(--color-coton);
-  --sidebar-accent: var(--color-lin);
-  --sidebar-accent-foreground: var(--color-encre);
-  --sidebar-border: #dcd7d0;
-  --sidebar-ring: var(--color-the);
+  --ring: var(--color-nila);
+  --chart-1: var(--color-fouwwa);
+  --chart-2: var(--color-nila);
+  --chart-3: var(--color-naanaa);
+  --chart-4: var(--color-kurkum);
+  --chart-5: var(--color-fil);
+  --radius: 0.875rem;
+  --sidebar: var(--color-laine);
+  --sidebar-foreground: var(--color-nila);
+  --sidebar-primary: var(--color-fouwwa);
+  --sidebar-primary-foreground: var(--color-laine);
+  --sidebar-accent: var(--color-rose);
+  --sidebar-accent-foreground: var(--color-nila);
+  --sidebar-border: #ead2ce;
+  --sidebar-ring: var(--color-nila);
 }
 
 /*
   Arabic type scale. Arabic letters sit smaller on the same body size and
   carry marks above and below, so reading sizes grow about 12 % and lines
-  open to 1.8. Display sizes grow less: Markazi's Naskh is already generous
-  at heading sizes, and long Arabic headlines would otherwise wrap twice.
+  open to 1.8. Display sizes grow about 8 %: Aref Ruqaa sits small on its
+  body, and its tall lam and alif need line-height 1.6 or more at display
+  sizes or they reach into the line above.
 */
 html:lang(ar) {
+  /*
+    Fraunces' bare face first (Latin words: MAD, the brand), then Aref Ruqaa
+    with its fallback. Fraunces' own fallback is Times New Roman, which has
+    Arabic letters, so it must not come before Ruqaa (see app/fonts.ts).
+  */
+  --heading-stack: var(--font-fraunces-face), var(--font-ruqaa), ui-serif, serif;
   --text-xs: 0.875rem;
   --text-xs--line-height: 1.7;
   --text-sm: 0.96875rem;
@@ -189,13 +212,13 @@ html:lang(ar) {
   --text-xl: 1.5rem;
   --text-xl--line-height: 1.55;
   --text-2xl: 1.875rem;
-  --text-2xl--line-height: 1.4;
-  --text-3xl: 2.25rem;
-  --text-3xl--line-height: 1.35;
-  --text-4xl: 2.875rem;
-  --text-4xl--line-height: 1.3;
-  --text-5xl: 3.5rem;
-  --text-5xl--line-height: 1.25;
+  --text-2xl--line-height: 1.7;
+  --text-3xl: 2.375rem;
+  --text-3xl--line-height: 1.7;
+  --text-4xl: 3.25rem;
+  --text-4xl--line-height: 1.65;
+  --text-5xl: 4rem;
+  --text-5xl--line-height: 1.6;
 }
 
 @layer base {
@@ -216,6 +239,15 @@ html:lang(ar) {
   h3,
   h4 {
     @apply font-heading font-semibold text-balance;
+    letter-spacing: -0.01em;
+  }
+  /* Fraunces' soft, slightly wonky cut: round terminals, close to yarn. */
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-heading {
+    font-variation-settings: "SOFT" 100, "WONK" 1;
   }
   p {
     text-wrap: pretty;
@@ -225,12 +257,12 @@ html:lang(ar) {
     font-weight: 500;
   }
   ::selection {
-    background-color: var(--color-the-pale);
-    color: var(--color-encre);
+    background-color: var(--color-kurkum-pale);
+    color: var(--color-nila);
   }
-  /* One focus style everywhere: a Thé outline that clears the element. */
+  /* One focus style everywhere: a Nila outline that clears the element. */
   :focus-visible {
-    outline: 2px solid var(--color-the);
+    outline: 2px solid var(--color-nila);
     outline-offset: 3px;
   }
   /* Prices, references and phone numbers stay LTR inside Arabic. */
@@ -296,7 +328,7 @@ html:lang(ar) {
     inset-inline: 0;
     bottom: 0.125rem;
     height: 0.375rem;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='6'%3E%3Cellipse cx='6' cy='3' rx='5' ry='2.2' fill='none' stroke='%231D5C48' stroke-width='1.3'/%3E%3C/svg%3E")
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='6'%3E%3Cellipse cx='6' cy='3' rx='5' ry='2.2' fill='none' stroke='%239C1D3B' stroke-width='1.6'/%3E%3C/svg%3E")
       repeat-x;
     background-position: left center;
   }
@@ -324,4 +356,14 @@ html:lang(ar) {
       transform: scale(1) rotate(0);
     }
   }
+}
+
+/*
+  An empty photo: faint rows of chain stitches on Laine, drawn in Nila at 9 %
+  so the piece's name on top keeps full contrast. Symmetrical, so nothing to
+  mirror in Arabic.
+*/
+@utility photo-stitches {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='28'%3E%3Cpath d='M2 14 C10 8 22 8 26 14 C22 20 10 20 18 14' fill='none' stroke='%231E2461' stroke-opacity='.09' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-size: 32px 28px;
 }

@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 
-import { fontClasses } from "@/app/fonts";
+import { fontClasses, fontStyle } from "@/app/fonts";
 import { SITE_URL, strings } from "@/lib/constants/strings";
 
 import "../globals.css";
@@ -29,7 +29,7 @@ export const viewport: Viewport = {
 
 export default function AdminRootLayout({ children }: LayoutProps<"/admin">) {
   return (
-    <html lang="fr" dir="ltr" className={`${fontClasses} h-full`}>
+    <html lang="fr" dir="ltr" className={`${fontClasses} h-full`} style={fontStyle}>
       <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );

@@ -81,8 +81,8 @@ export function ProductTileSkeleton({ feature = false }: { feature?: boolean }) 
     <div aria-hidden="true" className={cn("flex flex-col gap-3", feature && "sm:col-span-2 sm:row-span-2")}>
       <Photo alt="" loading className={cn(feature && "sm:aspect-auto sm:flex-1")} />
       <div className="flex flex-col gap-2">
-        <span className="h-5 w-2/3 bg-lin" />
-        <span className="h-4 w-1/3 bg-lin" />
+        <span className="h-5 w-2/3 bg-laine" />
+        <span className="h-4 w-1/3 bg-laine" />
       </div>
     </div>
   )

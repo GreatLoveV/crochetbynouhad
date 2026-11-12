@@ -17,7 +17,7 @@ export function NavLinks({ contactHref, className }: { contactHref: string; clas
   const onShop = pathname === `/${lang}` || pathname.startsWith(`/${lang}/products`);
 
   const base =
-    "inline-flex min-h-11 items-center py-2 text-base transition-colors duration-150 ease-thread hover:text-encre";
+    "inline-flex min-h-11 items-center py-2 text-base transition-colors duration-150 ease-thread hover:text-nila";
 
   return (
     <nav aria-label={t.nav.label} className={className}>
@@ -26,7 +26,7 @@ export function NavLinks({ contactHref, className }: { contactHref: string; clas
           <Link
             href={href("/")}
             aria-current={onShop ? "page" : undefined}
-            className={cn(base, onShop ? "stitch-underline text-encre" : "text-fil")}
+            className={cn(base, onShop ? "stitch-underline text-nila" : "text-fil")}
           >
             {t.nav.shop}
           </Link>

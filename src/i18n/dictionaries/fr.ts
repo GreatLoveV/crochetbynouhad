@@ -99,6 +99,16 @@ const fr = {
     addedToast: "{name} ajouté au panier",
     photoSoon: "Photo à venir",
     viewPhoto: "Voir la photo {n}",
+    yarnColours: "Couleurs de laine",
+  },
+  /** Dye names of the palette, also used for the yarn of each piece. */
+  colours: {
+    rose: "Rose",
+    laine: "Laine",
+    nila: "Nila",
+    fouwwa: "Fouwwa",
+    naanaa: "Naanaa",
+    kurkum: "Kurkum",
   },
 
   checkout: {

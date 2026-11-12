@@ -23,14 +23,14 @@ export async function SiteHeader() {
   const contactHref = whatsappUrl(fill(t.whatsapp.info, { shop: t.siteName }));
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-coton/95 backdrop-blur-sm">
-      <div className="mx-auto flex h-16 max-w-page items-center justify-between gap-4 px-4 sm:h-18 sm:px-8">
+    <header className="sticky top-0 z-40 border-b border-border bg-laine/95 backdrop-blur-sm">
+      <div className="mx-auto flex h-16 max-w-page items-center justify-between gap-3 px-4 sm:h-18 sm:px-8">
         {/* The brand is written in Latin letters in both languages. */}
         <Link
           href={localePath(lang, "/")}
           lang="fr"
           dir="ltr"
-          className="font-heading text-2xl leading-none font-semibold whitespace-nowrap sm:text-[1.75rem]"
+          className="py-2 font-heading text-[1.25rem] leading-none font-semibold whitespace-nowrap sm:text-[1.75rem]"
         >
           {t.siteName}
         </Link>
@@ -54,10 +54,11 @@ export async function SiteFooter() {
   const lang = await getLang();
   const t = await getDictionary();
 
-  const link = "w-fit underline-offset-4 decoration-1 hover:underline";
+  // py-1 keeps each link at least 24px tall (WCAG 2.5.8).
+  const link = "w-fit py-1 underline-offset-4 decoration-1 hover:underline";
 
   return (
-    <footer className="mt-section border-t border-border bg-lin">
+    <footer className="mt-section border-t border-border bg-laine">
       <div className="mx-auto grid max-w-page gap-10 px-4 py-14 sm:grid-cols-[1.4fr_1fr_1fr] sm:px-8">
         <div className="flex flex-col gap-3">
           <p lang="fr" dir="ltr" className="w-fit font-heading text-2xl font-semibold">

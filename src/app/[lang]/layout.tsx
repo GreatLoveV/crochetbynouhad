@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 
-import { fontClasses } from "@/app/fonts";
+import { fontClasses, fontStyle } from "@/app/fonts";
 import { CartProvider } from "@/components/cart/cart-provider";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { Toaster } from "@/components/ui/sonner";
@@ -57,7 +57,7 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[lang]">)
   const dir = dirOf(lang);
 
   return (
-    <html lang={lang} dir={dir} className={`${fontClasses} h-full`}>
+    <html lang={lang} dir={dir} className={`${fontClasses} h-full`} style={fontStyle}>
       <body className="flex min-h-full flex-col">
         <I18nProvider lang={lang} dictionary={dictionary}>
           {/* Cart lives in the browser: wrap the whole shop once, here. */}
@@ -65,7 +65,7 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[lang]">)
             {/* First stop for the keyboard: past the header, straight to the page. */}
             <a
               href="#contenu"
-              className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:top-3 focus-visible:inset-s-3 focus-visible:z-50 focus-visible:bg-encre focus-visible:px-4 focus-visible:py-3 focus-visible:text-coton"
+              className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:top-3 focus-visible:inset-s-3 focus-visible:z-50 focus-visible:bg-nila focus-visible:px-4 focus-visible:py-3 focus-visible:text-laine"
             >
               {dictionary.common.skipToContent}
             </a>

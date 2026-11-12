@@ -16,6 +16,7 @@ import { Price } from "@/components/ui/price"
 import { EmptyState, ErrorState, LoadingState } from "@/components/ui/state"
 import { Steps } from "@/components/ui/steps"
 import { Textarea } from "@/components/ui/textarea"
+import { YarnChips } from "@/components/ui/yarn-chips"
 import { getActiveProducts, type ProductSummary } from "@/lib/data/products"
 import { fill } from "@/i18n/config"
 import { getDictionary, getLang } from "@/i18n/server"
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
 /** Labels of the guide itself (not shop copy, so not in the dictionaries). */
 const L = {
   fr: {
-    title: "Système « Le fil »",
+    title: "Système « Fouwwa »",
     intro: "Chaque composant de base, dans chaque état. La même page existe en arabe, de droite à gauche.",
     colours: "Couleurs",
     type: "Typographie",
@@ -51,15 +52,20 @@ const L = {
     toasts: "Notifications",
     states_: { rest: "Repos", hover: "Survol", focus: "Focus clavier", disabled: "Désactivé", loading: "En cours" },
     roles: {
-      coton: "fond de page",
-      lin: "surfaces calmes, photo absente",
-      encre: "tout le texte",
+      rose: "fond de page",
+      laine: "fond des photos, cartes, champs",
+      nila: "tout le texte, contour du focus",
       fil: "texte secondaire",
-      the: "l’accent unique : action principale, liens",
+      fouwwa: "action principale, liens, prix, erreurs (toujours avec une icône)",
+      naanaa: "bande de l’atelier, succès",
+      kurkum: "fil de la chaînette, étiquette « pièce unique », jamais du texte sur Rose",
       trait: "contours de champs, jamais du texte",
-      grenade: "erreurs de formulaire seulement",
     },
-    onCoton: "sur Coton",
+    onRose: "sur Rose",
+    radii: "Arrondis",
+    radiiItems: ["Champ 14 px", "Photo 24 px", "Carte 28 px", "Bouton : pilule"],
+    yarn: "Couleurs de laine d’une pièce",
+    tones: "La chaînette prend la couleur de la section qui suit",
     divider: "Séparateur",
     drawn: "Se dessine une fois (premier écran)",
     nav: "Navigation : la page en cours",
@@ -79,7 +85,7 @@ const L = {
     placeholderNote: "Texte provisoire : les étapes définitives viendront avec la refonte des pages.",
   },
   ar: {
-    title: "نظام «الخيط»",
+    title: "نظام «فوّة»",
     intro: "كل مكوّن أساسي في كل حالاته. الصفحة نفسها موجودة بالفرنسية، من اليسار إلى اليمين.",
     colours: "الألوان",
     type: "الخطوط",
@@ -94,15 +100,20 @@ const L = {
     toasts: "الإشعارات",
     states_: { rest: "عادي", hover: "تمرير المؤشر", focus: "تركيز لوحة المفاتيح", disabled: "معطّل", loading: "قيد التنفيذ" },
     roles: {
-      coton: "خلفية الصفحة",
-      lin: "أسطح هادئة، صورة غائبة",
-      encre: "كل النصوص",
+      rose: "خلفية الصفحة",
+      laine: "خلفية الصور والبطاقات والحقول",
+      nila: "كل النصوص، وإطار التركيز",
       fil: "نص ثانوي",
-      the: "اللون المميّز الوحيد: الإجراء الرئيسي والروابط",
+      fouwwa: "الإجراء الرئيسي والروابط والأسعار والأخطاء (دائمًا مع أيقونة)",
+      naanaa: "شريط الورشة، والنجاح",
+      kurkum: "خيط السلسلة، ووسم «قطعة فريدة»، وليس للنص على الوردي أبدًا",
       trait: "حدود الحقول، وليس للنص أبدًا",
-      grenade: "أخطاء النماذج فقط",
     },
-    onCoton: "على Coton",
+    onRose: "على Rose",
+    radii: "الزوايا",
+    radiiItems: ["حقل 14 px", "صورة 24 px", "بطاقة 28 px", "زر: حواف مستديرة بالكامل"],
+    yarn: "ألوان صوف القطعة",
+    tones: "تأخذ السلسلة لون القسم الذي يليها",
     divider: "فاصل",
     drawn: "يُرسم مرة واحدة (الشاشة الأولى)",
     nav: "التنقل: الصفحة الحالية",
@@ -124,13 +135,14 @@ const L = {
 } as const
 
 const PALETTE = [
-  { key: "coton", name: "Coton", hex: "#FBFAF8", ratio: null, ink: "text-encre" },
-  { key: "lin", name: "Lin", hex: "#EEEAE4", ratio: null, ink: "text-encre" },
-  { key: "encre", name: "Encre de mûre", hex: "#241C2B", ratio: "15,8:1", ink: "text-coton" },
-  { key: "fil", name: "Fil gris", hex: "#5F5867", ratio: "6,5:1", ink: "text-coton" },
-  { key: "the", name: "Thé", hex: "#1D5C48", ratio: "7,5:1", ink: "text-coton" },
-  { key: "trait", name: "Trait", hex: "#8A8391", ratio: "3,5:1", ink: "text-coton" },
-  { key: "grenade", name: "Grenade", hex: "#A3262A", ratio: "7,0:1", ink: "text-coton" },
+  { key: "rose", name: "Rose", hex: "#FBEDEA", ratio: null, ink: "text-nila" },
+  { key: "laine", name: "Laine", hex: "#FFFDF9", ratio: null, ink: "text-nila" },
+  { key: "nila", name: "Nila", hex: "#1E2461", ratio: "12,4:1", ink: "text-laine" },
+  { key: "fil", name: "Fil", hex: "#4D4F7A", ratio: "6,8:1", ink: "text-laine" },
+  { key: "fouwwa", name: "Fouwwa", hex: "#9C1D3B", ratio: "6,9:1", ink: "text-laine" },
+  { key: "naanaa", name: "Naanaa", hex: "#1C6347", ratio: "6,3:1", ink: "text-laine" },
+  { key: "kurkum", name: "Kurkum", hex: "#E9A93A", ratio: "1,8:1", ink: "text-nila" },
+  { key: "trait", name: "Trait", hex: "#6F6E96", ratio: "4,2:1", ink: "text-laine" },
 ] as const
 
 function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
@@ -186,11 +198,11 @@ export default async function StyleguidePage() {
       </header>
 
       <Section id="colours" title={l.colours}>
-        <ul className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-7">
+        <ul className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
           {PALETTE.map((c) => (
             <li key={c.key} className="flex flex-col gap-2">
               <span
-                className={`flex h-20 items-end p-2 text-xs ${c.ink} outline -outline-offset-1 outline-border`}
+                className={`flex h-24 items-end rounded-xl p-2.5 text-xs ${c.ink} outline -outline-offset-1 outline-border`}
                 style={{ background: c.hex }}
               >
                 {c.ratio && (
@@ -207,19 +219,35 @@ export default async function StyleguidePage() {
           ))}
         </ul>
         <p className="text-sm text-fil">
-          {l.onCoton}: Encre 15,8 · Fil gris 6,5 · Thé 7,5 · Grenade 7,0 · Trait 3,5 (UI)
+          {l.onRose}: Nila 12,4 · Fil 6,8 · Fouwwa 6,9 · Naanaa 6,3 · Trait 4,2 (UI) · Kurkum 1,8 (jamais du texte). Laine sur Fouwwa 7,8 · Nila sur Kurkum 6,9
         </p>
+        <div className="flex flex-col gap-3">
+          <h3 className="text-lg font-sans font-medium">{l.radii}</h3>
+          <ul className="flex flex-wrap items-end gap-4">
+            {[
+              "h-12 w-32 rounded-md border border-input bg-laine",
+              "h-24 w-20 rounded-photo bg-laine photo-stitches",
+              "h-24 w-32 rounded-card bg-card ring-1 ring-foreground/10",
+              "h-12 w-32 rounded-full bg-fouwwa",
+            ].map((cls, i) => (
+              <li key={cls} className="flex flex-col gap-2">
+                <span className={cls} />
+                <span className="text-xs text-fil">{l.radiiItems[i]}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </Section>
 
       <Section id="type" title={l.type}>
         <div className="flex flex-col gap-6">
-          <Specimen label="5xl · Markazi Text 600">
+          <Specimen label={lang === "ar" ? "5xl · Aref Ruqaa 700, 1.5" : "5xl · Fraunces 600, SOFT 100, WONK 1"}>
             <p className="font-heading text-5xl font-semibold">{t.hero.title}</p>
           </Specimen>
-          <Specimen label="3xl · Markazi Text 600">
+          <Specimen label={lang === "ar" ? "3xl · Aref Ruqaa 700" : "3xl · Fraunces 600"}>
             <p className="font-heading text-3xl font-semibold">{t.shop.title}</p>
           </Specimen>
-          <Specimen label="xl · Markazi Text 500">
+          <Specimen label={lang === "ar" ? "xl · Aref Ruqaa 700" : "xl · Fraunces 500"}>
             <p className="font-heading text-xl font-medium">{tiles[0].name}</p>
           </Specimen>
           <Specimen label="lg · Readex Pro 350">
@@ -232,10 +260,10 @@ export default async function StyleguidePage() {
               <bdi>Crochet by Nouhad</bdi> <bdi>CN-0002</bdi>.
             </p>
           </Specimen>
-          <Specimen label="sm · Readex Pro 350, Fil gris">
+          <Specimen label="sm · Readex Pro 350, Fil">
             <p className="text-sm text-fil">{t.checkout.phoneHint}</p>
           </Specimen>
-          <Specimen label="xs · Readex Pro 350, Fil gris">
+          <Specimen label="xs · Readex Pro 350, Fil">
             <p className="text-xs text-fil">{t.footer.copyright}</p>
           </Specimen>
         </div>
@@ -248,6 +276,13 @@ export default async function StyleguidePage() {
         <Specimen label={l.drawn}>
           <Chain draw />
         </Specimen>
+        <Specimen label={l.tones}>
+          <div className="flex w-full flex-col gap-3">
+            <Chain tone="kurkum" />
+            <Chain tone="naanaa" />
+            <Chain tone="nila" />
+          </div>
+        </Specimen>
         <Specimen label={l.nav}>
           <nav aria-label={t.nav.label} className="flex items-center gap-6">
             {l.navItems.map((item, i) => (
@@ -255,7 +290,7 @@ export default async function StyleguidePage() {
                 key={item}
                 href="#chain"
                 aria-current={i === 0 ? "page" : undefined}
-                className={`py-2.5 text-base ${i === 0 ? "stitch-underline" : "text-fil hover:text-encre"}`}
+                className={`py-2.5 text-base ${i === 0 ? "stitch-underline" : "text-fil hover:text-nila"}`}
               >
                 {item}
               </a>
@@ -271,11 +306,11 @@ export default async function StyleguidePage() {
       <Section id="buttons" title={l.buttons}>
         {(["default", "outline", "secondary", "ghost", "destructive", "link"] as const).map((variant) => {
           const forcedHover = {
-            default: "bg-the-fonce",
-            outline: "bg-lin",
-            secondary: "bg-[color-mix(in_srgb,var(--color-lin),var(--color-encre)_7%)]",
-            ghost: "bg-lin",
-            destructive: "bg-grenade-pale",
+            default: "bg-fouwwa-fonce",
+            outline: "bg-laine",
+            secondary: "bg-rose-fonce",
+            ghost: "bg-laine",
+            destructive: "bg-erreur-pale",
             link: "decoration-2",
           }[variant]
           const label =
@@ -291,7 +326,7 @@ export default async function StyleguidePage() {
                 </Button>
               </Specimen>
               <Specimen label={l.states_.focus}>
-                <Button variant={variant} className="outline-solid! outline-2! outline-offset-3! outline-the!">
+                <Button variant={variant} className="outline-solid! outline-2! outline-offset-3! outline-nila!">
                   {label}
                 </Button>
               </Specimen>
@@ -336,7 +371,7 @@ export default async function StyleguidePage() {
               <Input
                 {...p}
                 defaultValue={t.checkout.cityPlaceholder}
-                className="border-the outline-solid! outline-2! outline-offset-2! outline-the!"
+                className="border-fouwwa outline-solid! outline-2! outline-offset-2! outline-nila!"
               />
             )}
           </Field>
@@ -397,6 +432,9 @@ export default async function StyleguidePage() {
             <Photo alt="" loading />
           </Specimen>
         </div>
+        <Specimen label={l.yarn}>
+          <YarnChips colours={["fouwwa", "kurkum", "laine"]} t={t} id="sg-yarn" />
+        </Specimen>
         <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
           <ProductTile product={tiles[0]} lang={lang} t={t} feature />
           <ProductTile product={tiles[1]} lang={lang} t={t} />
@@ -408,7 +446,7 @@ export default async function StyleguidePage() {
 
       <Section id="states" title={l.states}>
         <div className="grid gap-6 lg:grid-cols-3">
-          <div className="bg-lin/40 outline outline-border">
+          <div className="rounded-card bg-laine">
             <EmptyState
               as="h3"
               title={t.cart.empty}
@@ -416,10 +454,10 @@ export default async function StyleguidePage() {
               actions={<Button variant="outline">{t.cart.continueShopping}</Button>}
             />
           </div>
-          <div className="bg-lin/40 outline outline-border">
+          <div className="rounded-card bg-laine">
             <LoadingState label={t.common.loading} />
           </div>
-          <div className="bg-lin/40 outline outline-border">
+          <div className="rounded-card bg-laine">
             <ErrorState
               as="h3"
               title={t.common.loadErrorTitle}
