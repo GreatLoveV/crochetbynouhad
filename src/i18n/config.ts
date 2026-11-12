@@ -45,6 +45,15 @@ export const localeName: Record<Locale, string> = {
   ar: "العربية",
 };
 
+/**
+ * The switcher's short label on phones. Each is part of the full name above,
+ * so the link's accessible name contains what is seen (WCAG 2.5.3).
+ */
+export const localeShortName: Record<Locale, string> = {
+  fr: "FR",
+  ar: "عربي",
+};
+
 /** The language the switcher offers from this one. */
 export function otherLocale(lang: Locale): Locale {
   return lang === "fr" ? "ar" : "fr";

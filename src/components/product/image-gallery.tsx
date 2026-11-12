@@ -58,7 +58,7 @@ export function ImageGallery({
               <button
                 type="button"
                 onClick={() => setActiveIndex(index)}
-                aria-current={index === activeIndex}
+                aria-pressed={index === activeIndex}
                 aria-label={fill(t.product.viewPhoto, { n: index + 1 })}
                 className={cn(
                   "relative block aspect-4/5 w-16 overflow-hidden rounded-xl bg-laine outline-offset-2 focus-visible:outline-2! focus-visible:outline-barqouq! lg:w-20",

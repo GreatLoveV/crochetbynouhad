@@ -95,17 +95,18 @@ export default async function HomePage({ searchParams }: PageProps<"/[lang]">) {
           />
         ) : asRows ? (
           <ul className="flex flex-col gap-16 sm:gap-24">
-            {listed.map((product, i) => (
+            {/* Below the hero on every screen size, so the photos load lazily. */}
+            {listed.map((product) => (
               <li key={product.id}>
-                <PieceRow product={product} lang={lang} t={t} priority={i === 0} />
+                <PieceRow product={product} lang={lang} t={t} />
               </li>
             ))}
           </ul>
         ) : (
           <ul className="grid grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-3 sm:gap-x-6">
-            {products.map((product, i) => (
+            {products.map((product) => (
               <li key={product.id}>
-                <ProductTile product={product} lang={lang} t={t} priority={i < 2} />
+                <ProductTile product={product} lang={lang} t={t} />
               </li>
             ))}
           </ul>

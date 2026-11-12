@@ -7,6 +7,7 @@ import { useI18n } from "@/i18n/client";
 import {
   LOCALE_COOKIE,
   localeName,
+  localeShortName,
   otherLocale,
   switchLocalePath,
   type Locale,
@@ -41,7 +42,6 @@ function SwitcherLink({ className, search }: { className?: string; search: strin
   const { lang } = useI18n();
   const pathname = usePathname();
   const target: Locale = otherLocale(lang);
-  const shortLocaleName: Record<Locale, string> = { fr: "FR", ar: "عربي" };
 
   return (
     <a
@@ -59,7 +59,7 @@ function SwitcherLink({ className, search }: { className?: string; search: strin
       {/* Phones show a short label; its letters are part of the full name, so
           the accessible name still contains what is seen (WCAG 2.5.3). */}
       <span aria-hidden="true" className="sm:hidden">
-        {shortLocaleName[target]}
+        {localeShortName[target]}
       </span>
       <span className="sr-only sm:not-sr-only">{localeName[target]}</span>
     </a>

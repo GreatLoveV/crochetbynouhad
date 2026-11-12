@@ -24,10 +24,11 @@ type PhotoProps = {
   sizes?: string
   /**
    * The one photo that is the page's largest element (hero, product page):
-   * Next 16 puts a `<link rel=preload>` in the head for it.
+   * fetched eagerly with `fetchPriority="high"`. The Next 16 docs prefer this
+   * to `preload` when the image is already in the first HTML, which it is.
    */
   preload?: boolean
-  /** Above the fold but not the main photo: fetched eagerly and early. */
+  /** Above the fold but not the main photo: fetched eagerly, normal priority. */
   priority?: boolean
   loading?: boolean
   className?: string
@@ -67,7 +68,7 @@ export function Photo({
           alt={alt}
           fill
           sizes={sizes}
-          {...(preload ? { preload: true } : priority ? { loading: "eager", fetchPriority: "high" } : {})}
+          {...(preload ? { loading: "eager", fetchPriority: "high" } : priority ? { loading: "eager" } : {})}
           className="object-cover"
           unoptimized={!isOptimizableImageUrl(src)}
         />
