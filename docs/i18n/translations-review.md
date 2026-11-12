@@ -245,3 +245,34 @@ ordering flow (form, WhatsApp confirmation, cash on delivery).
 | ☐ | `common.retry` | Réessayer | إعادة المحاولة |
 | ☐ | `common.loadErrorTitle` | La page ne s’est pas chargée | لم تُحمَّل الصفحة |
 | ☐ | `common.loadErrorBody` | Vérifiez votre connexion, puis réessayez. Vous pouvez aussi écrire à Nouhad sur WhatsApp. | تحقّقوا من الاتصال، ثم أعيدوا المحاولة. يمكنكم أيضًا مراسلة نهاد على واتساب. |
+
+## Added in round 2 (the « Fouwwa » redesign)
+
+Same rules as above. Each French line is checked against the Arabic.
+
+| ✓ | Key | French | Arabic |
+|---|---|---|---|
+| ☐ | `nav.menu` (phone menu button and title) | Menu | القائمة |
+| ☐ | `home.viewPiece` (button on each piece) | Voir la pièce | شاهدوا القطعة |
+| ☐ | `product.yarnColours` (label for a piece's yarn colours, not shown yet) | Couleurs de laine | ألوان الصوف |
+| ☐ | `colours.rose` | Rose | ورد |
+| ☐ | `colours.laine` | Laine | صوف |
+| ☐ | `colours.barqouq` (plum, replaced `colours.nila` after Phase 5) | Barqouq | برقوق |
+| ☐ | `colours.fouwwa` (madder) | Fouwwa | فوّة |
+| ☐ | `colours.naanaa` (mint) | Naanaa | نعناع |
+| ☐ | `colours.kurkum` (turmeric) | Kurkum | كركم |
+| ☐ | `localeShortName` in `src/i18n/config.ts` (language switch on phones) | FR | عربي |
+| ☐ | `checkout.errors.phoneInvalid` (direction marks only: the example number is isolated so it reads `06 12 34 56 78`) | — | wording unchanged |
+
+**Decisions for this round:**
+
+1. **Arabic display face.** Headings, piece names and the brand's Arabic setting use
+   **Aref Ruqaa**, an Eastern handwritten script. The everyday Moroccan hand is Maghribi,
+   which has no good free webfont. If Ruqaa feels foreign for a Moroccan shop, the
+   alternative is **Reem Kufi** (calmer and geometric). Please judge it on the live pages.
+2. **French colour names.** The palette is named after wool dyes in Darija, written in
+   Latin letters (Fouwwa, Naanaa, Kurkum, Barqouq). A French reader may prefer
+   **Garance, Menthe, Curcuma and Prune**. The names will appear in the shop once each piece
+   lists its yarn colours.
+3. **"شاهدوا القطعة"** follows the plural of politeness, like the rest of the site (decision
+   1 at the top of this file). In the feminine singular it would be "شاهدي القطعة".

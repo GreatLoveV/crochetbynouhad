@@ -7,7 +7,12 @@ pieces, photos, categories and orders in `/admin` (French only).
 
 - Shop: `/fr/...` and `/ar/...`. `/` sends a visitor to the language they
   picked last, else to the one their browser asks for, else to French.
-- Design: the « Le fil » system, see [`docs/design/round-1/`](docs/design/round-1).
+- Design: the « Fouwwa » system (round 2), named after the wool dyes its colours come from:
+  - the choices: [`docs/design/direction.md`](docs/design/direction.md);
+  - tokens and components: [`docs/design/design-system.md`](docs/design/design-system.md);
+  - what changed on each page: [`docs/design/phase-5-redesign.md`](docs/design/phase-5-redesign.md).
+
+  Round 1 (« Le fil ») is kept in [`docs/design/round-1/`](docs/design/round-1).
 
 ## Stack
 
@@ -37,8 +42,8 @@ npx tsc --noEmit                # after one `npm run build`: route types are gen
 npm run build && npm run start  # production build, see the WhatsApp note below
 ```
 
-`/fr/styleguide` shows every component in every state. It exists in
-development only (a 404 in production).
+`/fr/styleguide` and `/ar/styleguide` show every component in every state. They exist in
+development only. In production they show the 404 page, which is marked `noindex`.
 
 ### Running a production build locally
 
@@ -87,7 +92,7 @@ tooling or the host, not by you.
 
 - **Only photos of Nouhad's own work.** Never a stock picture, never an image
   taken from another website. Where there is no photo yet, the site shows a
-  plain beige block with the piece's name.
+  wool-white frame with faint crochet stitches and the piece's name.
 - In `/admin`, open a piece and paste the photo's **https link** (photos are
   linked, not uploaded: Vercel Blob, or any host you control). The first photo
   is the main one; the arrows reorder them.
@@ -98,6 +103,11 @@ tooling or the host, not by you.
   language. Gallery thumbnails are buttons named "Voir la photo 1",
   "Voir la photo 2"… (and the same in Arabic).
 - The newest piece still for sale becomes the home page's first photo.
+- **Home page layout:**
+  - **Six pieces or fewer:** each piece gets a row of its own (photo, name, price, "Voir la
+    pièce" and WhatsApp).
+  - **More than six:** it switches to a grid of two or three columns.
+  - The rows were designed for real photos. With the sample placeholders they look empty.
 
 ### The workshop photo
 
@@ -191,6 +201,27 @@ Say an "À propos" page at `/fr/a-propos` and `/ar/a-propos`:
 6. **Check** both languages at 375 px and 1440 px, then run
    `npx tsc --noEmit` and `npm run lint`.
 
+## Design system in the code
+
+- **Colours, radii and type** are tokens in [`src/app/globals.css`](src/app/globals.css):
+  - Rose (the page), Laine (frames), Barqouq (text), Fouwwa (actions), Naanaa (the
+    atelier band) and Kurkum (the chain).
+  - Components use the tokens, never raw hex values.
+- **Fonts** are self-hosted through `next/font` ([`src/app/fonts.ts`](src/app/fonts.ts)):
+  - **Readex Pro:** the text and interface face in both languages.
+  - **Fraunces:** French headings. Committed as one small file with its Soft and Wonk
+    settings fixed (`src/app/fonts/`, under the SIL Open Font License). That brings it from
+    118 KB to 35 KB.
+  - **Aref Ruqaa:** Arabic headings, bold only.
+- **The chain** ([`src/components/ui/chain.tsx`](src/components/ui/chain.tsx)) is the
+  site's one ornament: section dividers in the dye colours, and the loader.
+- **Motion:**
+  - The chain under the home page's first screen draws once.
+  - The bag count turns when a piece is added.
+  - The phone menu slides in from the start side.
+  - Buttons give slightly when pressed.
+  - With "reduce motion" turned on in the system, nothing moves.
+
 ## How it works
 
 - **Prices** are integer MAD centimes everywhere. The browser only sends
@@ -217,6 +248,10 @@ Say an "À propos" page at `/fr/a-propos` and `/ar/a-propos`:
 - Response headers: HSTS, `nosniff`, `X-Frame-Options: DENY`, a strict
   referrer policy. There is no Content-Security-Policy yet, see
   [`docs/audit/phase-7-audit.md`](docs/audit/phase-7-audit.md).
+- **Dependencies need an update.** At the round-2 audit, `npm audit` reported a critical
+  advisory in Next.js 16.3.8 and high ones in zod, sharp and source-map-js. Fixes exist in the
+  same major versions (Next 16.4.6). See
+  [`docs/audit/phase-6-audit.md`](docs/audit/phase-6-audit.md).
 - The rate limits trust the `x-forwarded-for` header, which Vercel sets. On
   another host, make sure the proxy overwrites it.
 
@@ -232,8 +267,16 @@ Say an "À propos" page at `/fr/a-propos` and `/ar/a-propos`:
 
 ## Still open
 
+- **Upgrade `next` to 16.4.6 and run `npm audit fix`** (security, see above).
 - Nouhad's real photos, and her own words for the home page and *L'atelier*.
 - The legal pages are placeholder text and must be written before launch.
 - Native review of the Arabic, including how the site addresses customers.
 - The old `*_en` columns are still in the database, unused.
 - Delivery fees are not computed; they are agreed on WhatsApp.
+- **Design questions from round 2:**
+  - Aref Ruqaa or Reem Kufi for Arabic headings.
+  - Names for the pieces.
+  - Whether to store each piece's yarn colours, so the colour chips can show (this needs a
+    new field).
+  - French names for the dye colours.
+  - Whether to drop the stashed round-1 "Pelote" experiment (`git stash list`).
