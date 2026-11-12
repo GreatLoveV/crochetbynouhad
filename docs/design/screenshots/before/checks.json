@@ -1,0 +1,398 @@
+{
+ "home-fr-375": {
+  "overflowX": 0,
+  "h1": [
+   "Des pièces uniques, crochées une à une"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "category-coming-soon-fr-375": {
+  "overflowX": 0,
+  "h1": [
+   "Des pièces uniques, crochées une à une"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "product-fr-375": {
+  "overflowX": 0,
+  "h1": [
+   "Sac de Plage Raphia"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "cart-empty-fr-375": {
+  "overflowX": 0,
+  "h1": [
+   "Votre panier"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "conditions-fr-375": {
+  "overflowX": 0,
+  "h1": [
+   "Conditions générales de vente"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "not-found-fr-375": {
+  "overflowX": 0,
+  "h1": [
+   "Cette page n'existe pas"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "drawer-fr-375": [
+  0,
+  375
+ ],
+ "checkout-errors-fr-375": [
+  "Vérifiez les informations saisies.",
+  "Indiquez votre nom.",
+  "Numéro de téléphone invalide (ex. 06 12 34 56 78).",
+  "Indiquez votre ville.",
+  "Indiquez votre adresse de livraison.",
+  ""
+ ],
+ "home-ar-375": {
+  "overflowX": 0,
+  "h1": [
+   "قطع فريدة، تُحاك واحدةً تلو الأخرى"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "category-coming-soon-ar-375": {
+  "overflowX": 0,
+  "h1": [
+   "قطع فريدة، تُحاك واحدةً تلو الأخرى"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "product-ar-375": {
+  "overflowX": 0,
+  "h1": [
+   "حقيبة شاطئ من الرافيا"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "cart-empty-ar-375": {
+  "overflowX": 0,
+  "h1": [
+   "سلة المشتريات"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "conditions-ar-375": {
+  "overflowX": 0,
+  "h1": [
+   "الشروط العامة للبيع"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "not-found-ar-375": {
+  "overflowX": 0,
+  "h1": [
+   "هذه الصفحة غير موجودة"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "drawer-ar-375": [
+  0,
+  375
+ ],
+ "checkout-errors-ar-375": [
+  "يرجى التحقق من المعلومات المُدخلة.",
+  "يرجى إدخال الاسم.",
+  "رقم الهاتف غير صالح (مثال: 06 12 34 56 78).",
+  "يرجى إدخال المدينة.",
+  "يرجى إدخال عنوان التوصيل.",
+  ""
+ ],
+ "home-fr-768": {
+  "overflowX": 0,
+  "h1": [
+   "Des pièces uniques, crochées une à une"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "category-coming-soon-fr-768": {
+  "overflowX": 0,
+  "h1": [
+   "Des pièces uniques, crochées une à une"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "product-fr-768": {
+  "overflowX": 0,
+  "h1": [
+   "Sac de Plage Raphia"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "cart-empty-fr-768": {
+  "overflowX": 0,
+  "h1": [
+   "Votre panier"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "conditions-fr-768": {
+  "overflowX": 0,
+  "h1": [
+   "Conditions générales de vente"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "not-found-fr-768": {
+  "overflowX": 0,
+  "h1": [
+   "Cette page n'existe pas"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "drawer-fr-768": [
+  320,
+  768
+ ],
+ "checkout-errors-fr-768": [
+  "Vérifiez les informations saisies.",
+  "Indiquez votre nom.",
+  "Numéro de téléphone invalide (ex. 06 12 34 56 78).",
+  "Indiquez votre ville.",
+  "Indiquez votre adresse de livraison.",
+  ""
+ ],
+ "home-ar-768": {
+  "overflowX": 0,
+  "h1": [
+   "قطع فريدة، تُحاك واحدةً تلو الأخرى"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "category-coming-soon-ar-768": {
+  "overflowX": 0,
+  "h1": [
+   "قطع فريدة، تُحاك واحدةً تلو الأخرى"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "product-ar-768": {
+  "overflowX": 0,
+  "h1": [
+   "حقيبة شاطئ من الرافيا"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "cart-empty-ar-768": {
+  "overflowX": 0,
+  "h1": [
+   "سلة المشتريات"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "conditions-ar-768": {
+  "overflowX": 0,
+  "h1": [
+   "الشروط العامة للبيع"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "not-found-ar-768": {
+  "overflowX": 0,
+  "h1": [
+   "هذه الصفحة غير موجودة"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "drawer-ar-768": [
+  0,
+  448
+ ],
+ "checkout-errors-ar-768": [
+  "يرجى التحقق من المعلومات المُدخلة.",
+  "يرجى إدخال الاسم.",
+  "رقم الهاتف غير صالح (مثال: 06 12 34 56 78).",
+  "يرجى إدخال المدينة.",
+  "يرجى إدخال عنوان التوصيل.",
+  ""
+ ],
+ "home-fr-1440": {
+  "overflowX": 0,
+  "h1": [
+   "Des pièces uniques, crochées une à une"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "category-coming-soon-fr-1440": {
+  "overflowX": 0,
+  "h1": [
+   "Des pièces uniques, crochées une à une"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "product-fr-1440": {
+  "overflowX": 0,
+  "h1": [
+   "Sac de Plage Raphia"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "cart-empty-fr-1440": {
+  "overflowX": 0,
+  "h1": [
+   "Votre panier"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "conditions-fr-1440": {
+  "overflowX": 0,
+  "h1": [
+   "Conditions générales de vente"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "not-found-fr-1440": {
+  "overflowX": 0,
+  "h1": [
+   "Cette page n'existe pas"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "drawer-fr-1440": [
+  992,
+  1440
+ ],
+ "checkout-errors-fr-1440": [
+  "Vérifiez les informations saisies.",
+  "Indiquez votre nom.",
+  "Numéro de téléphone invalide (ex. 06 12 34 56 78).",
+  "Indiquez votre ville.",
+  "Indiquez votre adresse de livraison.",
+  ""
+ ],
+ "home-ar-1440": {
+  "overflowX": 0,
+  "h1": [
+   "قطع فريدة، تُحاك واحدةً تلو الأخرى"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "category-coming-soon-ar-1440": {
+  "overflowX": 0,
+  "h1": [
+   "قطع فريدة، تُحاك واحدةً تلو الأخرى"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "product-ar-1440": {
+  "overflowX": 0,
+  "h1": [
+   "حقيبة شاطئ من الرافيا"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "cart-empty-ar-1440": {
+  "overflowX": 0,
+  "h1": [
+   "سلة المشتريات"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "conditions-ar-1440": {
+  "overflowX": 0,
+  "h1": [
+   "الشروط العامة للبيع"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "not-found-ar-1440": {
+  "overflowX": 0,
+  "h1": [
+   "هذه الصفحة غير موجودة"
+  ],
+  "noAlt": 0,
+  "unnamed": [],
+  "smallTargets": []
+ },
+ "drawer-ar-1440": [
+  0,
+  448
+ ],
+ "checkout-errors-ar-1440": [
+  "يرجى التحقق من المعلومات المُدخلة.",
+  "يرجى إدخال الاسم.",
+  "رقم الهاتف غير صالح (مثال: 06 12 34 56 78).",
+  "يرجى إدخال المدينة.",
+  "يرجى إدخال عنوان التوصيل.",
+  ""
+ ]
+}

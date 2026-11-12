@@ -7,7 +7,7 @@ pieces, photos, categories and orders in `/admin` (French only).
 
 - Shop: `/fr/...` and `/ar/...`. `/` sends a visitor to the language they
   picked last, else to the one their browser asks for, else to French.
-- Design: the « Le fil » system, see [`docs/design/`](docs/design).
+- Design: the « Le fil » system, see [`docs/design/round-1/`](docs/design/round-1).
 
 ## Stack
 

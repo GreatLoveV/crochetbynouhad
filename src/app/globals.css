@@ -7,9 +7,9 @@
 
   One quiet, near-white page so Nouhad's photos supply all the colour. The only
   ornament is the crochet chain (components/ui/chain.tsx). Full rationale:
-  docs/design/direction.md and docs/design/design-system.md.
+  docs/design/round-1/direction.md and docs/design/round-1/design-system.md.
 
-  Contrast (WCAG 2.2, measured in docs/design/design-system.md):
+  Contrast (WCAG 2.2, measured in docs/design/round-1/design-system.md):
     Encre on Coton 15.8:1, on Lin 13.7:1      body text, AAA
     Fil gris on Coton 6.5:1, on Lin 5.7:1     secondary text, AA
     Thé on Coton 7.5:1; Coton on Thé 7.5:1    links and the primary button, AAA
