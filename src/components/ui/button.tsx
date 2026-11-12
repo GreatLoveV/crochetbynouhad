@@ -12,8 +12,9 @@ import { ChainLoader } from "@/components/ui/chain"
 
 const buttonVariants = cva(
   // « Fouwwa »: flat pills, no lift. Focus uses the global Nila outline
-  // (globals.css); a darker fill or a Laine wash marks hover.
-  "group/button relative inline-flex shrink-0 items-center justify-center rounded-full border border-transparent font-medium whitespace-nowrap transition-colors duration-200 ease-thread select-none focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-nila disabled:pointer-events-none disabled:cursor-not-allowed aria-busy:pointer-events-none aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5",
+  // (globals.css); a darker fill or a Laine wash marks hover. A press shrinks
+  // the pill by 3 % (none with reduced motion).
+  "group/button relative inline-flex shrink-0 items-center justify-center rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,background-color,border-color,scale] duration-150 ease-thread select-none motion-safe:active:not-aria-busy:scale-[0.97] focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-nila disabled:pointer-events-none disabled:cursor-not-allowed aria-busy:pointer-events-none aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5",
   {
     variants: {
       variant: {
@@ -29,6 +30,11 @@ const buttonVariants = cva(
           "text-foreground hover:bg-laine aria-expanded:bg-laine disabled:text-fil",
         destructive:
           "border-erreur bg-transparent text-erreur hover:bg-erreur-pale disabled:border-border disabled:text-fil",
+        // On a dark band (Naanaa, Nila): Laine fill, or a Laine outline.
+        inverse:
+          "bg-laine text-nila hover:bg-rose active:bg-rose disabled:opacity-60",
+        "inverse-outline":
+          "border-laine bg-transparent text-laine hover:bg-laine/10 active:bg-laine/15 disabled:opacity-60",
         link: "h-auto rounded-none p-0 text-fouwwa underline decoration-1 underline-offset-4 hover:decoration-2 disabled:text-fil",
       },
       size: {

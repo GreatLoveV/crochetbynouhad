@@ -37,7 +37,7 @@ export function ImageGallery({
 
   return (
     <div className="flex flex-col gap-3 lg:flex-row-reverse lg:items-start lg:gap-4">
-      <div className="relative aspect-4/5 w-full overflow-hidden bg-laine lg:flex-1">
+      <div className="relative aspect-4/5 w-full overflow-hidden rounded-photo bg-laine lg:flex-1">
         <Image
           // A new key remounts the image, which replays the fade.
           key={active.url}
@@ -52,7 +52,7 @@ export function ImageGallery({
       </div>
 
       {images.length > 1 ? (
-        <ul className="flex gap-2 overflow-x-auto no-scrollbar lg:w-20 lg:flex-col lg:overflow-visible">
+        <ul className="-m-1 flex gap-2 overflow-x-auto p-1 no-scrollbar lg:w-22 lg:flex-col lg:overflow-visible">
           {images.map((image, index) => (
             <li key={image.url} className="shrink-0">
               <button
@@ -61,8 +61,8 @@ export function ImageGallery({
                 aria-current={index === activeIndex}
                 aria-label={fill(t.product.viewPhoto, { n: index + 1 })}
                 className={cn(
-                  "relative block aspect-4/5 w-16 overflow-hidden bg-laine outline-offset-2 focus-visible:outline-2! focus-visible:outline-nila! lg:w-20",
-                  index === activeIndex ? "outline-1 outline-nila outline-solid" : "hover:outline-1 hover:outline-trait hover:outline-solid",
+                  "relative block aspect-4/5 w-16 overflow-hidden rounded-xl bg-laine outline-offset-2 focus-visible:outline-2! focus-visible:outline-nila! lg:w-20",
+                  index === activeIndex ? "outline-2 outline-fouwwa outline-solid" : "hover:outline-1 hover:outline-trait hover:outline-solid",
                 )}
               >
                 <Image

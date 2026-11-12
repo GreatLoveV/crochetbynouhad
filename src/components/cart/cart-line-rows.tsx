@@ -44,6 +44,7 @@ export function CartLineRows({
               alt=""
               ratio="4/5"
               sizes="96px"
+              className="rounded-xl"
             />
           </div>
 

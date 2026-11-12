@@ -7,6 +7,7 @@ import { CheckCircle2Icon, MessageCircleIcon } from "lucide-react";
 import { ClearCartOnMount } from "@/components/cart/clear-cart-on-mount";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Chain } from "@/components/ui/chain";
 import { Price } from "@/components/ui/price";
 import { fill, localePath } from "@/i18n/config";
 import { getDictionary, getLang } from "@/i18n/server";
@@ -64,13 +65,13 @@ export default async function OrderConfirmationPage({
       {unlocked ? <ClearCartOnMount /> : null}
 
       <div className="flex flex-col items-start gap-4">
-        <CheckCircle2Icon aria-hidden="true" className="size-8 text-fouwwa" />
+        <CheckCircle2Icon aria-hidden="true" className="size-9 text-naanaa" />
         <h1 className="text-4xl sm:text-5xl">{t.order.title}</h1>
         <p className="max-w-prose text-lg text-fil">{t.order.body}</p>
         <Badge variant="outline">{t.orderStatus[order.status]}</Badge>
       </div>
 
-      <dl className="mt-8 grid grid-cols-2 gap-4 border-y border-border py-5">
+      <dl className="mt-8 grid grid-cols-2 gap-4 rounded-card bg-laine p-6">
         <div>
           <dt className="text-sm text-fil">{t.order.reference}</dt>
           <dd className="font-heading text-2xl">
@@ -101,7 +102,8 @@ export default async function OrderConfirmationPage({
         ))}
       </ul>
 
-      <div className="mt-8 flex flex-col items-start gap-3 border-t border-border pt-8">
+      <Chain tone="naanaa" className="mt-10" />
+      <div className="mt-8 flex flex-col items-start gap-3">
         <Button render={<a href={whatsappHref} target="_blank" rel="noopener noreferrer" />}>
           <MessageCircleIcon data-icon="inline-start" aria-hidden="true" />
           {t.order.whatsapp}

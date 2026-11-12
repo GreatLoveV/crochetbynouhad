@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CartButton } from "@/components/cart/cart-sheet";
 import { InstagramIcon } from "@/components/icons";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { MobileMenu } from "@/components/mobile-menu";
 import { NavLinks } from "@/components/nav-links";
 import { fill, localePath } from "@/i18n/config";
 import { getDictionary, getLang } from "@/i18n/server";
@@ -14,8 +15,9 @@ import { whatsappUrl } from "@/lib/integrations/whatsapp";
  * the bag on the inline end. Server component; the navigation, language link
  * and bag are small client islands.
  *
- * On a phone the three links don't fit beside the brand, so they move to a
- * second row that scrolls sideways if it must.
+ * One row at every width: on a phone the three links move into a menu that
+ * slides in from the inline start (MobileMenu), so the header never takes a
+ * second row. A solid Laine bar, no blur behind it.
  */
 export async function SiteHeader() {
   const lang = await getLang();
@@ -23,28 +25,25 @@ export async function SiteHeader() {
   const contactHref = whatsappUrl(fill(t.whatsapp.info, { shop: t.siteName }));
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-laine/95 backdrop-blur-sm">
-      <div className="mx-auto flex h-16 max-w-page items-center justify-between gap-3 px-4 sm:h-18 sm:px-8">
+    <header className="sticky top-0 z-40 border-b border-border bg-laine">
+      <div className="mx-auto flex h-16 max-w-page items-center justify-between gap-2 ps-4 pe-2 sm:h-18 sm:gap-3 sm:px-8">
         {/* The brand is written in Latin letters in both languages. */}
         <Link
           href={localePath(lang, "/")}
           lang="fr"
           dir="ltr"
-          className="py-2 font-heading text-[1.25rem] leading-none font-semibold whitespace-nowrap sm:text-[1.75rem]"
+          className="py-2 font-heading text-[1.1875rem] leading-none font-semibold whitespace-nowrap sm:text-[1.75rem]"
         >
           {t.siteName}
         </Link>
 
-        <div className="flex items-center gap-2 sm:gap-6">
+        <div className="flex items-center gap-1.5 sm:gap-6">
           <NavLinks contactHref={contactHref} className="hidden md:block" />
           <LanguageSwitcher />
           <CartButton />
+          <MobileMenu contactHref={contactHref} className="md:hidden" />
         </div>
       </div>
-      <NavLinks
-        contactHref={contactHref}
-        className="overflow-x-auto border-t border-border px-4 no-scrollbar md:hidden"
-      />
     </header>
   );
 }
@@ -58,14 +57,14 @@ export async function SiteFooter() {
   const link = "w-fit py-1 underline-offset-4 decoration-1 hover:underline";
 
   return (
-    <footer className="mt-section border-t border-border bg-laine">
+    <footer className="on-dark mt-section bg-nila">
       <div className="mx-auto grid max-w-page gap-10 px-4 py-14 sm:grid-cols-[1.4fr_1fr_1fr] sm:px-8">
         <div className="flex flex-col gap-3">
           <p lang="fr" dir="ltr" className="w-fit font-heading text-2xl font-semibold">
             {t.siteName}
           </p>
-          <p className="max-w-xs text-sm text-fil">{t.footer.blurb}</p>
-          <p className="max-w-xs text-sm text-fil">{t.hero.note}</p>
+          <p className="max-w-xs text-sm text-rose">{t.footer.blurb}</p>
+          <p className="max-w-xs text-sm text-rose">{t.hero.note}</p>
         </div>
 
         <nav aria-labelledby="footer-contact" className="flex flex-col gap-3 text-sm">
@@ -99,7 +98,7 @@ export async function SiteFooter() {
         </nav>
       </div>
 
-      <div className="mx-auto max-w-page px-4 pb-8 text-xs text-fil sm:px-8">
+      <div className="mx-auto max-w-page px-4 pb-8 text-xs text-rose sm:px-8">
         © <bdi>{new Date().getFullYear()}</bdi> <bdi>{t.siteName}</bdi>. {t.footer.copyright}
       </div>
     </footer>

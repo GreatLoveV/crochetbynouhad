@@ -234,7 +234,7 @@ export function CheckoutForm() {
       </div>
 
       {/* The summary is a preview only: the server recalculates everything. */}
-      <aside aria-labelledby="checkout-summary" className="bg-laine p-6 lg:sticky lg:top-28">
+      <aside aria-labelledby="checkout-summary" className="rounded-card bg-laine p-6 sm:p-7 lg:sticky lg:top-24">
         <h2 id="checkout-summary" className="text-2xl">
           {t.checkout.itemsTitle}
         </h2>
@@ -244,7 +244,7 @@ export function CheckoutForm() {
           {products.map((product) => (
             <li key={product.id} className="flex items-start gap-3">
               <div className="w-14 shrink-0">
-                <Photo src={product.imageUrl} alt="" sizes="56px" />
+                <Photo src={product.imageUrl} alt="" sizes="56px" className="rounded-lg" />
               </div>
               <div className="flex min-w-0 flex-1 flex-col">
                 <span lang={product.nameLang} className="font-heading text-lg leading-snug">

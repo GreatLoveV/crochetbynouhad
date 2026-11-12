@@ -14,9 +14,9 @@ export function LegalPage({ content, t }: { content: LegalContent; t: Dictionary
         <h1 className="text-4xl sm:text-5xl">{content.title}</h1>
         <Notice className="mt-6">{t.legal.placeholder}</Notice>
 
-        <div className="mt-10 flex flex-col gap-8">
+        <div className="mt-10 flex flex-col gap-8 rounded-card bg-laine p-6 sm:p-10">
           {content.sections.map((section) => (
-            <section key={section.title} className="border-t border-border pt-6">
+            <section key={section.title} className="border-t border-border pt-6 first:border-t-0 first:pt-0">
               <h2 className="mb-2 text-2xl">{section.title}</h2>
               <p className={section.body ? undefined : "text-fil italic"}>{section.body ?? t.legal.toComplete}</p>
             </section>

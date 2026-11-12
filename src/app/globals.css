@@ -367,3 +367,16 @@ html:lang(ar) {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='28'%3E%3Cpath d='M2 14 C10 8 22 8 26 14 C22 20 10 20 18 14' fill='none' stroke='%231E2461' stroke-opacity='.09' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
   background-size: 32px 28px;
 }
+
+/*
+  A dark band (the atelier in Naanaa, the footer in Nila): Laine text, and a
+  Laine focus ring, since the Nila ring would vanish on Nila (Laine on Nila
+  14.0:1, on Naanaa 7.1:1).
+*/
+@utility on-dark {
+  color: var(--color-laine);
+  /* !important: buttons and inputs set their own Nila ring as a utility. */
+  & :focus-visible {
+    outline-color: var(--color-laine) !important;
+  }
+}

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { MessageCircleIcon } from "lucide-react";
 
 import { Hero } from "@/components/home/hero";
+import { PieceRow } from "@/components/home/piece-row";
 import { InstagramIcon } from "@/components/icons";
 import { ProductTile } from "@/components/product/product-tile";
 import { Button } from "@/components/ui/button";
@@ -18,8 +19,9 @@ import { ATELIER_PHOTO } from "@/lib/content/site";
 import { whatsappUrl } from "@/lib/integrations/whatsapp";
 
 /**
- * Home: the newest piece, the chain, the pieces (filtered by
- * ?category=<slug>), the atelier, and how to order.
+ * Home (« Fouwwa », docs/design/direction.md): the newest piece, the chain
+ * drawn once, the pieces one per row (a tile grid past six, filtered by
+ * ?category=<slug>), the atelier on a mint band, and how to order.
  *
  * This page reads `searchParams`, so it renders per request instead of being
  * pre-rendered. That is deliberate: the filter has to work on the server, and
@@ -46,16 +48,23 @@ export default async function HomePage({ searchParams }: PageProps<"/[lang]">) {
   // it is always something real the admin has just added. It reads the
   // unfiltered list, so the first screen doesn't change with the filter.
   const showcase = all.find((p) => !p.isSoldOut) ?? all[0] ?? null;
-  // The newest piece gets the large tile when the grid is long enough to
-  // carry it; a short or filtered list stays even.
-  const feature = !activeCategory && products.length >= 5;
+  // A short collection is shown one piece per row. Past six pieces the rows
+  // would make a very long page, so it becomes a tile grid instead.
+  const asRows = products.length <= 6;
+  // Unfiltered, the hero already shows the newest piece in full: the rows
+  // below start with the next one, so the same photo is never shown twice in
+  // a row. A filtered view lists every piece of its category.
+  const listed =
+    !activeCategory && asRows && showcase && products.length > 1
+      ? products.filter((p) => p.id !== showcase.id)
+      : products;
 
   return (
     <>
       <Hero showcase={showcase} lang={lang} t={t} />
 
       <div className="mx-auto max-w-page px-4 pt-12 sm:px-8 sm:pt-16">
-        <Chain draw />
+        <Chain draw tone="fouwwa" />
       </div>
 
       <section
@@ -63,7 +72,7 @@ export default async function HomePage({ searchParams }: PageProps<"/[lang]">) {
         aria-labelledby="boutique-title"
         className="mx-auto max-w-page scroll-mt-28 px-4 pt-10 sm:px-8"
       >
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <h2 id="boutique-title" className="text-3xl sm:text-4xl">
             {t.shop.title}
           </h2>
@@ -84,20 +93,28 @@ export default async function HomePage({ searchParams }: PageProps<"/[lang]">) {
               </Button>
             }
           />
+        ) : asRows ? (
+          <ul className="flex flex-col gap-16 sm:gap-24">
+            {listed.map((product, i) => (
+              <li key={product.id}>
+                <PieceRow product={product} lang={lang} t={t} priority={i === 0} />
+              </li>
+            ))}
+          </ul>
         ) : (
-          <ul className="grid grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4">
-            {products.map((product, i) => {
-              const big = i === 0 && feature;
-              return (
-                <li key={product.id} className={big ? "col-span-2 sm:row-span-2 sm:flex sm:flex-col" : undefined}>
-                  <ProductTile product={product} lang={lang} t={t} feature={big} priority={i < 2} />
-                </li>
-              );
-            })}
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-3 sm:gap-x-6">
+            {products.map((product, i) => (
+              <li key={product.id}>
+                <ProductTile product={product} lang={lang} t={t} priority={i < 2} />
+              </li>
+            ))}
           </ul>
         )}
       </section>
 
+      <div className="mx-auto max-w-page px-4 pt-section sm:px-8">
+        <Chain tone="naanaa" />
+      </div>
       <Atelier lang={lang} t={t} />
 
       <section aria-labelledby="steps-title" className="mx-auto max-w-page px-4 pt-section sm:px-8">
@@ -111,57 +128,52 @@ export default async function HomePage({ searchParams }: PageProps<"/[lang]">) {
 }
 
 /**
- * "L'atelier": who makes the pieces, in a few honest lines. With a photo of
- * Nouhad's hands (set in `lib/content/site.ts`) it becomes a two-column band;
- * without one it stays text, never a stock picture.
+ * "L'atelier": who makes the pieces, in a few honest lines, on a full-width
+ * Naanaa (mint) band with Laine text (7.1:1). With a photo of Nouhad's hands
+ * (set in `lib/content/site.ts`) the band holds it beside the words; without
+ * one it stays text, never a stock picture.
  */
 function Atelier({ lang, t }: { lang: Locale; t: Dictionary }) {
   const message = fill(t.whatsapp.question, { shop: t.siteName });
-  const title = (
-    <h2 id="atelier-title" className="text-3xl sm:text-4xl">
-      {t.home.atelierTitle}
-    </h2>
-  );
-  const text = (
-    <div className="flex max-w-prose flex-col items-start gap-5">
-      <p className="font-heading text-2xl font-normal">{t.home.atelierBody}</p>
-      <p className="text-fil">{t.home.atelierQuestion}</p>
-      <Button
-        variant="outline"
-        render={<a href={whatsappUrl(message)} target="_blank" rel="noopener noreferrer" />}
-      >
-        <MessageCircleIcon data-icon="inline-start" aria-hidden="true" />
-        {t.home.atelierCta}
-      </Button>
-    </div>
-  );
 
   return (
-    <section
-      id="atelier"
-      aria-labelledby="atelier-title"
-      className="mx-auto mt-section max-w-page scroll-mt-28 px-4 sm:px-8"
-    >
-      {ATELIER_PHOTO ? (
-        <div className="grid items-center gap-8 md:grid-cols-2 md:gap-14">
+    <section id="atelier" aria-labelledby="atelier-title" className="on-dark scroll-mt-20 bg-naanaa">
+      <div
+        className={
+          ATELIER_PHOTO
+            ? "mx-auto grid max-w-page items-center gap-8 px-4 py-16 sm:px-8 sm:py-20 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-14"
+            : "mx-auto grid max-w-page gap-6 px-4 py-16 sm:px-8 sm:py-20 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] md:gap-14"
+        }
+      >
+        {ATELIER_PHOTO ? (
           <Photo
             src={ATELIER_PHOTO.url}
             alt={ATELIER_PHOTO.alt[lang]}
             ratio="1/1"
-            sizes="(min-width: 768px) 50vw, 100vw"
+            sizes="(min-width: 768px) 45vw, 100vw"
           />
-          <div className="flex flex-col gap-5">
-            {title}
-            {text}
-          </div>
+        ) : (
+          <h2 id="atelier-title" className="text-4xl sm:text-5xl">
+            {t.home.atelierTitle}
+          </h2>
+        )}
+        <div className="flex max-w-prose flex-col items-start gap-5">
+          {ATELIER_PHOTO && (
+            <h2 id="atelier-title" className="text-4xl sm:text-5xl">
+              {t.home.atelierTitle}
+            </h2>
+          )}
+          <p className="text-xl leading-relaxed">{t.home.atelierBody}</p>
+          <p>{t.home.atelierQuestion}</p>
+          <Button
+            variant="inverse"
+            render={<a href={whatsappUrl(message)} target="_blank" rel="noopener noreferrer" />}
+          >
+            <MessageCircleIcon data-icon="inline-start" aria-hidden="true" />
+            {t.home.atelierCta}
+          </Button>
         </div>
-      ) : (
-        // Without a photo: the title on the inline start, the words beside it.
-        <div className="grid gap-5 border-t border-border pt-section md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] md:gap-14">
-          {title}
-          {text}
-        </div>
-      )}
+      </div>
     </section>
   );
 }
@@ -207,7 +219,8 @@ function ComingSoon({
 
 /**
  * The categories as plain words, the current one marked with the chain
- * stitch. Scrolls sideways on a phone instead of wrapping.
+ * stitch. Wraps onto a second line on a phone: a row that scrolls sideways
+ * hid the last categories with no hint that they were there.
  */
 function CategoryFilter({
   lang,
@@ -221,8 +234,8 @@ function CategoryFilter({
   activeSlug: string | undefined;
 }) {
   return (
-    <nav aria-label={t.shop.filterLabel} className="-mx-4 overflow-x-auto px-4 no-scrollbar sm:mx-0 sm:px-0">
-      <ul className="flex w-max gap-5">
+    <nav aria-label={t.shop.filterLabel}>
+      <ul className="flex flex-wrap gap-x-5 gap-y-1">
         <li>
           <FilterLink href={localePath(lang, "/#boutique")} active={activeSlug === undefined}>
             {t.shop.all}

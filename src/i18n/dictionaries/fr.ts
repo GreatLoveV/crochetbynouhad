@@ -29,6 +29,7 @@ const fr = {
     cart: "Panier",
     cartPage: "Panier",
     language: "Langue",
+    menu: "Menu",
   },
 
   hero: {
@@ -46,6 +47,7 @@ const fr = {
       "Chaque pièce est crochetée à la main par Nouhad, chez elle, au Maroc. Aucune n’existe en double : quand une pièce est vendue, elle reste ici, marquée « Vendu », pour montrer ce que ses mains savent faire.",
     atelierQuestion: "Une question sur une pièce ?",
     atelierCta: "Écrire à Nouhad",
+    viewPiece: "Voir la pièce",
     stepsTitle: "Comment commander",
     steps: [
       "Choisissez une pièce et confirmez votre commande ici, en quelques champs.",

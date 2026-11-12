@@ -7,8 +7,8 @@ import fr from "@/i18n/dictionaries/fr";
  * The card WhatsApp and social platforms show when someone shares a link.
  *
  * Without this, a shared product link renders as a bare text row with no photo,
- * which is most of what makes a customer tap it. Colours mirror the cream/rose
- * palette in globals.css.
+ * which is most of what makes a customer tap it. Colours are the « Fouwwa »
+ * tokens in globals.css.
  *
  * Only flexbox with explicit `display` is safe in Satori, and every size is
  * inline: it only knows `px`, not `rem`/`%`.
@@ -18,7 +18,7 @@ import fr from "@/i18n/dictionaries/fr";
  * images, does not shape Arabic letters, so Arabic text would come out as
  * disconnected glyphs. The redesign replaces this card with a real photo.
  */
-export const alt = `${fr.siteName} — ${fr.tagline}`;
+export const alt = `${fr.siteName}, ${fr.tagline}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -31,6 +31,13 @@ export default async function OpengraphImage({
   const lang = hasLocale(raw) ? raw : defaultLocale;
   const isFrench = lang === "fr";
 
+  // The site's chain, as the one ornament (same loop geometry as chain.tsx).
+  let chain = "M2 7"
+  for (let i = 0; i < 64; i++) {
+    const x = 10 + i * 16
+    chain += ` C ${x} 1, ${x + 12} 1, ${x + 16} 7 C ${x + 12} 13, ${x} 13, ${x + 8} 7`
+  }
+
   return new ImageResponse(
     (
       <div
@@ -39,56 +46,24 @@ export default async function OpengraphImage({
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
           justifyContent: "center",
-          gap: 28,
-          // Velvet: aubergine-black ground, ivory text, gold accent.
-          backgroundColor: "#140b12",
-          backgroundImage:
-            "radial-gradient(80% 70% at 15% 0%, #3a1a33 0%, transparent 65%)",
-          color: "#eee7db",
-          fontFamily: "sans-serif",
-          padding: 80,
+          gap: 36,
+          // « Fouwwa »: rose ground, nila text, madder accent, turmeric thread.
+          backgroundColor: "#FBEDEA",
+          color: "#1E2461",
+          fontFamily: "serif",
+          padding: 96,
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 16,
-            fontSize: 34,
-            letterSpacing: 4,
-            textTransform: "uppercase",
-            color: "#dfb35f",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              width: 12,
-              height: 12,
-              transform: "rotate(45deg)",
-              backgroundColor: "#dfb35f",
-            }}
-          />
-          {isFrench ? fr.og.eyebrow : "Crochet"}
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            fontSize: 92,
-            fontWeight: 700,
-            textAlign: "center",
-            lineHeight: 1.1,
-          }}
-        >
+        <div style={{ display: "flex", fontSize: 108, fontWeight: 700, lineHeight: 1.05 }}>
           {fr.siteName}
         </div>
-
-        {isFrench ? (
-          <div style={{ display: "flex", fontSize: 40, color: "#b1a2af" }}>{fr.tagline}</div>
-        ) : null}
+        <svg width="1008" height="28" viewBox="0 0 1034 14" preserveAspectRatio="none">
+          <path d={chain} fill="none" stroke="#E9A93A" strokeWidth="2.4" strokeLinecap="round" />
+        </svg>
+        <div style={{ display: "flex", fontSize: 44, color: "#9C1D3B", fontFamily: "sans-serif" }}>
+          {isFrench ? fr.tagline : "Crochet"}
+        </div>
       </div>
     ),
     size,

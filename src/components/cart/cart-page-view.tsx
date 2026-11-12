@@ -82,7 +82,7 @@ function CartPageLines({
       </div>
 
       {/* Sticky on desktop so the total stays visible while scrolling. */}
-      <aside aria-labelledby="cart-summary" className="bg-laine p-6 lg:sticky lg:top-28">
+      <aside aria-labelledby="cart-summary" className="rounded-card bg-laine p-6 sm:p-7 lg:sticky lg:top-24">
         <h2 id="cart-summary" className="text-2xl">
           {t.checkout.summaryTitle}
         </h2>

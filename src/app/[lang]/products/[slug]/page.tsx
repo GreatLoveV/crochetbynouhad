@@ -6,6 +6,7 @@ import { ArrowLeftIcon, ChevronRightIcon } from "lucide-react";
 import { ImageGallery } from "@/components/product/image-gallery";
 import { ProductBuyBox } from "@/components/product/buy-box";
 import { Badge } from "@/components/ui/badge";
+import { Chain } from "@/components/ui/chain";
 import { Price } from "@/components/ui/price";
 import { locales, localePath, ogLocale } from "@/i18n/config";
 import { alternatesFor } from "@/i18n/metadata";
@@ -109,7 +110,7 @@ export default async function ProductPage({
               {product.name}
             </h1>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-              <p className="text-2xl">
+              <p className="text-2xl font-medium text-fouwwa">
                 <Price centimes={product.price} lang={lang} />
               </p>
               {product.isSoldOut ? (
@@ -139,16 +140,17 @@ export default async function ProductPage({
           {/* whitespace-pre-line keeps the line breaks the admin typed. */}
           <p
             lang={product.descriptionLang}
-            className="max-w-prose border-t border-border pt-6 whitespace-pre-line"
+            className="max-w-prose rounded-card bg-laine p-6 whitespace-pre-line"
           >
             {product.description}
           </p>
         </div>
       </div>
 
+      <Chain tone="kurkum" className="mt-16" />
       <Link
         href={localePath(lang, "/#boutique")}
-        className="mt-12 inline-flex min-h-11 items-center gap-2 text-fouwwa underline decoration-1 underline-offset-4 hover:decoration-2"
+        className="mt-6 inline-flex min-h-11 items-center gap-2 text-fouwwa underline decoration-1 underline-offset-4 hover:decoration-2"
       >
         {/* "Back" points against the reading direction: flips in Arabic. */}
         <ArrowLeftIcon aria-hidden="true" className="size-4 rtl:-scale-x-100" />
