@@ -17,7 +17,7 @@ scoring as the round-1 audit ([`phase-7-audit.md`](phase-7-audit.md)), so the nu
 | **Design audit** | **85/100** (round 1: 86). The brief's target of 96 is **not reached**: 12 points are lost to two content items code can't supply (the real photos 🔴 and a native read of the Arabic 🟡). Without them, the code scores 97, against the Najdunes benchmark of 95. |
 | **Accessibility** | Lighthouse (axe-core) 100 on every page, both languages. The keyboard, focus, alt text, contrast and reduced-motion checks pass. A real screen reader was not tested. |
 | **Lighthouse mobile** | Median of 3 runs per page: **5 of 8 at 90 or more** (89 to 93). The other three are at 89: home in Arabic, and the product page in both languages. That is level with the round-1 code measured on the same day (89 to 92), and within the run-to-run spread. On those three pages, the largest element is a sample photo served by `placehold.co`. |
-| **Security** | No exploitable issue found in the code. **`npm audit` reports a critical Next.js advisory and three high ones** (zod, sharp, source-map-js). Fixes exist in the same major versions, but **they are not applied**: they change your dependencies, so they need your go-ahead (section 4). |
+| **Security** | No exploitable issue found in the code. `npm audit` reported a critical Next.js advisory and three high ones (zod, sharp, source-map-js). **Fixed after your go-ahead:** Next 16.4.6 and `npm audit fix`; `npm audit --omit=dev` now reports 0 vulnerabilities (section 4). |
 
 **Changed in this phase:**
 - **Fraunces is self-hosted** as one 35 KB file instead of 118 KB.
@@ -239,9 +239,9 @@ measured again here.
 | Secrets | No `.env` file is in git except `.env.example`. **Audit build:** this phase's production build was made with the example number `212612345678` passed on the command line. It wasn't written to any file, and the build was never deployed. |
 | Headers | HSTS, `nosniff`, `X-Frame-Options: DENY`, Referrer-Policy and Permissions-Policy are on every response (checked on the production server). |
 | Fonts | One new committed file, `src/app/fonts/fraunces-soft-wonk-latin.woff2`: the Google Fonts instance, with its SIL OFL licence next to it. It's a static font served as a file, not executed. |
-| **Dependencies** | **`npm audit --omit=dev` reports 4 vulnerable packages. This is the main finding of this review (below).** |
+| **Dependencies** | `npm audit --omit=dev` reported 4 vulnerable packages. **Fixed** (below): it now reports 0. |
 
-### ⚠️ Vulnerable dependencies (not fixed: needs your go-ahead)
+### ✅ Vulnerable dependencies (fixed after the audit)
 
 | Package | Installed | Advisory | Exposure in this shop | Fixed in |
 |---|---|---|---|---|
@@ -252,11 +252,20 @@ measured again here.
 | `sharp` | < 0.35.5 | librsvg vulnerability ([GHSA-wq5f-xc86-pv6w](https://github.com/advisories/GHSA-wq5f-xc86-pv6w)) | Through Next's image optimiser, as above. | 0.35.5 |
 | `source-map-js` | 1.2.1 | Event-loop denial of service ([GHSA-68fv-2mgg-jv7q](https://github.com/advisories/GHSA-68fv-2mgg-jv7q)) | **Build tooling only** (Tailwind and PostCSS). | 1.2.2 |
 
-**Recommended:** upgrade `next` (and `eslint-config-next`) to 16.4.6, and run `npm audit fix`
-for zod, sharp and source-map-js. All of these stay within their major versions. I haven't
-done this: it changes your dependencies, and the brief asks me to check with you first. The
-Next upgrade should be followed by a full build and a click-through, because `AGENTS.md` warns
-that this Next version changes between releases.
+**Done, with your go-ahead.** `next` and `eslint-config-next` are now 16.4.6, and `npm audit fix`
+brought zod to 4.6.7, sharp to 0.35.5 and source-map-js to 1.2.2, all within their major
+versions. `npm audit --omit=dev` reports 0 vulnerabilities.
+
+- The 16.4 upgrade notes only remove `experimental.appNewScrollHandler`, which this project
+  never set. `experimental.globalNotFound` is still documented and kept.
+- Checked after the upgrade: `tsc`, ESLint and the production build pass. On the production
+  server, every page answers as before (home, product, cart, checkout, both legal pages, 404,
+  admin login, Open Graph image, sitemap, robots), in French and Arabic. Adding a piece to the
+  bag, the cart and the checkout form work in both languages with no console error. No order
+  was placed.
+- **Left as is:** 16 moderate and low advisories in development tools only (`drizzle-kit`'s old
+  esbuild, `deepmerge`, `minimatch`). They never reach the site, and the fixes need
+  `npm audit fix --force`, which installs breaking versions.
 
 ### Still recommended from round 1 (no exploitable issue today)
 

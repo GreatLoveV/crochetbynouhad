@@ -248,9 +248,9 @@ Say an "À propos" page at `/fr/a-propos` and `/ar/a-propos`:
 - Response headers: HSTS, `nosniff`, `X-Frame-Options: DENY`, a strict
   referrer policy. There is no Content-Security-Policy yet, see
   [`docs/audit/phase-7-audit.md`](docs/audit/phase-7-audit.md).
-- **Dependencies need an update.** At the round-2 audit, `npm audit` reported a critical
-  advisory in Next.js 16.3.8 and high ones in zod, sharp and source-map-js. Fixes exist in the
-  same major versions (Next 16.4.6). See
+- **Dependencies:** the round-2 audit found a critical advisory in Next.js 16.3.8 and high
+  ones in zod, sharp and source-map-js. They are fixed (Next 16.4.6 and `npm audit fix`);
+  only development tools still carry moderate advisories. See
   [`docs/audit/phase-6-audit.md`](docs/audit/phase-6-audit.md).
 - The rate limits trust the `x-forwarded-for` header, which Vercel sets. On
   another host, make sure the proxy overwrites it.
@@ -267,7 +267,6 @@ Say an "À propos" page at `/fr/a-propos` and `/ar/a-propos`:
 
 ## Still open
 
-- **Upgrade `next` to 16.4.6 and run `npm audit fix`** (security, see above).
 - Nouhad's real photos, and her own words for the home page and *L'atelier*.
 - The legal pages are placeholder text and must be written before launch.
 - Native review of the Arabic, including how the site addresses customers.
