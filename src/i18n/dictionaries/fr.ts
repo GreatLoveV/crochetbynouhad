@@ -225,9 +225,12 @@ const fr = {
         },
         {
           title: "Livraison",
-          body: "Les délais et frais de livraison sont communiqués lors de la confirmation de la commande.",
+          body: "Les délais et frais de livraison dépendent de votre ville et sont confirmés avec vous sur WhatsApp avant l'expédition. Les pièces réalisées sur commande demandent un délai supplémentaire, annoncé à l'avance. Si vous refusez un colis sans motif ou restez injoignable, nous pourrons demander un paiement à l'avance pour vos prochaines commandes.",
         },
-        { title: "Annulation et retours", body: null },
+        {
+          title: "Annulation et retours",
+          body: "Vous pouvez annuler votre commande gratuitement tant qu'elle n'est pas expédiée, en nous écrivant sur WhatsApp. Après réception, vous disposez de 7 jours pour demander un retour ou un échange, si la pièce est neuve, non utilisée et dans son emballage d'origine ; les frais de retour sont à votre charge, sauf si la pièce est défectueuse. En cas de défaut ou de dommage, envoyez-nous une photo dans les 48 heures : nous réparons, remplaçons ou remboursons. Les pièces confectionnées sur mesure (couleur ou taille choisie) ne sont ni annulables ni retournables une fois commencées.",
+        },
         {
           title: "Contact",
           body: "Pour toute question, écrivez-nous sur WhatsApp ou Instagram via les liens en bas de page.",
@@ -247,7 +250,10 @@ const fr = {
           title: "Paiement",
           body: "Aucun paiement en ligne n'est enregistré : le règlement se fait en espèces à la livraison. Aucune donnée bancaire n'est donc demandée.",
         },
-        { title: "Conservation", body: null },
+        {
+          title: "Conservation et partage",
+          body: "Vos données sont conservées 12 mois après la commande, puis supprimées. Seuls votre nom, votre téléphone et votre adresse sont transmis au livreur, uniquement pour vous livrer. Elles ne sont ni vendues ni utilisées à d'autres fins.",
+        },
         {
           title: "Vos droits",
           body: "Vous pouvez demander l'accès, la rectification ou la suppression de vos données en nous écrivant via les liens de contact en bas de page.",
